@@ -42,7 +42,8 @@ const repository_name = 'api-pokemon-showdown';
             Octokit.actions.createWorkflowDispatch({
                 owner: repository_owner,
                 repo: repository_name,
-                workflow_id: WORKFLOW_ID
+                workflow_id: WORKFLOW_ID,
+                ref: 'main'
             }).then((response) => {
                 if(response.status == 204)
                     console.log(`Update requested at ${Date()}`)
