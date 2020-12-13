@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * @author ii02735
  * @description Script to check differences between the submodule and the repo's
@@ -40,6 +42,7 @@ const repository_name = 'api-pokemon_showdown'
             Octokit.actions.createWorkflowDispatch({
                 owner: repository_owner,
                 repo: repository_name,
+                workflow_id: WORKFLOW_ID
             }).then((response) => {
                 if(response.status == 204)
                     console.log(`Update requested at ${Date()}`)
