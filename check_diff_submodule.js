@@ -16,7 +16,7 @@ const Octokit = new octokit.Octokit({
 
 const WORKFLOW_ID = 4229835
 const repository_owner = 'ii02735'
-const repository_name = 'api-pokemon_showdown'
+const repository_name = 'api-pokemon-showdown';
 
 (async function (){
 
