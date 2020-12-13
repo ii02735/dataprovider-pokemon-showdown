@@ -1,0 +1,25 @@
+{
+  "name": "api-pokemon-showdown",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "heroku-prebuild": "cd pokemonshowdown && npm i && node build",
+    "heroku-postbuild": "node dataToJson/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeoDaz/api-pokemon-showdown.git"
+  },
+  "author": "GeoDaz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeoDaz/api-pokemon-showdown/issues"
+  },
+  "homepage": "https://github.com/GeoDaz/api-pokemon-showdown#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
