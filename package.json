@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/GeoDaz/api-pokemon-showdown#readme",
   "dependencies": {
+    "@octokit/rest": "^18.0.12",
     "express": "^4.17.1"
   }
 }
