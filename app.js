@@ -3,7 +3,7 @@ const app = express()
 const fs = require("fs")
 const path = require("path")
 
-app.get('/',(req,res) => res.json({"message": "Welcome to the API pokemon showdown ! Available resources : abilities, items, learns, moves, natures, pokemons, pokemonTier"}))
+app.get('/',(req,res) => res.json({"message": "Welcome to the data pokemon showdown API ! Available resources : abilities, items, learns, moves, natures, pokemons, pokemonTier"}))
 
 app.get("/:json_file",(req,res) => {
     
