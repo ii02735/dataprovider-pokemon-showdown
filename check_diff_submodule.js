@@ -9,6 +9,7 @@ const octokit = require("@octokit/rest")
 const Octokit = new octokit.Octokit({
     auth: process.env.PERSONAL_TOKEN
 });
+const fs = require('fs')
 
 /**
  * ID fetched from api.github.com/repos/ii02735/api-pokemon-showdown/actions/workflows
@@ -46,12 +47,16 @@ const repository_name = 'api-pokemon-showdown';
                 ref: 'main'
             }).then((response) => {
                 if(response.status == 204)
-                    console.log(`Update requested at ${Date()}`)
+                    fs.appendFileSync('execution.log',`Update requested at ${Date()}\n`)
+                else
+                    fs.appendFileSync('execution.log',`Update requested failed with code ${response.status} at ${Date()}\n`)
             })
+        }else{
+            fs.appendFileSync('execution.log',`Checking done without update request at ${Date()}\n`)
         }
 
     }catch(e){
-        console.log(e)
+        fs.appendFileSync('execution.log',`Error at ${Date()}\n${e.stack}\n`)
     }
 })()
 
