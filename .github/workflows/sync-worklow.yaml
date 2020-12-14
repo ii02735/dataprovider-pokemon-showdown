@@ -1,28 +1,28 @@
 name: "Sync submodule"
 
 
-on:
-        workflow_dispatch:
+on: # This workflow must be triggered on two conditions
+        workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
 
-        push:
+        push: # when we make a push to the main branch
             branches:
               - main
 
-jobs:
-        sync:
-                runs-on: 'ubuntu-latest'
+jobs: #this section contains the tasks / jobs that must be executed
+        sync: # the job name
+                runs-on: 'ubuntu-latest' # this job must run on a Ubuntu container
                 steps:
                         - name: checkout on main
-                          uses: actions/checkout@main
+                          uses: actions/checkout@main # action that make a checkout on the main branch
                           with:
                              ref: ${{ github.read_ref }}
 
-                        - name: update submodule content
+                        - name: update submodule content # fetch the latest updates and apply them to the submodule
                           uses: textbook/git-checkout-submodule-action@master
                           with:
                               remote: true
 
-                        - name: Commit if differences
+                        - name: Commit differences # commit if differences are tracked after updates (previous step)
                           uses: stefanzweifel/git-auto-commit-action@v4
                           with:
                               commit_message: Synchronization with submodule
