@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "heroku-prebuild": "cd pokemon-showdown && npm i && node build",
-    "heroku-postbuild": "node dataToJson.js"
+    "build": "cd pokemon-showdown && node build",
+    "postbuild": "node dataToJson.js"
   },
   "repository": {
     "type": "git",
