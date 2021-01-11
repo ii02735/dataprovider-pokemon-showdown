@@ -16,17 +16,13 @@ jobs: #this section contains the tasks / jobs that must be executed
                           uses: actions/checkout@main # action that make a checkout on the main branch
                           with:
                              ref: ${{ github.read_ref }}
-
-                        - name: update submodule content # fetch the latest updates and apply them to the submodule
-                          uses: textbook/git-checkout-submodule-action@master
-                          with:
-                              remote: true
-
+                             
                         - name: "generate JSON"
                           uses: actions/setup-node@v2
                           with:
                             node-version: '12'
-                        - run: npm run build && npm run postbuild
+                        - run: git clone https://github.com/smogon/pokemon-showdown.git    
+                        - run: npm run build
                         - name: Commit differences # commit if differences are tracked after updates (previous step)
                           uses: stefanzweifel/git-auto-commit-action@v4
                           with:

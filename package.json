@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "build": "cd pokemon-showdown && node build",
+    "build": "cd pokemon-showdown && npm i && node build",
     "postbuild": "node dataToJson.js"
   },
   "repository": {
