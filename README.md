@@ -1,34 +1,23 @@
-## Pokemon Showdown API Data Provider
+## Pokemon Showdown Data Provider
 
-This application has the purpose to provide data of Pokemon Showdown's resources by reading JSON files.
+This repository has the purpose to provide JSON resources from Pokemon Showdown.
+These are periodically **kept updated** through an external CRON.
 
-These JSON files are created by using the [SMOGON Pokemon Showdown repository's assets](https://github.com/smogon/pokemon-showdown), and [GeoDaz's](https://github.com/GeoDaz) script named `dataToJson.js`
+So it is not necessary to clone it.
 
-This GitHub repository is **bound to a Continuous Development process** on Heroku. 
+All JSON files are downloaded and committed in the `json` directory.
 
-The API can be called at https://api-data-pokemon-showdown.herokuapp.com/
+You can import them through multiple ways :
 
-Available endpoints :
-
-- `/abilities`
-- `/items`
-- `/learns`
-- `/moves`
-- `/natures`
-- `/pokemons`
-- `/pokemonTier`
-
-### Instructions for local execution
-
-If you want to use the data provider on your machine, you must run the following commands :
-
+- From `githubusercontent.com` with the following commands :
 ```sh
-git submodule init # Initializes the submodule
-git submodule update --recursive --merge # Retrieve and update the submodule's content
-npm install
-npm run heroku-prebuild # Install submodule's dependencies + execute the build process (required for retrieving the JSON resources)
-npm run heroku-postbuild # Writes the JSON resources in the json folder
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/abilities.json
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/learns.json
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/natures.json
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/pokemonTier.json
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/items.json
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/moves.json
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/pokemons.json
 ```
 
-
-**Warning :** the `check_submodule_diff.js` script cannot be executed locally because it requires this GitHub repository **owner's PAT (personal access token)**
+- By downloading them manually (point and click)
