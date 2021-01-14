@@ -11,6 +11,7 @@ You can import them through multiple ways :
 
 - From `githubusercontent.com` with the following commands :
 ```sh
+wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/types.json
 wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/abilities.json
 wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/learns.json
 wget https://raw.githubusercontent.com/ii02735/dataprovider-pokemon-showdown/main/json/natures.json
