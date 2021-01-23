@@ -34,9 +34,9 @@ const writeFile = (fileName, values) => fileSystem.writeFile(
 
 const pokemonIsStandard = value =>
 	!value.isNonstandard
-	|| !value.isNonstandard === "Past"  // keep pokemons that are not import in gen8
-	|| !value.isNonstandard === "Gigantamax"  // keep Gmax forms
-	|| !value.isNonstandard === "Unobtainable"; // keep Unobtainable real mons
+	|| value.isNonstandard === "Past"  // keep pokemons that are not import in gen8
+	|| value.isNonstandard === "Gigantamax"  // keep Gmax forms
+	|| value.isNonstandard === "Unobtainable"; // keep Unobtainable real mons
 
 const abilities = Object.entries(Abilities)
 	.filter(
@@ -107,9 +107,8 @@ const pokemons = Object.entries(Pokedex)
 		ability_2: value.abilities[1],
 		ability_hidden: value.abilities["H"],
 		weight: value.weightkg,
-		forms: value.otherFormes,
-		prevo: value.prevo,
-		evos: value.evos
+		baseForm: value.baseSpecies,
+		prevo: value.prevo
 	}));
 writeFile("pokemons", pokemons);
 
