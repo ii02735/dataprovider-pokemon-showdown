@@ -27,8 +27,8 @@ const log = (name, e) => {
 
 // prettier-ignore
 const writeFile = (fileName, values) => fileSystem.writeFile(
-	`json/${fileName}.json`, 
-	JSON.stringify(values), 
+	`json/${fileName}.json`,
+	JSON.stringify(values),
 	e => log(fileName, e)
 );
 
@@ -142,6 +142,7 @@ const pokemonTier = Object.entries(FormatsData)
 	.map(([key, value]) => ({
 		pokemon: PokedexText[key] ? PokedexText[key].name : key,
 		tier: value.tier ? removeParenthesis(value.tier) : undefined,
+		technically: value.tier ? value.tier.includes('(') : false,
 		doublesTier: value.doublesTier
 			? removeParenthesis(value.doublesTier)
 			: undefined
