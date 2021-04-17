@@ -113,7 +113,7 @@ Object.entries(Learnsets)
 			Object.keys(value.learnset).forEach(move => {
 				learns.push({
 					pokemon: PokedexText[key] ? PokedexText[key].name : key,
-					move: MovesText[move] ? MovesText[move] : move,
+					move: MovesText[move] ? MovesText[move].name : move,
 				});
 			});
 		}
