@@ -13,6 +13,7 @@ const { PokedexText } = require('./pokemon-showdown/.data-dist/text/pokedex');
 const { Learnsets } = require('./pokemon-showdown/.data-dist/learnsets');
 const { Natures } = require('./pokemon-showdown/.data-dist/natures');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
+const LAST_GEN = 8
 
 const removeParenthesis = string => string.replace(/\(+/g, '').replace(/\)+/g, '');
 
@@ -84,56 +85,115 @@ const moves = Object.entries(Moves)
 	}));
 writeFile('moves', moves);
 
+const createPokemonObject = (object) => ({  })
+
 const pokemons = Object.entries(Pokedex)
 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
-	.map(([key, value]) => ({
-		name: value.name,
-		type_1: value.types[0],
-		type_2: value.types[1],
-		hp: value.baseStats.hp,
-		atk: value.baseStats.atk,
-		def: value.baseStats.def,
-		spa: value.baseStats.spa,
-		spd: value.baseStats.spd,
-		spe: value.baseStats.spe,
-		ability_1: value.abilities[0],
-		ability_2: value.abilities[1],
-		ability_hidden: value.abilities['H'],
-		weight: value.weightkg,
-		baseForm: value.baseSpecies,
-		prevo: value.prevo,
-	}));
-writeFile('pokemons', pokemons);
+	.reduce((accumulator, [key,value]) => {
+		return {...accumulator, [key]:{
+			name: value.name,
+			type_1: value.types[0],
+			type_2: value.types[1],
+			hp: value.baseStats.hp,
+			atk: value.baseStats.atk,
+			def: value.baseStats.def,
+			spa: value.baseStats.spa,
+			spd: value.baseStats.spd,
+			spe: value.baseStats.spe,
+			ability_1: value.abilities[0],
+			ability_2: value.abilities[1],
+			ability_hidden: value.abilities['H'],
+			weight: value.weightkg,
+			baseForm: value.baseSpecies,
+			prevo: value.prevo,
+			gen: [LAST_GEN]
+		}}
+	},{});
 
-const learns = [];
-Object.entries(Learnsets)
-	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
-	.forEach(([key, value]) => {
-		if (value.learnset) {
-			Object.keys(value.learnset).forEach(move => {
-				learns.push({
-					pokemon: PokedexText[key] ? PokedexText[key].name : key,
-					move: MovesText[move] ? MovesText[move].name : move,
-				});
-			});
+const mods = (gen) => {
+	const { FormatsData } = require(`./pokemon-showdown/.data-dist/mods/gen${gen}/formats-data`)
+	const cleanedFormatsData = Object.keys(FormatsData).reduce((accumulator,key) => {
+		
+		if(pokemonIsStandard(FormatsData[key]))
+		{
+			const FormatsDataPokemon = FormatsData[key]
+			return {...accumulator, [key] : FormatsDataPokemon}
 		}
-	});
-writeFile('learns', learns);
+		return accumulator
 
-const natures = Object.values(Natures).map(value => {
-	const nature = { name: value.name };
-	if (value.plus) nature[value.plus] = 1;
-	if (value.minus) nature[value.minus] = -1;
-	return nature;
-});
-writeFile('natures', natures);
+	},{})
+	const { Pokedex } = require(`./pokemon-showdown/.data-dist/mods/gen${gen}/pokedex`)
 
-const pokemonTier = Object.entries(FormatsData)
-	.filter(([key, value]) => pokemonIsStandard(value))
-	.map(([key, value]) => ({
-		pokemon: PokedexText[key] ? PokedexText[key].name : key,
-		tier: value.tier ? removeParenthesis(value.tier) : undefined,
-		technically: value.tier ? value.tier.startsWith('(') : false,
-		doublesTier: value.doublesTier ? removeParenthesis(value.doublesTier) : undefined,
-	}));
-writeFile('pokemonTier', pokemonTier);
+	return { ModFormatsData: cleanedFormatsData, ModPokedex: Pokedex }
+}
+
+const isStatsEquals = (o1, o2) => {
+
+	return o1.hp === o2.hp &&
+		   o1.atk === o2.atk &&
+		   o1.def === o2.def &&
+		   o1.spa === o2.spa &&
+		   o1.spd === o2.spd &&
+		   o1.spe === o2.spe	
+
+}
+
+const pokemonOtherGens = {}
+
+for(let gen = LAST_GEN - 1; gen > 6; gen--)
+{
+	const { ModFormatsData, ModPokedex } = mods(gen)
+
+	if(gen >= 6) {
+		Object.keys(ModFormatsData).forEach((pokemon_name) => {
+			if(ModPokedex[pokemon_name])
+			{
+				console.log(pokemon_name)
+				if(ModPokedex[pokemon_name]['baseStats']  &&
+					!isStatsEquals(ModPokedex[pokemon_name]['baseStats'],pokemons[pokemon_name])){
+
+					pokemonOtherGens[gen] = Object.assign({...pokemons[pokemon_name]}, ModPokedex[pokemon_name]['baseStats'])
+				}
+				else
+					pokemons[pokemon_name]['gen'].unshift(gen)				
+			}
+		})
+	}
+
+
+}
+
+// writeFile('pokemons', pokemons);
+
+// const learns = [];
+// Object.entries(Learnsets)
+// 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
+// 	.forEach(([key, value]) => {
+// 		if (value.learnset) {
+// 			Object.keys(value.learnset).forEach(move => {
+// 				learns.push({
+// 					pokemon: PokedexText[key] ? PokedexText[key].name : key,
+// 					move: MovesText[move] ? MovesText[move].name : move,
+// 				});
+// 			});
+// 		}
+// 	});
+// writeFile('learns', learns);
+
+// const natures = Object.values(Natures).map(value => {
+// 	const nature = { name: value.name };
+// 	if (value.plus) nature[value.plus] = 1;
+// 	if (value.minus) nature[value.minus] = -1;
+// 	return nature;
+// });
+// writeFile('natures', natures);
+
+// const pokemonTier = Object.entries(FormatsData)
+// 	.filter(([key, value]) => pokemonIsStandard(value))
+// 	.map(([key, value]) => ({
+// 		pokemon: PokedexText[key] ? PokedexText[key].name : key,
+// 		tier: value.tier ? removeParenthesis(value.tier) : undefined,
+// 		technically: value.tier ? value.tier.startsWith('(') : false,
+// 		doublesTier: value.doublesTier ? removeParenthesis(value.doublesTier) : undefined,
+// 	}));
+// writeFile('pokemonTier', pokemonTier);
