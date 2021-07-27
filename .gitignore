@@ -3,3 +3,5 @@
 pokemon-showdown/
 node_modules/
 execution.log
+*.json
+!package*.json
