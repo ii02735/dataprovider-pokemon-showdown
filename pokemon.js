@@ -1,7 +1,6 @@
 const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
-const { pokemonIsStandard } = require('./util');
-const LAST_GEN = 8
+const { pokemonIsStandard, LAST_GEN } = require('./util');
 
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
 

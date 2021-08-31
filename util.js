@@ -1,5 +1,6 @@
 const fileSystem = require('fs');
 
+const LAST_GEN = 8
 
 const log = (name, e) => {
 	if (e) {
@@ -25,6 +26,9 @@ const pokemonIsStandard = value =>
 	value.isNonstandard === 'Unobtainable' &&  // keep Unobtainable real mons
 	value.tier !== 'Illegal'
 
-module.exports.writeFile = writeFile
-module.exports.pokemonIsStandard = pokemonIsStandard
-module.exports.removeParenthesis = removeParenthesis
+module.exports = {
+	writeFile,
+	pokemonIsStandard,
+	removeParenthesis,
+	LAST_GEN
+}
