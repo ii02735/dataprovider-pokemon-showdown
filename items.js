@@ -9,9 +9,9 @@ const getGenAttributes = (object) => {
 const itemsCollection = Object.entries(Items)
 	.filter(
 		([key, value]) =>
-			!value.isNonstandard ||
+			(!value.isNonstandard ||
 			value.isNonstandard === 'Past' ||
-			value.isNonstandard === 'Unobtainable'
+			value.isNonstandard === 'Unobtainable') && !key.match(/tr\d+/g) // pokemon shouldn't hold TRs --> we remove those items
 	)
 	.reduce((accumulator, [key, value]) => ({...accumulator, [key]:{
 		name: value.name,
