@@ -52,12 +52,18 @@ const mods = (gen) => {
  */
 const cleanAbilities = (gen, object) => {
 
+	object = JSON.parse(JSON.stringify(object))
+
 	if(object['abilities']){
-		if(gen < 5){
-			delete object['abilities']['H']
+			if(gen < 5){
+				delete object['abilities']['H']
+		
+			if(gen === 3){
+				if(object['abilities']['1'])
+					delete object['abilities']['1']
+			}else if(gen < 3)
+				delete object['abilities']
 		}
-		if(gen < 3)
-		  delete object['abilities']
 	}
 
 	return object
@@ -85,7 +91,7 @@ for(let gen=LAST_GEN; gen > 0; gen--)
 
 const findInheritedPokemonGenProperty = (gen,pokemonName, property) => {
 
-	for(let _gen = gen; gen < LAST_GEN; _gen++)
+	for(let _gen = gen; _gen < LAST_GEN; _gen++)
 	{
 		let nextPokemonGen = null;
 		if(_gen == 3)
@@ -100,6 +106,8 @@ const findInheritedPokemonGenProperty = (gen,pokemonName, property) => {
 			}
 		}
 	}
+
+	return modsByGen[LAST_GEN]['Pokedex'][pokemonName][property]
 }
 
 for(let gen=LAST_GEN-1; gen > 0; gen--)
@@ -128,6 +136,8 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 						types: findInheritedPokemonGenProperty(gen,key,'types')
 					}
 					
+
+
 					const richGenPokemonObject = cleanAbilities(gen,Object.assign(lastGenPokemon, inheritedPokemonInfo))
 					const discriminant = createDiscriminant(richGenPokemonObject)
 
@@ -145,23 +155,34 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 		
 }
 
-const resultPokemons = Object.values(pokemons).map((value) => ({
-	name: value.name,
-	type_1: value.types[0],
-	type_2: value.types.length > 1 ? value.types[1] : null,
-	hp: value.baseStats.hp,
-	atk: value.baseStats.atk,
-	def: value.baseStats.def,
-	spa: value.baseStats.spa,
-	spd: value.baseStats.spd,
-	spe: value.baseStats.spe,
-	ability_1: value.abilities ? value.abilities[0] : null,
-	ability_2: value.abilities && value.abilities.length > 1 ? value.abilities[1] : null,
-	ability_hidden: value.abilities && value.abilities['H'] ? value.abilities['H'] : null,
-	weight: value.weightkg,
-	baseForm: value.baseSpecies ? value.baseSpecies : null,
-	prevo: value.prevo ? value.prevo : null,
-	gen: value.gen.sort()
-}))
+const resultPokemons = Object.values(pokemons).map((value) => { 
+	const object = ({
+		name: value.name,
+		type_1: value.types[0],
+		type_2: value.types.length > 1 ? value.types[1] : null,
+		hp: value.baseStats.hp,
+		atk: value.baseStats.atk,
+		def: value.baseStats.def,
+		spa: value.baseStats.spa,
+		spd: value.baseStats.spd,
+		spe: value.baseStats.spe,
+		weight: value.weightkg,
+		baseForm: value.baseSpecies ? value.baseSpecies : null,
+		prevo: value.prevo ? value.prevo : null,
+		gen: value.gen.sort()
+	})
+
+	if(value.abilities){
+		if(value.abilities['0'])
+			object["ability_1"] = value.abilities['0']
+		if(value.abilities['1'])
+			object["ability_2"] = value.abilities['1']
+		if(value.abilities['H'])
+			object["ability_hidden"] = value.abilities['H']
+	}
+
+	return object
+	
+})
 
 module.exports = resultPokemons
