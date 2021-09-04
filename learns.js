@@ -13,6 +13,7 @@ Object.entries(Learnsets)
 				learns.push({
 					pokemon: PokedexText[key] ? PokedexText[key].name : key,
 					move: MovesText[move] ? MovesText[move].name : move,
+					gen: Array.from(new Set(value.learnset[move].map((rawGen) => parseInt(rawGen[0])))).sort()
 				});
 			});
 		}
