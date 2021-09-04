@@ -1,4 +1,5 @@
 const fileSystem = require('fs');
+const { Learnsets } = require("./pokemon-showdown/.data-dist/learnsets")
 
 const LAST_GEN = 8
 
@@ -26,9 +27,56 @@ const pokemonIsStandard = value =>
 	value.isNonstandard === 'Unobtainable' &&  // keep Unobtainable real mons
 	value.tier !== 'Illegal'
 
+
+/**
+ * There is no other way to find a move's gen (unlike for pokemon by reading 
+ * the format-data file for each gen or for items by accessing the gen property in the items file)
+ * Hence, we have no choice to read and parse the learnsets file
+ * 
+ * The learnsets file tells what moves can be learned from all pokemon,
+ * it can be either by leveling, evolution, transferring by generation... it is safe to assume
+ * that it gathers all the required data 
+ * 
+ * The result's structure is the following :
+ * @typedef {MoveByGen}
+ * @property {string} movename - the shortened move's name (key format)
+ * @property {number[]} generations - generations that contain the move
+ **/
+ 
+/** 
+ * @return {MoveByGen[]}
+ */
+let movesByGen = Object.values(Learnsets).reduce((accumulator,value) => {
+    
+    let { learnset } = value
+    let moveObjects = {}
+
+    if(learnset){
+        Object.entries(learnset).forEach(([moveName,rawGenArray]) => {
+   
+            rawGenArray = Array.from(new Set(rawGenArray.map((rawGen) => parseInt(rawGen[0]))))
+            
+            if(accumulator[moveName])
+                moveObjects[moveName] = Array.from(new Set(accumulator[moveName].concat(rawGenArray)))
+            else
+                moveObjects[moveName] = rawGenArray
+        })
+    }
+    
+    return {
+        ...accumulator,
+        ...moveObjects
+    }
+},{})
+
+Object.entries(movesByGen).forEach(([key,values]) => {
+    movesByGen[key] = values.sort()
+})
+
 module.exports = {
 	writeFile,
 	pokemonIsStandard,
 	removeParenthesis,
-	LAST_GEN
+	LAST_GEN,
+	movesByGen
 }
