@@ -5,7 +5,9 @@ const { LAST_GEN, movesByGen } = require('./util');
 const createDiscriminate = ({ name, category, description, power, pp, accuracy, type }) => JSON.stringify({ name, category, description, power, pp, accuracy, type })
 
 const getGenAttributes = (object) => {
-	return Object.keys(object).filter((key) => key.includes('gen'))
+	return Object.keys(object).filter((key) => key.includes('gen')).reduce((acc,index) => {
+		return { ...acc, [index]: index }
+	},{})
 }
 
 const findInheritedMovesGenProperty = (gen,moveName,property) => {
@@ -62,7 +64,7 @@ const determineCategory = (gen, type, initialCategory) => {
 
 const movesCollection = Object.entries(Moves)
 	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
-	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(Object.assign({ description: MovesText[key].desc}, {...value, power: value.basePower, accuracy: value.accuracy === true ? null : value.accuracy}))]: {
+	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(Object.assign({ description: MovesText[key].desc}, {...value, description: MovesText[key].desc || MovesText[key].shortDesc, power: value.basePower, accuracy: value.accuracy === true ? null : value.accuracy}))]: {
 		name: value.name,
 		category: value.category,
 		description: MovesText[key].desc || MovesText[key].shortDesc,
@@ -105,24 +107,12 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 				 movesByGen[key].find((genNumber) => genNumber === gen)){
 				  
 						const multipleDescriptionGen = getGenAttributes(value)
-						let description = null
-						if(!descriptions[key] && multipleDescriptionGen.length > 0){
-							descriptions[key] = {}
-							multipleDescriptionGen.forEach((attributeName) => {
-								const genNumber = parseInt(attributeName.split("gen")[1]);
-								descriptions[key][genNumber] = value[attributeName].desc
-							})
-							
-						}else if(descriptions[key])
-							description = descriptions[key].desc
-						else
-							description = MovesText[key].desc || MovesText[key].shortDesc
 
 						const moveGen = {
 							name: MovesText[key].name,
 							category: determineCategory(gen, lastGenMoves[key].type, lastGenMoves[key].category),
-							description,
-							shortDescription: MovesText[key].shortDesc,
+							description: Object.keys(multipleDescriptionGen).length > 0 && multipleDescriptionGen["gen"+gen] ? (MovesText[key][multipleDescriptionGen["gen"+gen]].desc || MovesText[key][multipleDescriptionGen["gen"+gen]].shortDesc) : (MovesText[key].desc || MovesText[key].shortDesc),
+							shortDescription:  Object.keys(multipleDescriptionGen).length > 0 && multipleDescriptionGen["gen"+gen] ? MovesText[key][multipleDescriptionGen["gen"+gen]].shortDesc : MovesText[key].shortDesc,
 							power: findInheritedMovesGenProperty(gen,key,"basePower"),
 							pp: findInheritedMovesGenProperty(gen,key,"pp"),
 							accuracy: lastGenMoves[key].accuracy,
