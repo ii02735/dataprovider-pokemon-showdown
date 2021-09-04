@@ -23,6 +23,8 @@ const findInheritedMovesGenProperty = (gen,moveName,property) => {
 			}
 		}
 	}
+	if(property === "basePower")
+		property = "power"
 	return lastGenMoves[moveName][property]
 }
 
@@ -41,6 +43,9 @@ const findInheritedMovesGenProperty = (gen,moveName,property) => {
  */
 const determineCategory = (gen, type, initialCategory) => {
 	
+	if(initialCategory === "Status")
+		return initialCategory
+
 	let beforeGen4 = {}
 	for(const type of ['Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel'])
 		beforeGen4[type] = 'Physical'
@@ -57,7 +62,7 @@ const determineCategory = (gen, type, initialCategory) => {
 
 const movesCollection = Object.entries(Moves)
 	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
-	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(Object.assign({ description: MovesText[key].desc}, value))]: {
+	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(Object.assign({ description: MovesText[key].desc}, {...value, power: value.basePower, accuracy: value.accuracy === true ? null : value.accuracy}))]: {
 		name: value.name,
 		category: value.category,
 		description: MovesText[key].desc || MovesText[key].shortDesc,
@@ -112,7 +117,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 							description = descriptions[key].desc
 						else
 							description = MovesText[key].desc || MovesText[key].shortDesc
-						
+
 						const moveGen = {
 							name: MovesText[key].name,
 							category: determineCategory(gen, lastGenMoves[key].type, lastGenMoves[key].category),
@@ -120,12 +125,12 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 							shortDescription: MovesText[key].shortDesc,
 							power: findInheritedMovesGenProperty(gen,key,"basePower"),
 							pp: findInheritedMovesGenProperty(gen,key,"pp"),
-							accuracy: findInheritedMovesGenProperty(gen,key,"accuracy"),
+							accuracy: lastGenMoves[key].accuracy,
 							type: lastGenMoves[key].type
 						}
 
 						const newDiscriminate = createDiscriminate(moveGen)
-
+						
 						if(movesCollection[newDiscriminate])
 							movesCollection[newDiscriminate]["gen"].push(gen)
 						else{
