@@ -1,6 +1,6 @@
 const { Items } = require('./pokemon-showdown/.data-dist/items');
 const { ItemsText } = require('./pokemon-showdown/.data-dist/text/items');
-const { LAST_GEN } = require('./util');
+const { LAST_GEN, range } = require('./util');
 
 const getGenAttributes = (object) => {
 	return Object.keys(object).filter((key) => key.includes('gen'))
@@ -17,8 +17,6 @@ const itemsCollection = Object.entries(Items)
 		name: value.name,
 		description: ItemsText[key].desc
 	}}),{});
-
-const range = (start, end) => Array(end - start + 1).fill().map((_, idx) => start + idx)
 
 // Creating gen property in items
 Object.keys(itemsCollection).forEach((key) => {

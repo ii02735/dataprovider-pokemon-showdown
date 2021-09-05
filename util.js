@@ -73,10 +73,20 @@ Object.entries(movesByGen).forEach(([key,values]) => {
     movesByGen[key] = values.sort()
 })
 
+/**
+ * Returns an array of sequential numbers
+ * like in python with the native range statement
+ * @param {number} start 
+ * @param {number} end 
+ * @returns an array of numbers
+ */
+const range = (start, end) => Array(end - start + 1).fill().map((_, idx) => start + idx)
+
 module.exports = {
 	writeFile,
 	pokemonIsStandard,
 	removeParenthesis,
 	LAST_GEN,
-	movesByGen
+	movesByGen,
+	range
 }
