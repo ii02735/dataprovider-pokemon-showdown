@@ -62,31 +62,23 @@ const determineCategory = (gen, type, initialCategory) => {
 
 }
 
-const movesCollection = Object.entries(Moves)
-	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
-	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(Object.assign({ description: MovesText[key].desc}, {...value, description: MovesText[key].desc || MovesText[key].shortDesc, power: value.basePower, accuracy: value.accuracy === true ? null : value.accuracy}))]: {
-		name: value.name,
-		category: value.category,
-		description: MovesText[key].desc || MovesText[key].shortDesc,
-		shortDescription: MovesText[key].shortDesc,
-		power: value.basePower,
-		pp: value.pp,
-		accuracy: value.accuracy === true ? null : value.accuracy,
-		type: value.type,
-		gen: [ LAST_GEN ]
-	}}),{});
-
 const lastGenMoves = Object.entries(Moves)
 	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
 	.reduce((accumulator,[key, value]) => ({...accumulator, [key]: {
 		name: value.name,
 		category: value.category,
-		description: MovesText[key].desc || MovesText[key].shortDesc,
+		description: value.isNonstandard === 'Past' ? `Not available in gen ${LAST_GEN}` : (MovesText[key].desc || MovesText[key].shortDesc),
 		shortDescription: MovesText[key].shortDesc,
 		power: value.basePower,
 		pp: value.pp,
 		accuracy: value.accuracy === true ? null : value.accuracy,
 		type: value.type
+	}}),{});
+
+const movesCollection = Object.entries(lastGenMoves)
+	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(value)]: {
+		...value,
+		gen: [ LAST_GEN ]
 	}}),{});
 
 
@@ -99,7 +91,6 @@ const mods = (gen) => {
 
 for(let gen=LAST_GEN-1; gen > 0; gen--)
 {
-	let descriptions = {}
 	Object.entries(MovesText)
 		  .forEach(([key,value]) => {
 			  if(lastGenMoves[key] /** to prevent accessing to NonStandardMoves */ &&
