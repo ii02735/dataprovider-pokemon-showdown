@@ -73,6 +73,11 @@ Object.entries(movesByGen).forEach(([key,values]) => {
     movesByGen[key] = values.sort()
 })
 
+const getGenAttributes = (object) => {
+	return Object.keys(object).filter((key) => key.includes('gen'))
+}
+
+
 /**
  * Returns an array of sequential numbers
  * like in python with the native range statement
@@ -88,5 +93,6 @@ module.exports = {
 	removeParenthesis,
 	LAST_GEN,
 	movesByGen,
-	range
+	range,
+	getGenAttributes
 }

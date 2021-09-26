@@ -1,10 +1,6 @@
 const { Items } = require('./pokemon-showdown/.data-dist/items');
 const { ItemsText } = require('./pokemon-showdown/.data-dist/text/items');
-const { LAST_GEN, range } = require('./util');
-
-const getGenAttributes = (object) => {
-	return Object.keys(object).filter((key) => key.includes('gen'))
-}
+const { LAST_GEN, range, getGenAttributes } = require('./util');
 
 const itemsCollection = Object.entries(Items)
 	.filter(
