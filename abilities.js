@@ -72,4 +72,4 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 })
 
 
-console.log(abilities)
+module.exports = abilities
