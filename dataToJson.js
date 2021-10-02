@@ -133,14 +133,14 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 	if (prevoKey) {
 		const prevoLearns = Learnsets[prevoKey];
 		if (prevoLearns && prevoLearns.learnset) {
-			learnset = { ...prevoLearns, ...prevoLearns.learnset };
+			learnset = { ...learnset, ...prevoLearns.learnset };
 		}
 		const prevo = Pokedex[prevoKey];
 		const prevoPrevoKey = getPokemonKeyFromName(prevo && prevo.prevo);
 		if (prevoPrevoKey) {
 			const prevoPrevoLearns = Learnsets[prevoPrevoKey];
 			if (prevoPrevoLearns && prevoPrevoLearns.learnset) {
-				learnset = { ...prevoPrevoLearns, ...prevoPrevoLearns.learnset };
+				learnset = { ...learnset, ...prevoPrevoLearns.learnset };
 			}
 		}
 	}
