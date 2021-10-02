@@ -31,16 +31,24 @@ const writeFile = (fileName, values) => fileSystem.writeFile(
 	e => log(fileName, e)
 );
 
-const pokemonIsStandard = value =>
-	!value.isNonstandard ||
-	value.isNonstandard === 'Past' || // keep pokemons that are not import in gen8
-	value.isNonstandard === 'Gigantamax' || // keep Gmax forms
-	value.isNonstandard === 'Unobtainable'; // keep Unobtainable real mons
+const pokemonIsStandard = ({ isNonstandard }) =>
+	!isNonstandard ||
+	isNonstandard === 'Past' || // keep pokemons that are not import in gen8
+	isNonstandard === 'Gigantamax' || // keep Gmax forms
+	isNonstandard === 'Unobtainable'; // keep Unobtainable real mons
+
+const pokedexEntries = Object.entries(PokedexText);
+const getPokemonKeyFromName = pokemonName => {
+	if (!pokemonName) return null;
+	let pokedexEntry = pokedexEntries.find(([key, { name }]) => name === pokemonName);
+	if (!pokedexEntry || !pokedexEntry.length) return null;
+	return pokedexEntry[0];
+};
 
 const abilities = Object.entries(Abilities)
-	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
-	.map(([key, value]) => ({
-		name: value.name,
+	.filter(([key, { isNonstandard }]) => !isNonstandard || isNonstandard === 'Past')
+	.map(([key, { name }]) => ({
+		name,
 		description: AbilitiesText[key].desc || AbilitiesText[key].shortDesc,
 		shortDescription: AbilitiesText[key].shortDesc,
 	}));
@@ -48,22 +56,20 @@ writeFile('abilities', abilities);
 
 const items = Object.entries(Items)
 	.filter(
-		([key, value]) =>
-			!value.isNonstandard ||
-			value.isNonstandard === 'Past' ||
-			value.isNonstandard === 'Unobtainable'
+		([key, { isNonstandard }]) =>
+			!isNonstandard || isNonstandard === 'Past' || isNonstandard === 'Unobtainable'
 	)
-	.map(([key, value]) => ({
-		name: value.name,
+	.map(([key, { name, itemUser }]) => ({
+		name,
 		description: ItemsText[key].desc,
-		owners: value.itemUser,
+		owners: itemUser,
 	}));
 writeFile('items', items);
 
 const WEAKNESS = { 0: 1, 1: 2, 2: 0.5, 3: 0 }; // translate weakness ratio
-const types = Object.entries(TypeChart).map(([key, value]) => ({
+const types = Object.entries(TypeChart).map(([key, { damageTaken }]) => ({
 	name: key,
-	weaknesses: Object.entries(value.damageTaken).map(([key, value]) => ({
+	weaknesses: Object.entries(damageTaken).map(([key, value]) => ({
 		name: key,
 		ratio: WEAKNESS[value],
 	})),
@@ -71,7 +77,7 @@ const types = Object.entries(TypeChart).map(([key, value]) => ({
 writeFile('types', types);
 
 const moves = Object.entries(Moves)
-	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
+	.filter(([key, { isNonstandard }]) => !isNonstandard || isNonstandard === 'Past')
 	.map(([key, value]) => ({
 		name: value.name,
 		category: value.category,
@@ -85,7 +91,7 @@ const moves = Object.entries(Moves)
 writeFile('moves', moves);
 
 const pokemons = Object.entries(Pokedex)
-	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
+	.filter(([key]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
 	.map(([key, value]) => ({
 		name: value.name,
 		type_1: value.types[0],
@@ -106,34 +112,81 @@ const pokemons = Object.entries(Pokedex)
 writeFile('pokemons', pokemons);
 
 const learns = [];
-Object.entries(Learnsets)
-	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
-	.forEach(([key, value]) => {
-		if (value.learnset) {
-			Object.keys(value.learnset).forEach(move => {
+Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
+	if (FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey])) return;
+	const pokemon = Pokedex[pokemonKey];
+	// add baseForm learnset if form hasn't learnset
+	const baseFormKey = getPokemonKeyFromName(pokemon && pokemon.baseSpecies);
+	const baseForm = baseFormKey && Pokedex[baseFormKey];
+	if (!learnset) {
+		if (!baseFormKey) return null;
+		const baseFomLearns = Learnsets[baseFormKey];
+		if (!baseFomLearns || !baseFomLearns.learnset) return;
+		learnset = baseFomLearns.learnset;
+	}
+	// add prevo learnset
+	// prettier-ignore
+	const prevoKey = getPokemonKeyFromName(
+		(pokemon && pokemon.prevo) 
+		|| (baseForm && baseForm.prevo)
+	);
+	if (prevoKey) {
+		const prevoLearns = Learnsets[prevoKey];
+		if (prevoLearns && prevoLearns.learnset) {
+			learnset = { ...prevoLearns, ...prevoLearns.learnset };
+		}
+		const prevo = Pokedex[prevoKey];
+		const prevoPrevoKey = getPokemonKeyFromName(prevo && prevo.prevo);
+		if (prevoPrevoKey) {
+			const prevoPrevoLearns = Learnsets[prevoPrevoKey];
+			if (prevoPrevoLearns && prevoPrevoLearns.learnset) {
+				learnset = { ...prevoPrevoLearns, ...prevoPrevoLearns.learnset };
+			}
+		}
+	}
+	const pokemonName = PokedexText[pokemonKey] && PokedexText[pokemonKey].name;
+	Object.keys(learnset).forEach(move => {
+		learns.push({
+			pokemon: pokemonName || pokemonKey,
+			move: MovesText[move] ? MovesText[move].name : move,
+		});
+	});
+	// Add move to unreferenced formes
+	if (pokemon && pokemon.otherFormes) {
+		pokemon.otherFormes.forEach(formeName => {
+			const formeKey = getPokemonKeyFromName(formeName);
+			if (
+				!formeKey ||
+				Learnsets[formeKey] ||
+				(FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey]))
+			) {
+				return;
+			}
+			Object.keys(learnset).forEach(move => {
 				learns.push({
-					pokemon: PokedexText[key] ? PokedexText[key].name : key,
+					pokemon: formeName,
 					move: MovesText[move] ? MovesText[move].name : move,
 				});
 			});
-		}
-	});
+		});
+	}
+});
 writeFile('learns', learns);
 
-const natures = Object.values(Natures).map(value => {
-	const nature = { name: value.name };
-	if (value.plus) nature[value.plus] = 1;
-	if (value.minus) nature[value.minus] = -1;
+const natures = Object.values(Natures).map(({ name, plus, minus }) => {
+	const nature = { name };
+	if (plus) nature[plus] = 1;
+	if (minus) nature[minus] = -1;
 	return nature;
 });
 writeFile('natures', natures);
 
 const pokemonTier = Object.entries(FormatsData)
-	.filter(([key, value]) => pokemonIsStandard(value))
-	.map(([key, value]) => ({
-		pokemon: PokedexText[key] ? PokedexText[key].name : key,
-		tier: value.tier ? removeParenthesis(value.tier) : undefined,
-		technically: value.tier ? value.tier.startsWith('(') : false,
-		doublesTier: value.doublesTier ? removeParenthesis(value.doublesTier) : undefined,
+	.filter(([pokemonKey, value]) => pokemonIsStandard(value))
+	.map(([pokemonKey, { tier, doublesTier }]) => ({
+		pokemon: PokedexText[pokemonKey] ? PokedexText[pokemonKey].name : pokemonKey,
+		tier: tier ? removeParenthesis(tier) : undefined,
+		technically: tier ? tier.startsWith('(') : false,
+		doublesTier: doublesTier ? removeParenthesis(doublesTier) : undefined,
 	}));
 writeFile('pokemonTier', pokemonTier);
