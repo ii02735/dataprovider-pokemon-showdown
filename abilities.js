@@ -4,9 +4,9 @@ const pokemonCollection = require('./pokemon');
 const { getGenAttributes, range, LAST_GEN } = require('./util');
 
 const abilitiesTextCollection = Object.entries(Abilities)
-	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
-	.reduce((accumulator,[key, value]) => ({...accumulator,[key]:{
-		name: value.name,
+	.filter(([key, { isNonstandard }]) => !isNonstandard || isNonstandard === 'Past')
+	.reduce((accumulator,[key, { name }]) => ({...accumulator,[key]:{
+		name,
 		description: AbilitiesText[key].desc || AbilitiesText[key].shortDesc,
 		shortDescription: AbilitiesText[key].shortDesc
 	}}),{});
