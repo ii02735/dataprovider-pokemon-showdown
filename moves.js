@@ -63,7 +63,7 @@ const determineCategory = (gen, type, initialCategory) => {
 }
 
 const lastGenMoves = Object.entries(Moves)
-	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
+	.filter(([key, { isNonstandard } ]) => !isNonstandard || isNonstandard === 'Past')
 	.reduce((accumulator,[key, value]) => ({...accumulator, [key]: {
 		name: value.name,
 		category: value.category,

@@ -20,14 +20,22 @@ const writeFile = (fileName, values) => fileSystem.writeFile(
 	e => log(fileName, e)
 );
 
-const pokemonIsStandard = value =>
-	!value.isNonstandard ||
-	value.isNonstandard === 'Past' || // keep pokemons that are not import in gen8
-	value.isNonstandard === 'Gigantamax' || // keep Gmax forms
-	value.isNonstandard === 'Unobtainable' &&  // keep Unobtainable real mons
-	value.tier !== 'Illegal'
+const pokemonIsStandard = ({ isNonstandard }) =>
+	!isNonstandard ||
+	isNonstandard === 'Past' || // keep pokemons that are not import in gen8
+	isNonstandard === 'Gigantamax' || // keep Gmax forms
+	isNonstandard === 'Unobtainable'  // keep Unobtainable real mons
 
 
+const { PokedexText } = require('./pokemon-showdown/.data-dist/text/pokedex');
+const pokedexEntries = Object.entries(PokedexText);
+// Applying GeoDaz's modifications from 0088816fc5ec17b71d085edf26fd7287d1b9b4b6
+const getPokemonKeyFromName = (pokemonName) => {
+	if (!pokemonName) return null;
+	let pokedexEntry = pokedexEntries.find(([key, { name }]) => name === pokemonName);
+	if (!pokedexEntry || !pokedexEntry.length) return null;
+	return pokedexEntry[0];
+};
 /**
  * There is no other way to find a move's gen (unlike for pokemon by reading 
  * the format-data file for each gen or for items by accessing the gen property in the items file)
@@ -94,5 +102,6 @@ module.exports = {
 	LAST_GEN,
 	movesByGen,
 	range,
-	getGenAttributes
+	getGenAttributes,
+	getPokemonKeyFromName
 }
