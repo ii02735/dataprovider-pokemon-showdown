@@ -44,6 +44,11 @@ const availableGensByMove = moves.reduce((accumulator,object) => {
 	return accumulator
 },{})
 
+/**
+ * DONE: Associate gens by learn
+ * TODO: remove invalid gens for certain learns (Example : Mega-Charizard-X is from gen 6, but we have 3th gen for bite / "morsure" -> remove invalid gens) 
+ * Way: find minimum generation for pkmn, slice the createGenArray and take the second part (the first part has an invalid interval) 
+ */
 Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 	if (FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey])) return;
 	const pokemon = Pokedex[pokemonKey];
@@ -65,23 +70,26 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 	if (prevoKey) {
 		const prevoLearns = Learnsets[prevoKey];
 		if (prevoLearns && prevoLearns.learnset) {
-			learnset = { ...learnset, ...prevoLearns.learnset };
+			learnset = { ...prevoLearns, ...prevoLearns.learnset };
 		}
 		const prevo = Pokedex[prevoKey];
 		const prevoPrevoKey = getPokemonKeyFromName(prevo && prevo.prevo);
 		if (prevoPrevoKey) {
 			const prevoPrevoLearns = Learnsets[prevoPrevoKey];
 			if (prevoPrevoLearns && prevoPrevoLearns.learnset) {
-				learnset = { ...learnset, ...prevoPrevoLearns.learnset };
+				learnset = { ...prevoPrevoLearns, ...prevoPrevoLearns.learnset };
 			}
 		}
 	}
 	const pokemonName = PokedexText[pokemonKey] && PokedexText[pokemonKey].name;
 	Object.keys(learnset).forEach(move => {
-		learns.push({
-			pokemon: pokemonName || pokemonKey,
-			move: MovesText[move] ? MovesText[move].name : move,
-		});
+		if(MovesText[move]){
+			learns.push({
+				pokemon: pokemonName || pokemonKey,
+				move: MovesText[move] ? MovesText[move].name : move,
+				gen: createGenArray(MovesText[move].name,learnset[move])
+			});
+		}
 	});
 	// Add move to unreferenced formes
 	if (pokemon && pokemon.otherFormes) {
@@ -95,14 +103,15 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 				return;
 			}
 			Object.keys(learnset).forEach(move => {
-				learns.push({
-					pokemon: formeName,
-					move: MovesText[move] ? MovesText[move].name : move,
-					gen: createGenArray(MovesText[move].name,learnset[move])
-				});
+				if(MovesText[move]){
+					learns.push({
+						pokemon: formeName,
+						move: MovesText[move] ? MovesText[move].name : move,
+						gen: createGenArray(MovesText[move].name,learnset[move])
+					});
+				}
 			});
 		});
 	}
 });
-
 module.exports = learns
