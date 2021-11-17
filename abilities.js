@@ -5,11 +5,14 @@ const { getGenAttributes, range, LAST_GEN } = require('./util');
 
 const abilitiesTextCollection = Object.entries(Abilities)
 	.filter(([key, { isNonstandard }]) => !isNonstandard || isNonstandard === 'Past')
-	.reduce((accumulator,[key, { name }]) => ({...accumulator,[key]:{
-		name,
-		description: AbilitiesText[key].desc || AbilitiesText[key].shortDesc,
-		shortDescription: AbilitiesText[key].shortDesc
-	}}),{});
+	.reduce((accumulator,[key, { name }]) => {
+				accumulator[key] = {
+				name,
+				description: AbilitiesText[key].desc || AbilitiesText[key].shortDesc,
+				shortDescription: AbilitiesText[key].shortDesc
+			}
+		return accumulator;
+	},{});
 
 // Method in order to create keys for abilitiesGen and to use them in abilities object
 const createKey = (name) => name.replace(/\W+/g,"").toLowerCase()

@@ -9,10 +9,13 @@ const itemsCollection = Object.entries(Items)
 			isNonstandard === 'Past' ||
 			isNonstandard === 'Unobtainable') && !key.match(/tr\d+/g) // pokemon shouldn't hold TRs --> we remove those items
 	)
-	.reduce((accumulator, [key, { name }]) => ({...accumulator, [key]:{
-		name,
-		description: ItemsText[key].desc
-	}}),{});
+	.reduce((accumulator, [key, { name }]) => {
+		accumulator[key] = {
+			name,
+			description: ItemsText[key].desc
+		}
+		return accumulator;
+	},{});
 
 // Creating gen property in items
 Object.keys(itemsCollection).forEach((key) => {

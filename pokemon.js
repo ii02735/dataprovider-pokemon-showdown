@@ -7,11 +7,13 @@ const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify(
 const pokemons = Object.entries(Pokedex)
 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
 	.reduce((accumulator, [key,value]) => {
-
-		return {...accumulator, [createDiscriminant(value)]:{
+		
+			accumulator[createDiscriminant(value)] = {
 			...value,
 			gen: [LAST_GEN]
-		}}
+			}
+
+		return accumulator;
 	},{});
 
 
@@ -28,7 +30,8 @@ const mods = (gen) => {
 		if(pokemonIsStandard(FormatsData[key]))
 		{
 			const FormatsDataPokemon = FormatsData[key]
-			return {...accumulator, [key] : FormatsDataPokemon}
+			accumulator[key] = FormatsDataPokemon;
+			return accumulator;
 		}
 		return accumulator
 
