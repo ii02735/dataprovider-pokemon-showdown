@@ -5,6 +5,7 @@ const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
 const { pokemonIsStandard, range, getPokemonKeyFromName } = require('./util');
 const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const moves = require('./moves');
+const { gensByPokemon } = require('./pokemon');
 
 const learns = [];
 
@@ -97,6 +98,7 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 			const formeKey = getPokemonKeyFromName(formeName);
 			if (
 				!formeKey ||
+				!gensByPokemon[formeKey] ||
 				Learnsets[formeKey] ||
 				(FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey]))
 			) {
@@ -104,10 +106,15 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 			}
 			Object.keys(learnset).forEach(move => {
 				if(MovesText[move]){
+
+					let genLearns = createGenArray(MovesText[move].name,learnset[move])
+
+					genLearns = genLearns[0] < gensByPokemon[formeKey][0] ? genLearns.slice(genLearns.indexOf(gensByPokemon[formeKey][0])) : genLearns
+
 					learns.push({
 						pokemon: formeName,
 						move: MovesText[move] ? MovesText[move].name : move,
-						gen: createGenArray(MovesText[move].name,learnset[move])
+						gen: genLearns
 					});
 				}
 			});
