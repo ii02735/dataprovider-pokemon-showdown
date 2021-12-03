@@ -42,7 +42,7 @@ const getPokemonKeyFromName = (pokemonName) => {
  * Hence, we have no choice to read and parse the learnsets file
  * 
  * The learnsets file tells what moves can be learned from all pokemon,
- * it can be either by leveling, evolution, transferring by generation... it is safe to assume
+ * it can either be by leveling, evolution, transferring by generation... it is safe to assume
  * that it gathers all the required data 
  * 
  * The result's structure is the following :
