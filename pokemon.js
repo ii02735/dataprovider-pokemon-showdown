@@ -1,17 +1,21 @@
 const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
 const { pokemonIsStandard, LAST_GEN } = require('./util');
-
+const gensByPokemon = {} // will be used for learns
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
 
 const pokemons = Object.entries(Pokedex)
 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
 	.reduce((accumulator, [key,value]) => {
 
-		return {...accumulator, [createDiscriminant(value)]:{
-			...value,
-			gen: [LAST_GEN]
-		}}
+		gensByPokemon[key] = [LAST_GEN]
+
+		accumulator[createDiscriminant(value)] = {
+		...value,
+		gen: [LAST_GEN]
+		}
+
+		return accumulator;
 	},{});
 
 
@@ -28,7 +32,8 @@ const mods = (gen) => {
 		if(pokemonIsStandard(FormatsData[key]))
 		{
 			const FormatsDataPokemon = FormatsData[key]
-			return {...accumulator, [key] : FormatsDataPokemon}
+			accumulator[key] = FormatsDataPokemon;
+			return accumulator;
 		}
 		return accumulator
 
@@ -141,12 +146,14 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 					const richGenPokemonObject = cleanAbilities(gen,Object.assign(lastGenPokemon, inheritedPokemonInfo))
 					const discriminant = createDiscriminant(richGenPokemonObject)
 
-					if(pokemons.hasOwnProperty(discriminant))
+					if(pokemons.hasOwnProperty(discriminant)){
 						pokemons[discriminant]['gen'].push(gen)
-					else {
-							
+						gensByPokemon[key].push(gen);
+					} else {
 						pokemons[discriminant] = richGenPokemonObject
 						pokemons[discriminant]['gen'] = [gen]
+						if(gensByPokemon[key])
+							gensByPokemon[key].push(gen);
 					}
 
 				}
@@ -185,4 +192,6 @@ const resultPokemons = Object.values(pokemons).map((value) => {
 	
 })
 
+Object.values(gensByPokemon).forEach((value) => value.sort())
 module.exports = resultPokemons
+module.exports.gensByPokemon = gensByPokemon

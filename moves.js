@@ -6,7 +6,8 @@ const createDiscriminate = ({ name, category, description, power, pp, accuracy, 
 
 const getGenAttributes = (object) => {
 	return Object.keys(object).filter((key) => key.includes('gen')).reduce((acc,index) => {
-		return { ...acc, [index]: index }
+		acc[index] = index;
+		return acc
 	},{})
 }
 
@@ -63,7 +64,7 @@ const determineCategory = (gen, type, initialCategory) => {
 }
 
 const lastGenMoves = Object.entries(Moves)
-	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
+	.filter(([key, { isNonstandard } ]) => !isNonstandard || isNonstandard === 'Past')
 	.reduce((accumulator,[key, value]) => ({...accumulator, [key]: {
 		name: value.name,
 		category: value.category,
@@ -76,10 +77,13 @@ const lastGenMoves = Object.entries(Moves)
 	}}),{});
 
 const movesCollection = Object.entries(lastGenMoves)
-	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(value)]: {
-		...value,
-		gen: [ LAST_GEN ]
-	}}),{});
+	.reduce((accumulator,[key, value]) => {
+		accumulator[createDiscriminate(value)] = {
+			...value,
+			gen: [ LAST_GEN ]
+		}
+		return accumulator;
+	},{});
 
 
 const mods = (gen) => {
