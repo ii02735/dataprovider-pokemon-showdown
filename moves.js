@@ -22,12 +22,18 @@ const findInheritedMovesGenProperty = (gen,moveName,property) => {
 		if(nextMoveGen)
 		{
 			if(nextMoveGen[property]){
+				if(property === 'accuracy' && nextMoveGen[property] === true)
+					nextMoveGen[property] = null
 				return nextMoveGen[property];
 			}
 		}
 	}
 	if(property === "basePower")
 		property = "power"
+
+	if(property === 'accuracy' && lastGenMoves[moveName][property] === true)
+		lastGenMoves[moveName][property] = null
+	
 	return lastGenMoves[moveName][property]
 }
 
