@@ -31,8 +31,8 @@ const findInheritedMovesGenProperty = (gen,moveName,property) => {
 	if(property === "basePower")
 		property = "power"
 
-	if(property === 'accuracy' && nextMoveGen[property] === true)
-		nextMoveGen[property] = null
+	if(property === 'accuracy' && lastGenMoves[moveName][property] === true)
+		lastGenMoves[moveName][property] = null
 	
 	return lastGenMoves[moveName][property]
 }
