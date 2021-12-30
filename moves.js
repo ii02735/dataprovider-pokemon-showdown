@@ -110,8 +110,8 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 							shortDescription:  Object.keys(multipleDescriptionGen).length > 0 && multipleDescriptionGen["gen"+gen] ? MovesText[key][multipleDescriptionGen["gen"+gen]].shortDesc : MovesText[key].shortDesc,
 							power: findInheritedMovesGenProperty(gen,key,"basePower"),
 							pp: findInheritedMovesGenProperty(gen,key,"pp"),
-							accuracy: lastGenMoves[key].accuracy,
-							type: lastGenMoves[key].type
+							accuracy: findInheritedMovesGenProperty(gen,key,"accuracy"),
+							type: findInheritedMovesGenProperty(gen,key,"type")
 						}
 
 						const newDiscriminate = createDiscriminate(moveGen)
