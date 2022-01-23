@@ -2,8 +2,10 @@ const { PokedexText } = require('./pokemon-showdown/.data-dist/text/pokedex');
 const { Learnsets } = require('./pokemon-showdown/.data-dist/learnsets');
 const { MovesText } = require('./pokemon-showdown/.data-dist/text/moves');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
-const { pokemonIsStandard, range } = require('./util');
+const { pokemonIsStandard, range, getPokemonKeyFromName } = require('./util');
+const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const moves = require('./moves');
+const { gensByPokemon } = require('./pokemon');
 
 const learns = [];
 
@@ -43,18 +45,80 @@ const availableGensByMove = moves.reduce((accumulator,object) => {
 	return accumulator
 },{})
 
-Object.entries(Learnsets)
-	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
-	.forEach(([key, value]) => {
-		if (value.learnset) {
-			Object.keys(value.learnset).forEach(move => {
-				learns.push({
-					pokemon: PokedexText[key] ? PokedexText[key].name : key,
-					move: MovesText[move] ? MovesText[move].name : move,
-					gen: createGenArray(MovesText[move].name,value.learnset[move])
-				});
+/**
+ * DONE: Associate gens by learn
+ * TODO: remove invalid gens for certain learns (Example : Mega-Charizard-X is from gen 6, but we have 3th gen for bite / "morsure" -> remove invalid gens) 
+ * Way: find minimum generation for pkmn, slice the createGenArray and take the second part (the first part has an invalid interval) 
+ */
+Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
+	if (FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey])) return;
+	const pokemon = Pokedex[pokemonKey];
+	// add baseForm learnset if form hasn't learnset
+	const baseFormKey = getPokemonKeyFromName(pokemon && pokemon.baseSpecies);
+	const baseForm = baseFormKey && Pokedex[baseFormKey];
+	if (!learnset) {
+		if (!baseFormKey) return null;
+		const baseFomLearns = Learnsets[baseFormKey];
+		if (!baseFomLearns || !baseFomLearns.learnset) return;
+		learnset = baseFomLearns.learnset;
+	}
+	// add prevo learnset
+	// prettier-ignore
+	const prevoKey = getPokemonKeyFromName(
+		(pokemon && pokemon.prevo) 
+		|| (baseForm && baseForm.prevo)
+	);
+	if (prevoKey) {
+		const prevoLearns = Learnsets[prevoKey];
+		if (prevoLearns && prevoLearns.learnset) {
+			learnset = { ...prevoLearns, ...prevoLearns.learnset };
+		}
+		const prevo = Pokedex[prevoKey];
+		const prevoPrevoKey = getPokemonKeyFromName(prevo && prevo.prevo);
+		if (prevoPrevoKey) {
+			const prevoPrevoLearns = Learnsets[prevoPrevoKey];
+			if (prevoPrevoLearns && prevoPrevoLearns.learnset) {
+				learnset = { ...prevoPrevoLearns, ...prevoPrevoLearns.learnset };
+			}
+		}
+	}
+	const pokemonName = PokedexText[pokemonKey] && PokedexText[pokemonKey].name;
+	Object.keys(learnset).forEach(move => {
+		if(MovesText[move]){
+			learns.push({
+				pokemon: pokemonName || pokemonKey,
+				move: MovesText[move] ? MovesText[move].name : move,
+				gen: createGenArray(MovesText[move].name,learnset[move])
 			});
 		}
 	});
+	// Add move to unreferenced formes
+	if (pokemon && pokemon.otherFormes) {
+		pokemon.otherFormes.forEach(formeName => {
+			const formeKey = getPokemonKeyFromName(formeName);
+			if (
+				!formeKey ||
+				!gensByPokemon[formeKey] ||
+				Learnsets[formeKey] ||
+				(FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey]))
+			) {
+				return;
+			}
+			Object.keys(learnset).forEach(move => {
+				if(MovesText[move]){
 
+					let genLearns = createGenArray(MovesText[move].name,learnset[move])
+
+					genLearns = genLearns[0] < gensByPokemon[formeKey][0] ? genLearns.slice(genLearns.indexOf(gensByPokemon[formeKey][0])) : genLearns
+
+					learns.push({
+						pokemon: formeName,
+						move: MovesText[move] ? MovesText[move].name : move,
+						gen: genLearns
+					});
+				}
+			});
+		});
+	}
+});
 module.exports = learns

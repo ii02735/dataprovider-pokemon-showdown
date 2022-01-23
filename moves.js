@@ -6,7 +6,8 @@ const createDiscriminate = ({ name, category, description, power, pp, accuracy, 
 
 const getGenAttributes = (object) => {
 	return Object.keys(object).filter((key) => key.includes('gen')).reduce((acc,index) => {
-		return { ...acc, [index]: index }
+		acc[index] = index;
+		return acc
 	},{})
 }
 
@@ -21,12 +22,18 @@ const findInheritedMovesGenProperty = (gen,moveName,property) => {
 		if(nextMoveGen)
 		{
 			if(nextMoveGen[property]){
+				if(property === 'accuracy' && nextMoveGen[property] === true)
+					nextMoveGen[property] = null
 				return nextMoveGen[property];
 			}
 		}
 	}
 	if(property === "basePower")
 		property = "power"
+
+	if(property === 'accuracy' && lastGenMoves[moveName][property] === true)
+		lastGenMoves[moveName][property] = null
+	
 	return lastGenMoves[moveName][property]
 }
 
@@ -63,7 +70,7 @@ const determineCategory = (gen, type, initialCategory) => {
 }
 
 const lastGenMoves = Object.entries(Moves)
-	.filter(([key, value]) => !value.isNonstandard || value.isNonstandard === 'Past')
+	.filter(([key, { isNonstandard } ]) => !isNonstandard || isNonstandard === 'Past')
 	.reduce((accumulator,[key, value]) => ({...accumulator, [key]: {
 		name: value.name,
 		category: value.category,
@@ -76,10 +83,13 @@ const lastGenMoves = Object.entries(Moves)
 	}}),{});
 
 const movesCollection = Object.entries(lastGenMoves)
-	.reduce((accumulator,[key, value]) => ({...accumulator, [createDiscriminate(value)]: {
-		...value,
-		gen: [ LAST_GEN ]
-	}}),{});
+	.reduce((accumulator,[key, value]) => {
+		accumulator[createDiscriminate(value)] = {
+			...value,
+			gen: [ LAST_GEN ]
+		}
+		return accumulator;
+	},{});
 
 
 const mods = (gen) => {
@@ -106,8 +116,8 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 							shortDescription:  Object.keys(multipleDescriptionGen).length > 0 && multipleDescriptionGen["gen"+gen] ? MovesText[key][multipleDescriptionGen["gen"+gen]].shortDesc : MovesText[key].shortDesc,
 							power: findInheritedMovesGenProperty(gen,key,"basePower"),
 							pp: findInheritedMovesGenProperty(gen,key,"pp"),
-							accuracy: lastGenMoves[key].accuracy,
-							type: lastGenMoves[key].type
+							accuracy: findInheritedMovesGenProperty(gen,key,"accuracy"),
+							type: findInheritedMovesGenProperty(gen,key,"type")
 						}
 
 						const newDiscriminate = createDiscriminate(moveGen)
