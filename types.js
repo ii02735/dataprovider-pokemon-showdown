@@ -86,4 +86,4 @@ for(type of types)
 	delete type.damageTaken
 }
 
-module.exports = type
+module.exports = types

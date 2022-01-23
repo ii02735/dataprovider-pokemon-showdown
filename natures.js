@@ -1,9 +1,9 @@
 const { Natures } = require('./pokemon-showdown/.data-dist/natures');
 
-const natures = Object.values(Natures).map(value => {
-	const nature = { name: value.name };
-	if (value.plus) nature[value.plus] = 1;
-	if (value.minus) nature[value.minus] = -1;
+const natures = Object.values(Natures).map(({ name, plus, minus }) => {
+	const nature = { name };
+	if (plus) nature[plus] = 1;
+	if (minus) nature[minus] = -1;
 	return nature;
 });
 
