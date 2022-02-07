@@ -1,6 +1,6 @@
 const { Abilities } = require('./pokemon-showdown/.data-dist/abilities');
 const { AbilitiesText } = require('./pokemon-showdown/.data-dist/text/abilities');
-const pokemonCollection = require('./pokemon');
+const { pokemonCollection } = require('./pokemon');
 const { getGenAttributes, range, LAST_GEN } = require('./util');
 
 const abilitiesTextCollection = Object.entries(Abilities)
@@ -85,7 +85,7 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 				name: value.name,
 				description: AbilitiesText[key]["gen"+otherGen].desc || AbilitiesText[key]["gen"+otherGen].shortDesc,
 				shortDescription: AbilitiesText[key]["gen"+otherGen].shortDesc,
-				gen: index == 0 && abilitiesGen[key] ? range(abilitiesGen[key][0],otherGen) : [otherGen]
+				gen: index == 0 ? range(abilitiesGen[key][0],otherGen) : [otherGen]
 			})
 		})
 

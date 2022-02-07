@@ -4,7 +4,7 @@ const { MovesText } = require('./pokemon-showdown/.data-dist/text/moves');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
 const { pokemonIsStandard, range, getPokemonKeyFromName } = require('./util');
 const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
-const moves = require('./moves');
+const { movesCollection } = require('./moves');
 const { gensByPokemon } = require('./pokemon');
 
 const learns = [];
@@ -35,7 +35,7 @@ const createGenArray = (moveName,learnsetMoveData) => {
  * Return an object that shows for each move, the valid generations
  * Structure : { 'move name': [gens] }
  */
-const availableGensByMove = moves.reduce((accumulator,object) => {
+const availableGensByMove = movesCollection.reduce((accumulator,object) => {
 	if(!/Not available in gen \d/.test(object["description"])){
 		if(accumulator[object.name])
 			accumulator[object.name] = [...accumulator[object.name], ...object["gen"]].sort()

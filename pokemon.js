@@ -214,5 +214,35 @@ const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) =>
 },{})
 
 Object.values(gensByPokemon).forEach((value) => value.sort())
-module.exports = Object.values(intermediaryObject).map((value) => value)
+module.exports.pokemonCollection = Object.values(pokemons).map((value) => { 
+	const object = ({
+		name: value.name,
+		type_1: value.types[0],
+		type_2: value.types.length > 1 ? value.types[1] : null,
+		hp: value.baseStats.hp,
+		atk: value.baseStats.atk,
+		def: value.baseStats.def,
+		spa: value.baseStats.spa,
+		spd: value.baseStats.spd,
+		spe: value.baseStats.spe,
+		weight: value.weightkg,
+		baseForm: value.baseSpecies ? value.baseSpecies : null,
+		prevo: value.prevo ? value.prevo : null,
+		gen: value.gen.sort()
+	})
+
+	if(value.abilities){
+		if(value.abilities['0'])
+			object["ability_1"] = value.abilities['0']
+		if(value.abilities['1'])
+			object["ability_2"] = value.abilities['1']
+		if(value.abilities['H'])
+			object["ability_hidden"] = value.abilities['H']
+	}
+
+	return object
+	
+})
+
+module.exports.pokemons = Object.values(intermediaryObject).map((value) => value)
 module.exports.gensByPokemon = gensByPokemon
