@@ -135,7 +135,8 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 					const lastGenPokemon = JSON.parse(JSON.stringify(modsByGen[LAST_GEN]['Pokedex'][key]))
 					
 					// Will check and fetch values of next gen (smogon system uses reverse inheritence, example : gen1 inherit values from gen2)
-					const inheritedPokemonInfo = { 
+					const inheritedPokemonInfo = {
+						num: findInheritedPokemonGenProperty(gen,key,'num'), 
 						baseStats: findInheritedPokemonGenProperty(gen,key,'baseStats'),
 						abilities: findInheritedPokemonGenProperty(gen,key,'abilities'),
 						types: findInheritedPokemonGenProperty(gen,key,'types')
@@ -164,6 +165,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 
 const resultPokemons = Object.values(pokemons).map((value) => { 
 	const object = ({
+		num: value.num,
 		name: value.name,
 		type_1: value.types[0],
 		type_2: value.types.length > 1 ? value.types[1] : null,
