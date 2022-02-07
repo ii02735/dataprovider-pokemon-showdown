@@ -81,12 +81,11 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 	if(otherGens.length > 0)
 	{
 		otherGens.forEach((otherGen,index) => {
-		
 			abilities.push({
 				name: value.name,
 				description: AbilitiesText[key]["gen"+otherGen].desc || AbilitiesText[key]["gen"+otherGen].shortDesc,
 				shortDescription: AbilitiesText[key]["gen"+otherGen].shortDesc,
-				gen: index == 0 ? range(abilitiesGen[key][0],otherGen) : [otherGen]
+				gen: index == 0 && abilitiesGen[key] ? range(abilitiesGen[key][0],otherGen) : [otherGen]
 			})
 		})
 
@@ -115,4 +114,21 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 
 abilities[0]["gen"] = range(1,LAST_GEN)
 
-module.exports = abilities
+const intermediaryObject = abilities.reduce((accumulator,{name,description,shortDescription,gen}) => {
+
+	const key = JSON.stringify(name)
+
+	if(!accumulator.hasOwnProperty(key))
+		accumulator[key] = {
+			name,
+			versions: []	
+		}
+	
+	accumulator[key].versions.push({description,shortDescription,gen})
+
+
+	return accumulator;
+
+},{})
+
+module.exports = Object.values(intermediaryObject).map((value) => value)
