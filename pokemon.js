@@ -2,7 +2,10 @@ const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
 const { pokemonIsStandard, LAST_GEN } = require('./util');
 const gensByPokemon = {} // will be used for learns
+
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
+const createDiscriminantVersion = ({name,baseForm,prevo}) => JSON.stringify({name,baseForm,prevo});
+const versionObject = ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen}) => ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen})
 
 const pokemons = Object.entries(Pokedex)
 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
@@ -160,10 +163,13 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 				}
 				
 	})
-		
+	
 }
 
-const resultPokemons = Object.values(pokemons).map((value) => { 
+
+
+const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) => { 
+	
 	const object = ({
 		num: value.num,
 		name: value.name,
@@ -181,6 +187,16 @@ const resultPokemons = Object.values(pokemons).map((value) => {
 		gen: value.gen.sort()
 	})
 
+	const keyVersion = createDiscriminantVersion(object);
+
+	if(!accumulator.hasOwnProperty(keyVersion))
+		accumulator[keyVersion] = {
+			num: object.num,
+			name: object.name,
+			prevo: object.prevo,
+			versions: []
+		};
+
 	if(value.abilities){
 		if(value.abilities['0'])
 			object["ability_1"] = value.abilities['0']
@@ -190,10 +206,13 @@ const resultPokemons = Object.values(pokemons).map((value) => {
 			object["ability_hidden"] = value.abilities['H']
 	}
 
-	return object
+
+	accumulator[keyVersion].versions.push(versionObject(object))
+
+	return accumulator
 	
-})
+},{})
 
 Object.values(gensByPokemon).forEach((value) => value.sort())
-module.exports = resultPokemons
+module.exports = Object.values(intermediaryObject).map((value) => value)
 module.exports.gensByPokemon = gensByPokemon
