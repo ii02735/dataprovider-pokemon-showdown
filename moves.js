@@ -3,6 +3,8 @@ const { MovesText } = require('./pokemon-showdown/.data-dist/text/moves');
 const { LAST_GEN, movesByGen } = require('./util');
 
 const createDiscriminate = ({ name, category, description, power, pp, accuracy, type }) => JSON.stringify({ name, category, description, power, pp, accuracy, type })
+const createDiscriminantVersion = ({ name }) => JSON.stringify({name});
+const versionObject = ({category, description, power, pp, accuracy, type}) => ({category, description, power, pp, accuracy, type})
 
 const getGenAttributes = (object) => {
 	return Object.keys(object).filter((key) => key.includes('gen')).reduce((acc,index) => {
@@ -138,4 +140,22 @@ Object.keys(movesCollection).forEach((key) => {
 	movesCollection[key]["gen"] = movesCollection[key]["gen"].sort()
 })
 
-module.exports = Object.values(movesCollection)
+const intermediaryObject = Object.values(movesCollection).reduce((accumulator,value) => {
+
+	const key = createDiscriminantVersion(value);
+
+	if(!accumulator.hasOwnProperty(key)){
+		accumulator[key] = {
+			name: value.name,
+			versions: []
+		};
+	}
+
+	accumulator[key].versions.push(versionObject(value))
+	
+	return accumulator
+
+},{});
+
+module.exports = Object.values(intermediaryObject).map(value => value)
+	
