@@ -155,6 +155,6 @@ const intermediaryObject = Object.values(movesCollection).reduce((accumulator,{n
 
 },{});
 
-module.exports.movesCollection = Object.values(movesCollection)
-module.exports.moves = Object.values(intermediaryObject
+module.exports.movesCollection = Object.values(movesCollection);
+module.exports.moves = Object.values(intermediaryObject);
 	
