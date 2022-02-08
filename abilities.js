@@ -131,4 +131,4 @@ const intermediaryObject = abilities.reduce((accumulator,{name,description,short
 
 },{})
 
-module.exports = Object.values(intermediaryObject).map((value) => value)
+module.exports = Object.values(intermediaryObject)

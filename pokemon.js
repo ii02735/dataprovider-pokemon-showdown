@@ -244,5 +244,5 @@ module.exports.pokemonCollection = Object.values(pokemons).map((value) => {
 	
 })
 
-module.exports.pokemons = Object.values(intermediaryObject).map((value) => value)
+module.exports.pokemons = Object.values(intermediaryObject)
 module.exports.gensByPokemon = gensByPokemon

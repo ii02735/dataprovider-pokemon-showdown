@@ -68,6 +68,6 @@ const intermediaryObject = Object.values(itemsCollection).reduce((accumulator,va
 	return accumulator
 },{})
 
-const items = Object.values(intermediaryObject).map((value) => value)
+const items = Object.values(intermediaryObject)
 module.exports = items
 
