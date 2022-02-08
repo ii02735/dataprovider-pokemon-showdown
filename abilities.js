@@ -1,6 +1,6 @@
 const { Abilities } = require('./pokemon-showdown/.data-dist/abilities');
 const { AbilitiesText } = require('./pokemon-showdown/.data-dist/text/abilities');
-const pokemonCollection = require('./pokemon');
+const { pokemonCollection } = require('./pokemon');
 const { getGenAttributes, range, LAST_GEN } = require('./util');
 
 const abilitiesTextCollection = Object.entries(Abilities)
@@ -81,7 +81,6 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 	if(otherGens.length > 0)
 	{
 		otherGens.forEach((otherGen,index) => {
-		
 			abilities.push({
 				name: value.name,
 				description: AbilitiesText[key]["gen"+otherGen].desc || AbilitiesText[key]["gen"+otherGen].shortDesc,
@@ -115,4 +114,21 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 
 abilities[0]["gen"] = range(1,LAST_GEN)
 
-module.exports = abilities
+const intermediaryObject = abilities.reduce((accumulator,{name,description,shortDescription,gen}) => {
+
+	const key = JSON.stringify(name)
+
+	if(!accumulator.hasOwnProperty(key))
+		accumulator[key] = {
+			name,
+			versions: []	
+		}
+	
+	accumulator[key].versions.push({description,shortDescription,gen})
+
+
+	return accumulator;
+
+},{})
+
+module.exports = Object.values(intermediaryObject)

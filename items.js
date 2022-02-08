@@ -50,5 +50,24 @@ Object.keys(itemsCollection).forEach((key) => {
 		itemsCollection[key]["gen"] = range(Items[key]["gen"],LAST_GEN)
 })
 
-const items = Object.values(itemsCollection)
+const intermediaryObject = Object.values(itemsCollection).reduce((accumulator,value) => {
+	
+	const { name, description, gen } = value
+
+	const key = JSON.stringify({ name })
+
+	if(!accumulator.hasOwnProperty(key)){
+		accumulator[key] = {
+			name,
+			versions: []
+		};
+	}
+	
+	accumulator[key].versions.push({description, gen})
+	
+	return accumulator
+},{})
+
+const items = Object.values(intermediaryObject)
 module.exports = items
+

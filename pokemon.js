@@ -2,7 +2,10 @@ const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
 const { pokemonIsStandard, LAST_GEN } = require('./util');
 const gensByPokemon = {} // will be used for learns
+
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
+const createDiscriminantVersion = ({name,baseForm,prevo}) => JSON.stringify({name,baseForm,prevo});
+const versionObject = ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen}) => ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen})
 
 const pokemons = Object.entries(Pokedex)
 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
@@ -135,7 +138,8 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 					const lastGenPokemon = JSON.parse(JSON.stringify(modsByGen[LAST_GEN]['Pokedex'][key]))
 					
 					// Will check and fetch values of next gen (smogon system uses reverse inheritence, example : gen1 inherit values from gen2)
-					const inheritedPokemonInfo = { 
+					const inheritedPokemonInfo = {
+						num: findInheritedPokemonGenProperty(gen,key,'num'), 
 						baseStats: findInheritedPokemonGenProperty(gen,key,'baseStats'),
 						abilities: findInheritedPokemonGenProperty(gen,key,'abilities'),
 						types: findInheritedPokemonGenProperty(gen,key,'types')
@@ -159,10 +163,58 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 				}
 				
 	})
-		
+	
 }
 
-const resultPokemons = Object.values(pokemons).map((value) => { 
+
+
+const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) => { 
+	
+	const object = ({
+		num: value.num,
+		name: value.name,
+		type_1: value.types[0],
+		type_2: value.types.length > 1 ? value.types[1] : null,
+		hp: value.baseStats.hp,
+		atk: value.baseStats.atk,
+		def: value.baseStats.def,
+		spa: value.baseStats.spa,
+		spd: value.baseStats.spd,
+		spe: value.baseStats.spe,
+		weight: value.weightkg,
+		baseForm: value.baseSpecies ? value.baseSpecies : null,
+		prevo: value.prevo ? value.prevo : null,
+		gen: value.gen.sort()
+	})
+
+	const keyVersion = createDiscriminantVersion(object);
+
+	if(!accumulator.hasOwnProperty(keyVersion))
+		accumulator[keyVersion] = {
+			num: object.num,
+			name: object.name,
+			prevo: object.prevo,
+			versions: []
+		};
+
+	if(value.abilities){
+		if(value.abilities['0'])
+			object["ability_1"] = value.abilities['0']
+		if(value.abilities['1'])
+			object["ability_2"] = value.abilities['1']
+		if(value.abilities['H'])
+			object["ability_hidden"] = value.abilities['H']
+	}
+
+
+	accumulator[keyVersion].versions.push(versionObject(object))
+
+	return accumulator
+	
+},{})
+
+Object.values(gensByPokemon).forEach((value) => value.sort())
+module.exports.pokemonCollection = Object.values(pokemons).map((value) => { 
 	const object = ({
 		name: value.name,
 		type_1: value.types[0],
@@ -192,6 +244,5 @@ const resultPokemons = Object.values(pokemons).map((value) => {
 	
 })
 
-Object.values(gensByPokemon).forEach((value) => value.sort())
-module.exports = resultPokemons
+module.exports.pokemons = Object.values(intermediaryObject)
 module.exports.gensByPokemon = gensByPokemon
