@@ -1,6 +1,6 @@
 const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
-const { pokemonIsStandard, LAST_GEN } = require('./util');
+const { pokemonIsStandard, LAST_GEN, getPokemonKeyFromName } = require('./util');
 const gensByPokemon = {} // will be used for learns
 
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
@@ -121,7 +121,7 @@ const findInheritedPokemonGenProperty = (gen,pokemonName, property) => {
 for(let gen=LAST_GEN-1; gen > 0; gen--)
 {
 	Object.entries(modsByGen[gen]['FormatsData'])
-		  .filter(([key,object]) => !modsByGen[gen]['FormatsData'][key] || pokemonIsStandard(!modsByGen[gen]['FormatsData'][key]))
+		  .filter(([key,object]) => !modsByGen[gen]['FormatsData'][key] || pokemonIsStandard(FormatsData[key]))
 		  .forEach(([key,object]) => {
 
 				if(key != 'missingno' && modsByGen[LAST_GEN]['Pokedex'][key]){ //missingno is Custom in 8th gen however, it is Unobtainable in 1st gen
@@ -138,8 +138,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 					const lastGenPokemon = JSON.parse(JSON.stringify(modsByGen[LAST_GEN]['Pokedex'][key]))
 					
 					// Will check and fetch values of next gen (smogon system uses reverse inheritence, example : gen1 inherit values from gen2)
-					const inheritedPokemonInfo = {
-						num: findInheritedPokemonGenProperty(gen,key,'num'), 
+					const inheritedPokemonInfo = { 
 						baseStats: findInheritedPokemonGenProperty(gen,key,'baseStats'),
 						abilities: findInheritedPokemonGenProperty(gen,key,'abilities'),
 						types: findInheritedPokemonGenProperty(gen,key,'types')
@@ -171,7 +170,6 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) => { 
 	
 	const object = ({
-		num: value.num,
 		name: value.name,
 		type_1: value.types[0],
 		type_2: value.types.length > 1 ? value.types[1] : null,
@@ -188,10 +186,10 @@ const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) =>
 	})
 
 	const keyVersion = createDiscriminantVersion(object);
-
+	const pokedexInfo = Pokedex[getPokemonKeyFromName(object.name)];
 	if(!accumulator.hasOwnProperty(keyVersion))
 		accumulator[keyVersion] = {
-			num: object.num,
+			pokedex: pokedexInfo ? pokedexInfo['num'] : null, // pokedex num won't be found for special forms
 			name: object.name,
 			prevo: object.prevo,
 			versions: []
