@@ -5,7 +5,7 @@ const gensByPokemon = {} // will be used for learns
 
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
 const createDiscriminantVersion = ({name,baseForm,prevo}) => JSON.stringify({name,baseForm,prevo});
-const versionObject = ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen}) => ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen})
+const versionObject = ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen, ability_1 = null, ability_2 = null, ability_hidden = null}) => ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen,ability_1, ability_2, ability_hidden})
 
 const pokemons = Object.entries(Pokedex)
 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
