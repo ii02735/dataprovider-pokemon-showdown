@@ -118,7 +118,7 @@ const findInheritedPokemonGenProperty = (gen,pokemonName, property) => {
 for(let gen=LAST_GEN-1; gen > 0; gen--)
 {
 	Object.entries(modsByGen[gen]['FormatsData'])
-		  .filter(([key,object]) => !modsByGen[gen]['FormatsData'][key] || pokemonIsStandard(!modsByGen[gen]['FormatsData'][key]))
+		  .filter(([key,object]) => !modsByGen[gen]['FormatsData'][key] || pokemonIsStandard(FormatsData[key]))
 		  .forEach(([key,object]) => {
 
 				if(key != 'missingno' && modsByGen[LAST_GEN]['Pokedex'][key]){ //missingno is Custom in 8th gen however, it is Unobtainable in 1st gen
