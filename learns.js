@@ -1,5 +1,6 @@
 const { PokedexText } = require('./pokemon-showdown/.data-dist/text/pokedex');
 const { Learnsets } = require('./pokemon-showdown/.data-dist/learnsets');
+const { Learnsets: oldGenLearnsets } = require('./pokemon-showdown/.data-dist/mods/gen2/learnsets');
 const { MovesText } = require('./pokemon-showdown/.data-dist/text/moves');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
 const { pokemonIsStandard, range, getPokemonKeyFromName } = require('./util');
@@ -45,11 +46,6 @@ const availableGensByMove = movesCollection.reduce((accumulator,object) => {
 	return accumulator
 },{})
 
-/**
- * DONE: Associate gens by learn
- * TODO: remove invalid gens for certain learns (Example : Mega-Charizard-X is from gen 6, but we have 3th gen for bite / "morsure" -> remove invalid gens) 
- * Way: find minimum generation for pkmn, slice the createGenArray and take the second part (the first part has an invalid interval) 
- */
 Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 	if (FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey])) return;
 	const pokemon = Pokedex[pokemonKey];
@@ -84,11 +80,14 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 	}
 	const pokemonName = PokedexText[pokemonKey] && PokedexText[pokemonKey].name;
 	Object.keys(learnset).forEach(move => {
+		let learnsetData = learnset[move];
+		if(oldGenLearnsets[pokemonKey] && oldGenLearnsets[pokemonKey]['learnset'][move])
+			learnsetData = learnsetData.concat(oldGenLearnsets[pokemonKey]['learnset'][move]);
 		if(MovesText[move]){
 			learns.push({
 				pokemon: pokemonName || pokemonKey,
 				move: MovesText[move] ? MovesText[move].name : move,
-				gen: createGenArray(MovesText[move].name,learnset[move])
+				gen: createGenArray(MovesText[move].name,learnsetData)
 			});
 		}
 	});
@@ -106,8 +105,10 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
 			}
 			Object.keys(learnset).forEach(move => {
 				if(MovesText[move]){
-
-					let genLearns = createGenArray(MovesText[move].name,learnset[move])
+					let learnsetData = learnset[move];
+					if(oldGenLearnsets[pokemonKey] && oldGenLearnsets[pokemonKey]['learnset'][move])
+						learnsetData = learnsetData.concat(oldGenLearnsets[pokemonKey]['learnset'][move]);
+					let genLearns = createGenArray(MovesText[move].name,learnsetData)
 
 					genLearns = genLearns[0] < gensByPokemon[formeKey][0] ? genLearns.slice(genLearns.indexOf(gensByPokemon[formeKey][0])) : genLearns
 
