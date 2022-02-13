@@ -1,6 +1,6 @@
 const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
-const { pokemonIsStandard, LAST_GEN } = require('./util');
+const { pokemonIsStandard, LAST_GEN, getPokemonKeyFromName } = require('./util');
 const gensByPokemon = {} // will be used for learns
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
 
@@ -163,7 +163,9 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 }
 
 const resultPokemons = Object.values(pokemons).map((value) => { 
+	const pokedexInfo = Pokedex[getPokemonKeyFromName(value.name)];
 	const object = ({
+		pokedex: pokedexInfo ? pokedexInfo['num'] : null, // pokedex num won't be found for special forms
 		name: value.name,
 		type_1: value.types[0],
 		type_2: value.types.length > 1 ? value.types[1] : null,
