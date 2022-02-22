@@ -3,6 +3,26 @@ const { AbilitiesText } = require('./pokemon-showdown/.data-dist/text/abilities'
 const { pokemonCollection } = require('./pokemon');
 const { getGenAttributes, range, LAST_GEN } = require('./util');
 
+const findInheritedAbilityTextGenProperty = (key,gen,property) => {
+
+	let result = null;
+
+	for(let _gen=gen;_gen!=1;_gen--){
+		if(AbilitiesText[key].hasOwnProperty("gen"+_gen))
+		{
+			if(AbilitiesText[key]["gen"+_gen].hasOwnProperty(property)){
+				result = AbilitiesText[key]["gen"+_gen][property];
+				break;
+			}
+		}
+	}
+
+	return result;
+
+
+}
+
+
 const abilitiesTextCollection = Object.entries(Abilities)
 	.filter(([key, { isNonstandard }]) => !isNonstandard || isNonstandard === 'Past')
 	.reduce((accumulator,[key, { name }]) => {
@@ -46,9 +66,8 @@ let abilities = []
 // Fetch descriptions in different gens for each ability
 
 Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
-
 	// check if the ability has multiple descriptions
-	const otherGens = getGenAttributes(AbilitiesText[key]).map((attribute) => parseInt(attribute.replace("gen",""))).sort()
+	let otherGens = getGenAttributes(AbilitiesText[key]).map((attribute) => parseInt(attribute.replace("gen",""))).sort()
 
 	// If that's the case the initial gen array must be split in different objects :
 	/**
@@ -78,16 +97,36 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 	 * 		gen: [3,4] //the description of gen4 is in fact the same in gen3 (reverse inheritance)
 	 * }]
 	 */
+
+	// Fill possible gaps
+	if(otherGens.length > 1)
+		otherGens = range(otherGens[0],otherGens[otherGens.length - 1])
+
 	if(otherGens.length > 0)
-	{
+	{	
+		const similarDescriptions = {}
+
 		otherGens.forEach((otherGen,index) => {
-			abilities.push({
-				name: value.name,
-				description: AbilitiesText[key]["gen"+otherGen].desc || AbilitiesText[key]["gen"+otherGen].shortDesc,
-				shortDescription: AbilitiesText[key]["gen"+otherGen].shortDesc,
-				gen: index == 0 ? range(abilitiesGen[key][0],otherGen) : [otherGen]
-			})
+			
+			let description = findInheritedAbilityTextGenProperty(key,otherGen,"desc") || findInheritedAbilityTextGenProperty(key,otherGen,"shortDesc");
+			let shortDescription = findInheritedAbilityTextGenProperty(key,otherGen,"shortDesc");
+			const { name } = value
+			const keyAbility = JSON.stringify({name,description,shortDescription})
+			if(!similarDescriptions.hasOwnProperty(keyAbility))
+				similarDescriptions[keyAbility] = { gen: [] }	
+			similarDescriptions[keyAbility]['gen'].push(otherGen)
+			
 		})
+
+		for(const keyAbility of Object.keys(similarDescriptions))
+		{
+			const { name, description, shortDescription } = JSON.parse(keyAbility)
+			const { gen } = similarDescriptions[keyAbility]
+			abilities.push({
+				name,description,shortDescription,gen
+			})
+		}
+
 
 		const gens = range(otherGens.pop(),LAST_GEN);
 		gens.shift()
@@ -109,7 +148,6 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 		})
 	} 
 })
-
 // Fill "No Ability" gen array
 
 abilities[0]["gen"] = range(1,LAST_GEN)
