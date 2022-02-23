@@ -120,6 +120,8 @@ const getGenAttributes = (object) => {
  */
 const range = (start, end) => Array(end - start + 1).fill().map((_, idx) => start + idx)
 
+const withoutSpaces = (s) => s.replace(/['\s\-.:’%]/,'').toLowerCase()
+
 module.exports = {
 	writeFile,
 	pokemonIsStandard,
@@ -128,5 +130,6 @@ module.exports = {
 	movesByGen,
 	range,
 	getGenAttributes,
-	getPokemonKeyFromName
+	getPokemonKeyFromName,
+	withoutSpaces
 }
