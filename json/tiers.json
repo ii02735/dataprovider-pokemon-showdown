@@ -13,7 +13,8 @@
 		"shortName": "UUBL",
 		"playable": false,
 		"rank": 3,
-		"parent": "Over Used"
+		"parent": "Over Used",
+		"gen": [2, 3, 4, 5, 6, 7, 8]
 	},
 	{
 		"name": "Under Used",
@@ -28,7 +29,9 @@
 		"shortName": "RUBL",
 		"playable": false,
 		"rank": 4,
-		"parent": "Under Used"
+		"parent": "Under Used",
+		"gen": [5, 6, 7, 8]
+
 	},
 	{
 		"name": "Rarely Used",
@@ -43,7 +46,8 @@
 		"shortName": "NUBL",
 		"playable": false,
 		"rank": 5,
-		"parent": "Rarely Used"
+		"parent": "Rarely Used",
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
 	},
 	{
 		"name": "Never Used",
@@ -58,7 +62,8 @@
 		"shortName": "PUBL",
 		"playable": false,
 		"rank": 6,
-		"parent": "Never Used"
+		"parent": "Never Used",
+		"gen": [5, 6, 7, 8]
 	},
 	{
 		"name": "PU",
@@ -87,10 +92,11 @@
 		"playable": true,
 		"usageName": "lc",
 		"rank": 100,
-		"gen": [4, 5, 6, 7, 8]
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
 	},
 	{
 		"name": "Uber",
+		"shortName": "Uber",
 		"playable": true,
 		"usageName": "ubers",
 		"rank": 2,
