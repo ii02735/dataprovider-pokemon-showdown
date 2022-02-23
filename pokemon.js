@@ -11,6 +11,7 @@ const pokemons = Object.entries(Pokedex)
 		gensByPokemon[key] = [LAST_GEN]
 
 		accumulator[createDiscriminant(value)] = {
+			usageName: key,
 		...value,
 		gen: [LAST_GEN]
 		}
@@ -135,7 +136,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 					const lastGenPokemon = JSON.parse(JSON.stringify(modsByGen[LAST_GEN]['Pokedex'][key]))
 					
 					// Will check and fetch values of next gen (smogon system uses reverse inheritence, example : gen1 inherit values from gen2)
-					const inheritedPokemonInfo = { 
+					const inheritedPokemonInfo = {
 						baseStats: findInheritedPokemonGenProperty(gen,key,'baseStats'),
 						abilities: findInheritedPokemonGenProperty(gen,key,'abilities'),
 						types: findInheritedPokemonGenProperty(gen,key,'types')
@@ -145,7 +146,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 
 					const richGenPokemonObject = cleanAbilities(gen,Object.assign(lastGenPokemon, inheritedPokemonInfo))
 					const discriminant = createDiscriminant(richGenPokemonObject)
-
+					richGenPokemonObject.usageName = key;
 					if(pokemons.hasOwnProperty(discriminant)){
 						pokemons[discriminant]['gen'].push(gen)
 						gensByPokemon[key].push(gen);
@@ -165,6 +166,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 const resultPokemons = Object.values(pokemons).map((value) => { 
 	const pokedexInfo = Pokedex[getPokemonKeyFromName(value.name)];
 	const object = ({
+		usageName: value.usageName,
 		pokedex: pokedexInfo ? pokedexInfo['num'] : null, // pokedex num won't be found for special forms
 		name: value.name,
 		type_1: value.types[0],

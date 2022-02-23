@@ -11,6 +11,7 @@ const itemsCollection = Object.entries(Items)
 	)
 	.reduce((accumulator, [key, { name }]) => {
 		accumulator[key] = {
+			usageName: key,
 			name,
 			description: ItemsText[key].desc
 		}
@@ -28,6 +29,7 @@ Object.keys(itemsCollection).forEach((key) => {
 		otherGens.forEach((otherGen) => {
 
 			itemsCollection[Items[key]["name"]+"gen"+otherGen] = {
+				usageName: key,
 				name: itemsCollection[key].name,
 				description: ItemsText[key]["gen"+otherGen]["desc"],
 				gen: [otherGen]
