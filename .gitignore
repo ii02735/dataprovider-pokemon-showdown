@@ -6,5 +6,6 @@ execution.log
 *.json
 !tiers.json
 !tags.json
+!json/translations/*.json
 !package*.json
 .env
