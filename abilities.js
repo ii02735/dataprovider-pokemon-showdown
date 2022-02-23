@@ -155,12 +155,13 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 
 abilities[0]["gen"] = range(1,LAST_GEN)
 
-const intermediaryObject = abilities.reduce((accumulator,{name,description,shortDescription,gen}) => {
+const intermediaryObject = abilities.reduce((accumulator,{usageName,name,description,shortDescription,gen}) => {
 
 	const key = JSON.stringify(name)
 
 	if(!accumulator.hasOwnProperty(key))
 		accumulator[key] = {
+			usageName,
 			name,
 			versions: []	
 		}

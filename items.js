@@ -54,12 +54,13 @@ Object.keys(itemsCollection).forEach((key) => {
 
 const intermediaryObject = Object.values(itemsCollection).reduce((accumulator,value) => {
 	
-	const { name, description, gen } = value
+	const { usageName, name, description, gen } = value
 
 	const key = JSON.stringify({ name })
 
 	if(!accumulator.hasOwnProperty(key)){
 		accumulator[key] = {
+			usageName,
 			name,
 			versions: []
 		};

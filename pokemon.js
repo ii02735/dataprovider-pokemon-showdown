@@ -14,7 +14,7 @@ const pokemons = Object.entries(Pokedex)
 		gensByPokemon[key] = [LAST_GEN]
 
 		accumulator[createDiscriminant(value)] = {
-			usageName: key,
+		   usageName: key,
 		...value,
 		gen: [LAST_GEN]
 		}
@@ -169,7 +169,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 
 
 const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) => { 
-	
+
 	const object = ({
 		name: value.name,
 		type_1: value.types[0],
@@ -190,6 +190,7 @@ const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) =>
 	const pokedexInfo = Pokedex[getPokemonKeyFromName(object.name)];
 	if(!accumulator.hasOwnProperty(keyVersion))
 		accumulator[keyVersion] = {
+			usageName: value.usageName,
 			pokedex: pokedexInfo ? pokedexInfo['num'] : null, // pokedex num won't be found for special forms
 			name: object.name,
 			prevo: object.prevo,
@@ -215,8 +216,6 @@ const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) =>
 Object.values(gensByPokemon).forEach((value) => value.sort())
 module.exports.pokemonCollection = Object.values(pokemons).map((value) => { 
 	const object = ({
-		usageName: value.usageName,
-		pokedex: pokedexInfo ? pokedexInfo['num'] : null, // pokedex num won't be found for special forms
 		name: value.name,
 		type_1: value.types[0],
 		type_2: value.types.length > 1 ? value.types[1] : null,
