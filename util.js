@@ -1,5 +1,6 @@
 const fileSystem = require('fs');
 const { Learnsets } = require("./pokemon-showdown/.data-dist/learnsets")
+const { Learnsets : oldLearnsets } = require("./pokemon-showdown/.data-dist/mods/gen2/learnsets")
 
 const LAST_GEN = 8
 
@@ -76,6 +77,30 @@ let movesByGen = Object.values(Learnsets).reduce((accumulator,value) => {
         ...moveObjects
     }
 },{})
+
+movesByGen = Object.values(oldLearnsets).reduce((accumulator,value) => {
+
+	let { learnset } = value
+    let moveObjects = {}
+
+    if(learnset){
+        Object.entries(learnset).forEach(([moveName,rawGenArray]) => {
+   
+            rawGenArray = Array.from(new Set(rawGenArray.map((rawGen) => parseInt(rawGen[0]))))
+            
+            if(accumulator[moveName])
+                moveObjects[moveName] = Array.from(new Set(accumulator[moveName].concat(rawGenArray)))
+            else
+                moveObjects[moveName] = rawGenArray
+        })
+    }
+    
+    return {
+        ...accumulator,
+        ...moveObjects
+    }
+
+},movesByGen)
 
 Object.entries(movesByGen).forEach(([key,values]) => {
     movesByGen[key] = values.sort()
