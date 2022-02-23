@@ -86,4 +86,6 @@ for(type of types)
 	delete type.damageTaken
 }
 
+types.push({ name: '???', weaknesses: [], gen: [1,2,3,4] })
+
 module.exports = types
