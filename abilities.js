@@ -123,6 +123,7 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 			const { name, description, shortDescription } = JSON.parse(keyAbility)
 			const { gen } = similarDescriptions[keyAbility]
 			abilities.push({
+				usageName: key,
 				name,description,shortDescription,gen
 			})
 		}
@@ -132,6 +133,7 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 		gens.shift()
 		
 		abilities.push({
+			usageName: key,
 			name: value.name,
 			description: value.description || value.shortDescription,
 			shortDescription: value.shortDescription,
@@ -141,6 +143,7 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 	}else{
 		// If the object has no gens, we push the initial gen array stored in abilitiesGen in the gen attribute
 		abilities.push({
+				usageName: key,
 				name: value.name,
 				description: value.description || value.shortDescription,
 				shortDescription: value.shortDescription,

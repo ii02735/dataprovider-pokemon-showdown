@@ -72,6 +72,7 @@ const determineCategory = (gen, type, initialCategory) => {
 const lastGenMoves = Object.entries(Moves)
 	.filter(([key, { isNonstandard } ]) => !isNonstandard || isNonstandard === 'Past')
 	.reduce((accumulator,[key, value]) => ({...accumulator, [key]: {
+		usageName: key,
 		name: value.name,
 		category: value.category,
 		description: value.isNonstandard === 'Past' ? `Not available in gen ${LAST_GEN}` : (MovesText[key].desc || MovesText[key].shortDesc),
@@ -110,6 +111,7 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 						const multipleDescriptionGen = getGenAttributes(value)
 
 						const moveGen = {
+							usageName: key,
 							name: MovesText[key].name,
 							category: determineCategory(gen, lastGenMoves[key].type, lastGenMoves[key].category),
 							description: Object.keys(multipleDescriptionGen).length > 0 && multipleDescriptionGen["gen"+gen] ? (MovesText[key][multipleDescriptionGen["gen"+gen]].desc || MovesText[key][multipleDescriptionGen["gen"+gen]].shortDesc) : (MovesText[key].desc || MovesText[key].shortDesc),
