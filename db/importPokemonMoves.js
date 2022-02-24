@@ -1,10 +1,10 @@
 const { knex } = require('./db');
-const { withoutSpaces } = require('./util');
-const learns = require('./learns').flatMap((learn) => learn.gen.map((gen) => ({...learn,gen})))
+const { withoutSpaces } = require('../util');
+const learns = require('../learns').flatMap((learn) => learn.gen.map((gen) => ({...learn,gen})))
 let results = { table: 'pokemon_move', CREATED: 0 }
 let learnCount = 0;
 
-module.exports.execute = async () => {
+(async () => {
     for(const object of learns)
     {
 
@@ -38,4 +38,6 @@ module.exports.execute = async () => {
         await knex('pokemon_move').insert({pokemon_id: pokemonRow.id, move_id: moveRow.id, gen: object.gen})
         results.CREATED++;
     }
-}
+})().then(() => console.log(results))
+    .catch((err) => console.log(err))
+    .finally(() => knex.destroy())

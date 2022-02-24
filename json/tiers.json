@@ -67,6 +67,7 @@
 	},
 	{
 		"name": "PU",
+		"shortName": "PU",
 		"playable": true,
 		"usageName": "pu",
 		"rank": 7,
@@ -148,6 +149,13 @@
 	},
 	{
 		"name": "Untiered",
+		"shortName": "Untiered",
+		"playable": false,
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Illegal",
+		"shortName": "Illegal",
 		"playable": false,
 		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
 	}

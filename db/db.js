@@ -1,11 +1,16 @@
 require('dotenv').config()
 
-module.exports.insertOrUpdate = (knex,tableName,objectArray,options = {}) => {
+module.exports.insertOrUpdate = (knex,tableName,objectArray,{ hasGen = false, replaceColumns = null, relations = null, ignoreColumns = [] } = {}) => {
     
-    const { hasGen = false, replaceColumns = null, relations = null } = options;
-    console.log(hasGen, replaceColumns, relations)
     return objectArray.map(async (entry) => {
-        let originalEntry = {...entry}
+        
+        if(ignoreColumns.length > 0)
+            for(const ignoreColumn of ignoreColumns){
+                if(!entry.hasOwnProperty(ignoreColumn))
+                    continue;
+                delete entry[ignoreColumn]
+            }   
+
         if(replaceColumns)
             for(const [oldColumn,newColumn] of Object.entries(replaceColumns)){
                 if(!entry.hasOwnProperty(oldColumn))
@@ -63,7 +68,8 @@ module.exports.knex = require('knex')({
         port: process.env.DB_PORT,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
+        database: process.env.DB_NAME,
+        charset  : 'utf8mb4'
     }
 });
 

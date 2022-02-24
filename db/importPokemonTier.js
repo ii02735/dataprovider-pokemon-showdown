@@ -1,9 +1,9 @@
 const { knex } = require('./db')
-const pokemonTiers = require('./pokemonTier')
-const { withoutSpaces } = require('./util')
+const pokemonTiers = require('../pokemonTier')
+const { withoutSpaces } = require('../util')
 const results = { table: 'pokemon', UPDATED: 0 }
 
-module.exports.execute = () => Promise.all(pokemonTiers.map(async ({ pokemon:name, tier: short_name = null, gen, technically }) => {
+Promise.all(pokemonTiers.map(async ({ pokemon:name, tier: short_name = null, gen, technically }) => {
     let rowPokemon = await knex('pokemon').where({ name, gen }).first(['id'])
     if(!rowPokemon){
         rowPokemon = await knex('pokemon').where({ name: withoutSpaces(name), gen }).first(['id'])
@@ -19,5 +19,3 @@ module.exports.execute = () => Promise.all(pokemonTiers.map(async ({ pokemon:nam
 })).then(() => console.log(results))
    .catch((err) => console.log(err))
    .finally(() => knex.destroy())
-
-this.execute()

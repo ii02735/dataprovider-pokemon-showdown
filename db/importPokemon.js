@@ -1,62 +1,37 @@
-const { knex } = require('./db')
-const pokemon = require('./pokemon').flatMap((pokemon_object) => pokemon_object.gen.map((gen) => ({...pokemon_object,gen})))
-let results = { table: 'pokemon', CREATED: 0, UPDATED: 0 }
-module.exports.execute = () => Promise.all(pokemon.map(async(object) => {
-   
-    let row = await knex('type').where({name: object.type_1, gen: object.gen}).first(['id'])
-    object.type_1_id = row.id
-    
-    if(object.type_2){
-       row = await knex('type').where({name: object.type_2, gen: object.gen}).first(['id']);
-       object.type_2_id = row.id
-    }
+const { knex, insertOrUpdate, resultRecords } = require('./db')
+const pokemons = require('../pokemon').flatMap((pokemon_object) => pokemon_object.gen.map((gen) => ({ ...pokemon_object, gen })))
 
-    for(const abilityKey of ['ability_1','ability_2','ability_hidden'])
-    {
-        if(object.hasOwnProperty(abilityKey)){
-            row = await knex('ability').where({name: object[abilityKey], gen: object.gen}).first(['id']);
-            object[`${abilityKey}_id`] = row.id
-            delete object[abilityKey]
-        }     
-    }
+Promise.all(insertOrUpdate(knex, 'pokemon', pokemons, {
+    hasGen: true,
+    replaceColumns: {
+        "type_1": "type_1_id",
+        "type_2": "type_2_id",
+        "ability_1": "ability_1_id",
+        "ability_2": "ability_2_id",
+        "ability_hidden": "ability_hidden_id"
+    },
+    ignoreColumns: ['baseForm', 'prevo', 'usageName'],
+    relations: {
+        "type_1_id": { "table": "type", "refColumn": "name" },
+        "type_2_id": { "table": "type", "refColumn": "name" },
+        "ability_1_id": { "table": "ability", "refColumn": "name" },
+        "ability_2_id": { "table": "ability", "refColumn": "name" },
+        "ability_hidden_id": { "table": "ability", "refColumn": "name" }
+    },
+})).then((results) => {
+    console.log(resultRecords('pokemon',results));
+    return Promise.all(insertOrUpdate(knex, 'pokemon', pokemons, {
+        hasGen: true,
+        replaceColumns: {
+            "baseForm": "base_form_id",
+            "prevo": "prevo_id"
+        },
+        ignoreColumns: ["type_1", "type_2", "ability_1", "ability_2", "ability_hidden"],
+        relations: {
+            "base_form_id": { "table": "pokemon", "refColumn": "name" },
+            "prevo_id": { "table": "pokemon", "refColumn": "name" }
+        },
+    }))
+}).then((results) => console.log(resultRecords('pokemon (forms)',results)))
+  .finally(() => knex.destroy());
 
-    delete object.baseForm
-    delete object.prevo
-    delete object.type_1
-    delete object.type_2
-     
-    row = await knex('pokemon').where({name: object.name, gen: object.gen}).first(['id'])
-    if(row){
-        await knex('pokemon').update(object).where({ id: row.id })
-        results.UPDATED++
-    }else{
-        await knex('pokemon').insert(object)
-        results.CREATED++
-    }
-}))
-.then(() => Promise.all(pokemon.map(async(object) => {
-    let row = null;
-    if(object.baseForm){
-        row = await knex('pokemon').where({name: object.baseForm, gen: object.gen}).first(['id']);
-        if(row)
-             object.base_form_id = row.id;
-    }
-    
-    if(object.prevo){
-        row = await knex('pokemon').where({name: object.prevo, gen: object.gen}).first(['id']);
-        if(row)
-             object.prevo_id = row.id;
-    }
-
-    delete object.baseForm
-    delete object.prevo
-    delete object.type_1
-    delete object.type_2
-     
-    row = await knex('pokemon').where({name: object.name, gen: object.gen}).first(['id']);
-
-    await knex('pokemon').update(object).where({id: row.id})
-    
-})))
-.then(() => console.log('pokemon',results))  
-.finally(() => knex.destroy());

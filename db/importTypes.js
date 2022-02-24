@@ -2,9 +2,9 @@ const fs = require('fs')
 const { knex } = require("./db")
 let typesWeaknesses = {};
 let records = { table: 'type', CREATED: 0, UPDATED: 0 }
-const objects = require('./types').flatMap((object) => object.gen.map((gen) => ({...object,gen})))
+const objects = require('../types').flatMap((object) => object.gen.map((gen) => ({...object,gen})))
 
-module.exports.execute = () => Promise.all(objects.map(async (object) => {
+Promise.all(objects.map(async (object) => {
     const {name,gen,weaknesses} = object
     const type = await knex('type').where({name,gen}).first(['id'])
     let typeId = null;
