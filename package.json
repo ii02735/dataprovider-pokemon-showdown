@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/GeoDaz/api-pokemon-showdown#readme",
   "dependencies": {
+    "axios": "^0.26.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
+    "iconv": "^3.0.1",
     "knex": "^1.0.3",
     "mysql": "^2.18.1"
   }
