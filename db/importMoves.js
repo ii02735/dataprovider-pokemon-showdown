@@ -4,9 +4,10 @@ const moves = require('../moves').flatMap((move) => move.gen.map((gen) => ({...m
 Promise.all(insertOrUpdate(knex, 'move', moves, {
         hasGen: true,
         replaceColumns: {
-               "type": "type_id"
+               "type": "type_id",
+               "usageName": "usage_name"
         },
-        ignoreColumns: [ 'shortDescription', 'usageName' ],
+        ignoreColumns: [ 'shortDescription' ],
         relations: {
                "type_id": { "table": "type", "refColumn": "name" }
         },

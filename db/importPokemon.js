@@ -8,9 +8,10 @@ Promise.all(insertOrUpdate(knex, 'pokemon', pokemons, {
         "type_2": "type_2_id",
         "ability_1": "ability_1_id",
         "ability_2": "ability_2_id",
-        "ability_hidden": "ability_hidden_id"
+        "ability_hidden": "ability_hidden_id",
+        "usageName": "usage_name"
     },
-    ignoreColumns: ['baseForm', 'prevo', 'usageName'],
+    ignoreColumns: ['baseForm', 'prevo' ],
     relations: {
         "type_1_id": { "table": "type", "refColumn": "name" },
         "type_2_id": { "table": "type", "refColumn": "name" },

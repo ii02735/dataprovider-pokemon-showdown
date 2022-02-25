@@ -3,7 +3,8 @@ const abilities = require('../abilities').flatMap((ability) => ability.gen.map((
 
 Promise.all(insertOrUpdate(knex, 'ability', abilities, {
        hasGen: true,
-       ignoreColumns: [ 'shortDescription', 'usageName' ]
+       ignoreColumns: [ 'shortDescription' ],
+       replaceColumns: { 'usageName': 'usage_name' }
 }))
        .then((results) => console.log(resultRecords('ability', results)))
        .finally(() => knex.destroy())
