@@ -9,3 +9,4 @@ execution.log
 !json/translations/*.json
 !package*.json
 .env
+Smogon-Stats-Viewer
