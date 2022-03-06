@@ -2,10 +2,7 @@ const { Pokedex } = require('./pokemon-showdown/.data-dist/pokedex');
 const { FormatsData } = require('./pokemon-showdown/.data-dist/formats-data');
 const { pokemonIsStandard, LAST_GEN, getPokemonKeyFromName } = require('./util');
 const gensByPokemon = {} // will be used for learns
-
 const createDiscriminant = ({name,baseStats,types,abilities}) => JSON.stringify({name,baseStats,types,abilities})
-const createDiscriminantVersion = ({name,baseForm,prevo}) => JSON.stringify({name,baseForm,prevo});
-const versionObject = ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen, ability_1 = null, ability_2 = null, ability_hidden = null}) => ({type_1,type_2,hp,atk,def,spa,spd,spe,weight,gen,ability_1, ability_2, ability_hidden})
 
 const pokemons = Object.entries(Pokedex)
 	.filter(([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key]))
@@ -14,7 +11,7 @@ const pokemons = Object.entries(Pokedex)
 		gensByPokemon[key] = [LAST_GEN]
 
 		accumulator[createDiscriminant(value)] = {
-		   usageName: key,
+			usageName: key,
 		...value,
 		gen: [LAST_GEN]
 		}
@@ -163,59 +160,14 @@ for(let gen=LAST_GEN-1; gen > 0; gen--)
 				}
 				
 	})
-	
+		
 }
 
-
-
-const intermediaryObject = Object.values(pokemons).reduce((accumulator,value) => { 
-
+const resultPokemons = Object.values(pokemons).map((value) => { 
+	const pokedexInfo = Pokedex[getPokemonKeyFromName(value.name)];
 	const object = ({
-		name: value.name,
-		type_1: value.types[0],
-		type_2: value.types.length > 1 ? value.types[1] : null,
-		hp: value.baseStats.hp,
-		atk: value.baseStats.atk,
-		def: value.baseStats.def,
-		spa: value.baseStats.spa,
-		spd: value.baseStats.spd,
-		spe: value.baseStats.spe,
-		weight: value.weightkg,
-		baseForm: value.baseSpecies ? value.baseSpecies : null,
-		prevo: value.prevo ? value.prevo : null,
-		gen: value.gen.sort()
-	})
-
-	const keyVersion = createDiscriminantVersion(object);
-	const pokedexInfo = Pokedex[getPokemonKeyFromName(object.name)];
-	if(!accumulator.hasOwnProperty(keyVersion))
-		accumulator[keyVersion] = {
-			usageName: value.usageName,
-			pokedex: pokedexInfo ? pokedexInfo['num'] : null, // pokedex num won't be found for special forms
-			name: object.name,
-			prevo: object.prevo,
-			versions: []
-		};
-
-	if(value.abilities){
-		if(value.abilities['0'])
-			object["ability_1"] = value.abilities['0']
-		if(value.abilities['1'])
-			object["ability_2"] = value.abilities['1']
-		if(value.abilities['H'])
-			object["ability_hidden"] = value.abilities['H']
-	}
-
-
-	accumulator[keyVersion].versions.push(versionObject(object))
-
-	return accumulator
-	
-},{})
-
-Object.values(gensByPokemon).forEach((value) => value.sort())
-module.exports.pokemonCollection = Object.values(pokemons).map((value) => { 
-	const object = ({
+		usageName: value.usageName,
+		pokedex: pokedexInfo ? pokedexInfo['num'] : null, // pokedex num won't be found for special forms
 		name: value.name,
 		type_1: value.types[0],
 		type_2: value.types.length > 1 ? value.types[1] : null,
@@ -244,5 +196,6 @@ module.exports.pokemonCollection = Object.values(pokemons).map((value) => {
 	
 })
 
-module.exports.pokemons = Object.values(intermediaryObject)
+Object.values(gensByPokemon).forEach((value) => value.sort())
+module.exports = resultPokemons
 module.exports.gensByPokemon = gensByPokemon

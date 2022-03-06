@@ -1,4 +1,5 @@
 const fileSystem = require('fs');
+const { Iconv } = require('iconv');
 const { Learnsets } = require("./pokemon-showdown/.data-dist/learnsets")
 const { Learnsets : oldLearnsets } = require("./pokemon-showdown/.data-dist/mods/gen2/learnsets")
 
@@ -120,6 +121,18 @@ const getGenAttributes = (object) => {
  */
 const range = (start, end) => Array(end - start + 1).fill().map((_, idx) => start + idx)
 
+const pokemonLittleName = (name) => {
+
+    const iconv = new Iconv('UTF-8','ASCII//TRANSLIT//IGNORE')
+    name = iconv.convert(name).toString()
+    name = name.replace(/[.'’:%]/,'')
+    name = name.toLowerCase()
+    name = name.replace(/(\s+)/, '-')
+    return name
+}
+
+const withoutSpaces = (s) => s.replace(/['\s\-.:’%]/,'').toLowerCase()
+
 module.exports = {
 	writeFile,
 	pokemonIsStandard,
@@ -128,5 +141,7 @@ module.exports = {
 	movesByGen,
 	range,
 	getGenAttributes,
-	getPokemonKeyFromName
+	getPokemonKeyFromName,
+	withoutSpaces,
+    pokemonLittleName
 }

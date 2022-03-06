@@ -97,11 +97,12 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 	 * }]
 	 */
 
+	// Fill possible gaps
+	if(otherGens.length > 1)
+		otherGens = range(otherGens[0],otherGens[otherGens.length - 1])
 
 	if(otherGens.length > 0)
 	{	
-		// Fill possible gaps
-		otherGens = range(abilitiesGen[key][0],otherGens[otherGens.length - 1])
 		const similarDescriptions = {}
 
 		otherGens.forEach((otherGen,index) => {
@@ -153,22 +154,4 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 
 abilities[0]["gen"] = range(1,LAST_GEN)
 
-const intermediaryObject = abilities.reduce((accumulator,{usageName,name,description,shortDescription,gen}) => {
-
-	const key = JSON.stringify(name)
-
-	if(!accumulator.hasOwnProperty(key))
-		accumulator[key] = {
-			usageName,
-			name,
-			versions: []	
-		}
-	
-	accumulator[key].versions.push({description,shortDescription,gen})
-
-
-	return accumulator;
-
-},{})
-
-module.exports = Object.values(intermediaryObject)
+module.exports = abilities

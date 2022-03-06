@@ -6,9 +6,9 @@ const { writeFile } = require('./util');
 const abilities = require('./abilities')
 const items = require('./items')
 const learns = require('./learns')
-const { moves } = require('./moves')
+const moves = require('./moves')
 const natures = require('./natures')
-const { pokemons } = require('./pokemon')
+const pokemons = require('./pokemon')
 const pokemonTier = require('./pokemonTier')
 const types = require('./types')
 

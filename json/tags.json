@@ -1,0 +1,64 @@
+[
+	{
+		"name": "hyper offense",
+		"short_name": "HO"
+	},
+	{
+		"name": "stall"
+	},
+	{
+		"name": "bulky offense",
+		"short_name": "BO"
+	},
+	{
+		"name": "balanced",
+		"short_name": "BL"
+	},
+	{
+		"name": "distortion",
+		"short_name": "disto"
+	},
+	{
+		"name": "sticky"
+	},
+	{
+		"name": "stack hazards"
+	},
+	{
+		"name": "screens"
+	},
+	{
+		"name": "rain"
+	},
+	{
+		"name": "sun"
+	},
+	{
+		"name": "sand"
+	},
+	{
+		"name": "hail"
+	},
+	{
+		"name": "grass spam"
+	},
+	{
+		"name": "psy spam"
+	},
+	{
+		"name": "electrik spam",
+		"short_name": "elec spam"
+	},
+	{
+		"name": "tailwind"
+	},
+	{
+		"name": "trap"
+	},
+	{
+		"name": "gravity"
+	},
+	{
+		"name": "dragmag"
+	}
+]

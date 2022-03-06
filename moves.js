@@ -140,24 +140,4 @@ Object.keys(movesCollection).forEach((key) => {
 	movesCollection[key]["gen"] = movesCollection[key]["gen"].sort()
 })
 
-const intermediaryObject = Object.values(movesCollection).reduce((accumulator,{usageName, name,category, description, power, pp, accuracy, type, gen}) => {
-
-	const key = JSON.stringify(name);
-
-	if(!accumulator.hasOwnProperty(key)){
-		accumulator[key] = {
-			usageName,
-			name,
-			versions: []
-		};
-	}
-
-	accumulator[key].versions.push({category, description, power, pp, accuracy, type, gen})
-	
-	return accumulator
-
-},{});
-
-module.exports.movesCollection = Object.values(movesCollection);
-module.exports.moves = Object.values(intermediaryObject);
-	
+module.exports = Object.values(movesCollection)
