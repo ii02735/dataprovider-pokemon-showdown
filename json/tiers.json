@@ -14,7 +14,7 @@
 		"playable": false,
 		"rank": 3,
 		"parent": "Over Used",
-		"gen": [2, 3, 4, 5, 6, 7, 8]
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
 	},
 	{
 		"name": "Under Used",
@@ -31,7 +31,6 @@
 		"rank": 4,
 		"parent": "Under Used",
 		"gen": [5, 6, 7, 8]
-
 	},
 	{
 		"name": "Rarely Used",
@@ -63,11 +62,10 @@
 		"playable": false,
 		"rank": 6,
 		"parent": "Never Used",
-		"gen": [5, 6, 7, 8]
+		"gen": [4, 5, 6, 7, 8]
 	},
 	{
 		"name": "PU",
-		"shortName": "PU",
 		"playable": true,
 		"usageName": "pu",
 		"rank": 7,
@@ -93,11 +91,10 @@
 		"playable": true,
 		"usageName": "lc",
 		"rank": 100,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"gen": [4, 5, 6, 7, 8]
 	},
 	{
 		"name": "Uber",
-		"shortName": "Uber",
 		"playable": true,
 		"usageName": "ubers",
 		"rank": 2,
@@ -149,13 +146,6 @@
 	},
 	{
 		"name": "Untiered",
-		"shortName": "Untiered",
-		"playable": false,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
-	},
-	{
-		"name": "Illegal",
-		"shortName": "Illegal",
 		"playable": false,
 		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
 	}

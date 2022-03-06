@@ -1,22 +1,22 @@
 [
 	{
 		"name": "hyper offense",
-		"short_name": "HO"
+		"shortName": "HO"
 	},
 	{
 		"name": "stall"
 	},
 	{
 		"name": "bulky offense",
-		"short_name": "BO"
+		"shortName": "BO"
 	},
 	{
 		"name": "balanced",
-		"short_name": "BL"
+		"shortName": "BL"
 	},
 	{
 		"name": "distortion",
-		"short_name": "disto"
+		"shortName": "disto"
 	},
 	{
 		"name": "sticky"
@@ -47,7 +47,7 @@
 	},
 	{
 		"name": "electrik spam",
-		"short_name": "elec spam"
+		"shortName": "elec spam"
 	},
 	{
 		"name": "tailwind"
