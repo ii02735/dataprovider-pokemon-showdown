@@ -3,11 +3,12 @@ const { AbilitiesText } = require('./pokemon-showdown/.data-dist/text/abilities'
 const { pokemonCollection } = require('./pokemon');
 const { getGenAttributes, range, LAST_GEN } = require('./util');
 
-const findInheritedAbilityTextGenProperty = (key,gen,property) => {
+const findInheritedAbilityTextGenProperty = (key,gen,property,order="desc") => {
 
 	let result = null;
 
-	for(let _gen=gen;_gen!=1;_gen--){
+
+	for(let _gen=gen;_gen<=LAST_GEN;_gen++){
 		if(AbilitiesText[key].hasOwnProperty("gen"+_gen))
 		{
 			if(AbilitiesText[key]["gen"+_gen].hasOwnProperty(property)){
@@ -18,8 +19,6 @@ const findInheritedAbilityTextGenProperty = (key,gen,property) => {
 	}
 
 	return result;
-
-
 }
 
 
@@ -98,12 +97,11 @@ Object.entries(abilitiesTextCollection).forEach(([key,value]) => {
 	 * }]
 	 */
 
-	// Fill possible gaps
-	if(otherGens.length > 1)
-		otherGens = range(otherGens[0],otherGens[otherGens.length - 1])
 
 	if(otherGens.length > 0)
 	{	
+		// Fill possible gaps
+		otherGens = range(abilitiesGen[key][0],otherGens[otherGens.length - 1])
 		const similarDescriptions = {}
 
 		otherGens.forEach((otherGen,index) => {
