@@ -1,85 +1,118 @@
-// const { knex } = require('./db')
-// const axios = require('axios')
-// const { pokemonLittleName } = require('../util')
+const { LAST_GEN, folderUsage } = require("../util");
+const { knex } = require("./db");
 
-// const gen = 8
+process.argv.shift();
+process.argv.shift();
 
-// const generateHerokuUrl = (date, tierName, ladderRef, pokemonName) => `https://smogon-usage-stats.herokuapp.com/${date}/${tierName}/${ladderRef}/${pokemonName}`
-// const formatDate = (dateObject) => {
-//     const d = dateObject
-//     let month = d.getMonth() + 1
-//     const year = d.getFullYear();
-//     if (month < 10)
-//         month = '0' + month;
-//     return [year, month].join('/')
-// }
+const gen = process.argv.shift() || LAST_GEN;
 
-// const date = new Date
-// let currentDate = formatDate(date)
-// let prevDate = date
-// let response = null
-// prevDate.setMonth(prevDate.getMonth() - 1);
-// prevDate = formatDate(prevDate);
+// Choose latest data folder
+const fs = require("fs");
 
+(async () => {
+  let playableTiers = [];
+  for (const usage_name of [
+    "ou",
+    "ubers",
+    "uu",
+    "ru",
+    "nu",
+    "pu",
+    "zu",
+    "lc",
+  ]) {
+    const row = await knex("tier")
+      .where({ usage_name, gen })
+      .first(["id", "ladder_ref"]);
+    if (row)
+      playableTiers.push({
+        id: row.id,
+        ladder_ref: row.ladder_ref,
+        usage_name,
+      });
+  }
 
+  // Clear usages
+  console.log(`Clearing usages in ${gen}...`);
+  for (const { id } of playableTiers) {
+    const rowTierUsages = await knex("tier_usage").where({ tier_id: id });
+    if (!rowTierUsages) continue;
+    for (const rowTierUsage of rowTierUsages) {
+      await knex("usage_item").where({ tier_usage_id: rowTierUsage.id }).del();
+      await knex("usage_ability")
+        .where({ tier_usage_id: rowTierUsage.id })
+        .del();
+      await knex("usage_move").where({ tier_usage_id: rowTierUsage.id }).del();
+      await knex("team_mate").where({ tier_usage_id: rowTierUsage.id }).del();
+      await knex("tier_usage").where({ id: rowTierUsage.id }).del();
+    }
+  }
+  // Return only tiers that have a ladder_ref
+  playableTiers = playableTiers.filter(({ ladder_ref }) => ladder_ref);
 
-// (async () => {
-//     let pokemonRows = await knex.select('name', 'usage_name', 'tier_id').from('pokemon').where({ gen }).whereNotNull('tier_id').whereNotNull('pokemon.usage_name');
-//     Promise.all(pokemonRows.map(async(pokemon) => {
-//         let tier = await knex('tier').where({ id: pokemon.tier_id }).first()
-//         if (tier.parent_id)
-//             tier = await knex('tier').where({ id: tier.parent_id }).first()
-//         if (!tier.playable)
-//             return null;
-//         if(!tier.ladder_ref)
-//             return null;
-//         const tierName = 'gen' + gen + tier.usage_name;
-//         const ladderRef = tier.ladder_ref;
-//         const pokemonName = pokemonLittleName(pokemon.name);
-//         try{
-//             response = await axios.get(generateHerokuUrl(currentDate, tierName, ladderRef, pokemonName))
-//             return {pokemonName, data: response.data}
-//         }catch(e){
-           
-//                 try {
-//                     response = await axios.get(generateHerokuUrl(prevDate, tierName, ladderRef, pokemonName))
-//                     return {pokemonName, data: response.data}
-//                 } catch (e) {
-//                     return null;
-//                 }
-            
-//         }
- 
-//     })).then((responses) => responses.filter((response) => response !== null))
-//        .then((responses) => {
-//            for(const object of responses)
-//             console.log(object.pokemonName)
-//        }).finally(() => knex.destroy())
-
-
-  
-// })()
-
-// TODO: create method that will import the fetched data to the DB
-
-// Promise.all(gens.map(async (gen) => {
-//     let promises = [];
-    
-    
-//     for (const pokemonRow of pokemonRows) {
-//         let tierRow = await knex('tier').where({ id: pokemonRow.tier_id }).first()
-//         if (tierRow.parent_id)
-//             tierRow = await knex('tier').where({ id: tierRow.parent_id }).first()
-//         if (!tierRow.playable)
-//             continue;
-
-//         const tierName = 'gen' + gen + tierRow.usage_name;
-//         const ladderRef = tierRow.ladder_ref;
-//         promises.push(axios.get(generateHerokuUrl(currentDate, tierName, ladderRef, pokemonLittleName(pokemonRow.name))))
-
-//     }
-
-//     return promises;
-// })).then((res) => console.log(res.data))
-//    .catch((err) => console.log(err.data))  
-
+  for (const { ladder_ref, usage_name } of playableTiers) {
+    const pokedata = JSON.parse(
+      fs.readFileSync(
+        `${folderUsage}/formats/gen${
+          gen + usage_name
+        }/${ladder_ref}/pokedata.json`
+      )
+    );
+    let rank = 1;
+    for (const [index, [pokemonUsageName, usageData]] of Object.entries(
+      pokedata
+    )) {
+      console.log(index);
+      const pokemonRow = await knex("pokemon")
+        .select(["id", "tier_id"])
+        .where({ usage_name: pokemonUsageName, gen })
+        .first();
+      if (!pokemonRow || !pokemonRow.tier_id) continue;
+      const insertedTierUsageId = await knex("tier_usage").insert(
+        {
+          tier_id: pokemonRow.tier_id,
+          pokemon_id: pokemonRow.id,
+          percent: usageData.usage,
+          rank,
+          gen,
+        },
+        "id"
+      );
+      rank++;
+      for (const [property, tableName] of [
+        ["abilities", "ability"],
+        ["items", "item"],
+        ["moves", "move"],
+        ["teammates", "team_mate"],
+      ]) {
+        switch (property) {
+          case "teammates":
+            for (const entityData of usageData[property]) {
+              const entityRow = await knex("pokemon")
+                .where({ name: entityData.name, gen })
+                .first();
+              if (!entityRow) continue;
+              await knex(`team_mate`).insert({
+                tier_usage_id: insertedTierUsageId[0],
+                pokemon_id: entityRow.id,
+                percent: entityData.usage,
+              });
+            }
+            break;
+          default:
+            for (const entityData of usageData[property]) {
+              const entityRow = await knex(tableName)
+                .where({ name: entityData.name, gen })
+                .first();
+              if (!entityRow) continue;
+              await knex(`usage_${tableName}`).insert({
+                tier_usage_id: insertedTierUsageId[0],
+                [`${tableName}_id`]: entityRow.id,
+                percent: entityData.usage,
+              });
+            }
+        }
+      }
+    }
+  }
+})().finally(() => knex.destroy());
