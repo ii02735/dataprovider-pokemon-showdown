@@ -82,4 +82,9 @@ module.exports.knex = require("knex")({
     database: process.env.DB_NAME,
     charset: "utf8mb4",
   },
+  log: {
+    warn() {
+      // do nothing...it will hide warning messages
+    },
+  },
 });
