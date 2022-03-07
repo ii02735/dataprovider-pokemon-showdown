@@ -23,6 +23,7 @@
   "dependencies": {
     "axios": "^0.26.0",
     "bluebird": "^3.7.2",
+    "cli-progress": "^3.10.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "knex": "^1.0.3",
