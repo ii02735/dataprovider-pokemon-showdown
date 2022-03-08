@@ -30,7 +30,12 @@ Promise.all(
       tiers
         .filter(({ usage_name }) => usage_name)
         .map(async ({ gen, usage_name }) => {
-          const usageNameTierGen = "gen" + gen + usage_name;
+          const usageNameTierGen =
+            usage_name !== "vgc"
+              ? `gen${gen}${usage_name}`
+              : `gen${gen}${usage_name}${
+                  folderUsage.split("/").pop().split("-")[0]
+                }`;
           if (
             formats.hasOwnProperty(usageNameTierGen) &&
             formats[usageNameTierGen].hasOwnProperty("dcut")
