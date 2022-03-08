@@ -4,7 +4,6 @@
 		"shortName": "OU",
 		"playable": true,
 		"usageName": "ou",
-		"ladderRef": 1695,
 		"rank": 3,
 		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
 	},
