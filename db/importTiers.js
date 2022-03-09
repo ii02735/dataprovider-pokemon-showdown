@@ -17,7 +17,6 @@ Promise.all(
       isDouble: "is_double",
       maxPokemon: "max_pokemon",
     },
-    ignoreColumns: ["ladder_ref"],
     relations: {
       parent_id: { table: "tier", refColumn: "name" },
     },
