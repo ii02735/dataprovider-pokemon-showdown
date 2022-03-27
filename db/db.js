@@ -34,7 +34,7 @@ module.exports.insertOrUpdate = (
             .where({ [refColumn]: entry[column], gen: entry.gen })
             .first(["id"]);
         else
-          row = await knex(refTable)
+          row = await knex(table)
             .where({ [refColumn]: entry[column] })
             .first(["id"]);
         entry[column] = row ? row.id : null;
