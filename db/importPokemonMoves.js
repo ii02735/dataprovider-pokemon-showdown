@@ -76,15 +76,16 @@ progressBar.start(learns.length, 0);
       .whereNotNull("base_form_id");
     progressBar.start(forms.length, 0);
     console.log("Importing learns for special forms...");
-    results = await bluebird.map(
-      forms,
-      async (pokemon) => {
-        progressBar.increment();
-        let learns = await knex("pokemon_move").where({
-          pokemon_id: pokemon.base_form_id,
-        });
-        let result = { INSERTED: 0 };
-        for (const learn of learns) {
+    let result = { INSERTED: 0 };
+    for (const pokemon of forms) {
+      progressBar.increment();
+      let learns = await knex("pokemon_move").where({
+        pokemon_id: pokemon.base_form_id,
+      });
+
+      await bluebird.map(
+        learns,
+        async (learn) => {
           let existantLearn = await knex("pokemon_move")
             .where({
               pokemon_id: pokemon.id,
@@ -92,23 +93,23 @@ progressBar.start(learns.length, 0);
               gen: learn.gen,
             })
             .first(["id"]);
-          if (existantLearn) continue;
-          await knex("pokemon_move").insert({
-            pokemon_id: pokemon.id,
-            move_id: learn.move_id,
-            way: learn.way,
-            gen: learn.gen,
-          });
-          result.INSERTED++;
-        }
-        return result;
-      },
-      { concurrency: 150 }
-    );
+          if (!existantLearn) {
+            await knex("pokemon_move").insert({
+              pokemon_id: pokemon.id,
+              move_id: learn.move_id,
+              way: learn.way,
+              gen: learn.gen,
+            });
+            result.INSERTED++;
+          }
+        },
+        { concurrency: 150 }
+      );
+    }
 
     console.log({
       table: "pokemon_move (base forms)",
-      INSERTED: results.reduce((sum, { INSERTED }) => sum + INSERTED, 0),
+      INSERTED: result.INSERTED,
     });
 
     forms = await knex("pokemon")
@@ -116,17 +117,19 @@ progressBar.start(learns.length, 0);
       .whereNotNull("pre_evo_id");
     console.log("Importing learns for pre evolutions...");
     console.log();
+
     progressBar.start(forms.length, 0);
 
-    results = await bluebird.map(
-      forms,
-      async (pokemon) => {
-        progressBar.increment();
-        let learns = await knex("pokemon_move").where({
-          pokemon_id: pokemon.pre_evo_id,
-        });
-        let result = { INSERTED: 0 };
-        for (const learn of learns) {
+    result = { INSERTED: 0 };
+    for (const pokemon of forms) {
+      progressBar.increment();
+      let learns = await knex("pokemon_move").where({
+        pokemon_id: pokemon.pre_evo_id,
+      });
+
+      await bluebird.map(
+        learns,
+        async (learn) => {
           let existantLearn = await knex("pokemon_move")
             .where({
               pokemon_id: pokemon.id,
@@ -134,23 +137,23 @@ progressBar.start(learns.length, 0);
               gen: learn.gen,
             })
             .first(["id"]);
-          if (existantLearn) continue;
-          await knex("pokemon_move").insert({
-            pokemon_id: pokemon.id,
-            move_id: learn.move_id,
-            way: learn.way,
-            gen: learn.gen,
-          });
-          result.INSERTED++;
-        }
-        return result;
-      },
-      { concurrency: 150 }
-    );
+          if (!existantLearn) {
+            await knex("pokemon_move").insert({
+              pokemon_id: pokemon.id,
+              move_id: learn.move_id,
+              way: learn.way,
+              gen: learn.gen,
+            });
+            result.INSERTED++;
+          }
+        },
+        { concurrency: 150 }
+      );
+    }
 
     console.log({
       table: "pokemon_move (pre evos)",
-      INSERTED: results.reduce((sum, { INSERTED }) => sum + INSERTED, 0),
+      INSERTED: result.INSERTED,
     });
   } catch (err) {
     console.log(err);
