@@ -21,7 +21,8 @@ jobs: #this section contains the tasks / jobs that must be executed
                           uses: actions/setup-node@v2
                           with:
                             node-version: '12'
-                        - run: git clone https://github.com/smogon/pokemon-showdown.git    
+                        - run: git clone https://github.com/smogon/pokemon-showdown.git
+                        - run: git clone https://github.com/ii02735/Smogon-Stats-Viewer.git
                         - run: npm run build
                         - name: Commit differences # commit if differences are tracked after updates (previous step)
                           uses: stefanzweifel/git-auto-commit-action@v4
