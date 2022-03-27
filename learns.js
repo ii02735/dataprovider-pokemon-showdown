@@ -65,11 +65,10 @@ Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
   // add baseForm learnset if form hasn't learnset
   const baseFormKey = getPokemonKeyFromName(pokemon && pokemon.baseSpecies);
   const baseForm = baseFormKey && Pokedex[baseFormKey];
-  if (!learnset) {
-    if (!baseFormKey) return null;
-    const baseFomLearns = Learnsets[baseFormKey];
-    if (!baseFomLearns || !baseFomLearns.learnset) return;
-    learnset = baseFomLearns.learnset;
+  if (baseFormKey) {
+    const baseFormLearns = Learnsets[baseFormKey];
+    if (!baseFormLearns || !baseFormLearns.learnset) return;
+    learnset = { ...learnset, ...baseFormLearns.learnset };
   }
   // add prevo learnset
   // prettier-ignore
