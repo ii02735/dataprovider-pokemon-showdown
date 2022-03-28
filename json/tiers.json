@@ -1,0 +1,153 @@
+[
+	{
+		"name": "Over Used",
+		"shortName": "OU",
+		"playable": true,
+		"usageName": "ou",
+		"rank": 3,
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Under Used Border Line",
+		"shortName": "UUBL",
+		"playable": false,
+		"rank": 3,
+		"parent": "Over Used",
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Under Used",
+		"shortName": "UU",
+		"playable": true,
+		"usageName": "uu",
+		"rank": 4,
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Rarely Used Border Line",
+		"shortName": "RUBL",
+		"playable": false,
+		"rank": 4,
+		"parent": "Under Used",
+		"gen": [5, 6, 7, 8]
+	},
+	{
+		"name": "Rarely Used",
+		"shortName": "RU",
+		"playable": true,
+		"usageName": "ru",
+		"rank": 5,
+		"gen": [5, 6, 7, 8]
+	},
+	{
+		"name": "Never Used Border Line",
+		"shortName": "NUBL",
+		"playable": false,
+		"rank": 5,
+		"parent": "Rarely Used",
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Never Used",
+		"shortName": "NU",
+		"playable": true,
+		"usageName": "nu",
+		"rank": 6,
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "PU Border Line",
+		"shortName": "PUBL",
+		"playable": false,
+		"rank": 6,
+		"parent": "Never Used",
+		"gen": [4, 5, 6, 7, 8]
+	},
+	{
+		"name": "PU",
+		"playable": true,
+		"usageName": "pu",
+		"rank": 7,
+		"gen": [4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Zero Used",
+		"shortName": "ZU",
+		"playable": true,
+		"usageName": "zu",
+		"rank": 8,
+		"gen": [7, 8]
+	},
+	{
+		"name": "Not Fully Evolved",
+		"shortName": "NFE",
+		"usageName": "nfe",
+		"playable": false,
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Little Cup",
+		"shortName": "LC",
+		"playable": true,
+		"usageName": "lc",
+		"rank": 100,
+		"gen": [4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Uber",
+		"playable": true,
+		"usageName": "ubers",
+		"rank": 2,
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Anything Goes",
+		"shortName": "AG",
+		"usageName": "anythinggoes",
+		"playable": true,
+		"rank": 1,
+		"gen": [4, 6, 7, 8]
+	},
+	{
+		"name": "Monotype",
+		"shortName": "Mono",
+		"usageName": "monotype",
+		"playable": true,
+		"gen": [5, 6, 7, 8]
+	},
+	{
+		"name": "VGC",
+		"playable": true,
+		"usageName": "vgc",
+		"isDouble": true,
+		"gen": [4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Battle Stadium Singles",
+		"shortName": "BSS",
+		"usageName": "battlestadiumsingles",
+		"playable": true,
+		"gen": [6, 7, 8]
+	},
+	{
+		"name": "1v1",
+		"playable": true,
+		"maxPokemon": 3,
+		"usageName": "1v1",
+		"gen": [2, 3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Doubles OU",
+		"shortName": "DOU",
+		"playable": true,
+		"usageName": "doublesou",
+		"ladderRef": 1695,
+		"isDouble": true,
+		"gen": [3, 4, 5, 6, 7, 8]
+	},
+	{
+		"name": "Untiered",
+		"playable": false,
+		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+	}
+]

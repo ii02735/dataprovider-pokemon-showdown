@@ -1,0 +1,6 @@
+# Ignore following files to be prettied :
+json/*.json
+json/translations/*.json
+json/translations/descriptions/*.json
+pokemon-showdown
+Smogon-Stats-Viewer

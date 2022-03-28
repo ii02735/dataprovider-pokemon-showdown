@@ -3,3 +3,11 @@
 pokemon-showdown/
 node_modules/
 execution.log
+*.json
+!tiers.json
+!tags.json
+!json/translations/*.json
+!json/translations/descriptions/*.json
+!package*.json
+.env
+Smogon-Stats-Viewer
