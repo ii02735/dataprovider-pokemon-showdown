@@ -27,9 +27,12 @@ const results = { table: "pokemon", UPDATED: 0 };
               return;
             }
           }
-          let rowTier = short_name
-            ? await knex("tier").where({ short_name, gen }).first(["id"])
-            : await knex("tier").where({ name: "Untiered", gen }).first(["id"]);
+          let rowTier =
+            short_name && name != "Illegal"
+              ? await knex("tier").where({ short_name, gen }).first(["id"])
+              : await knex("tier")
+                  .where({ name: "Untiered", gen })
+                  .first(["id"]);
 
           if (!rowTier) {
             throw new Error(

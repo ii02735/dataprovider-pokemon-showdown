@@ -65,6 +65,7 @@
 	},
 	{
 		"name": "PU",
+		"shortName": "PU",
 		"playable": true,
 		"usageName": "pu",
 		"rank": 7,
