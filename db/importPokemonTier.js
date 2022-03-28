@@ -28,7 +28,7 @@ const results = { table: "pokemon", UPDATED: 0 };
             }
           }
           let rowTier =
-            short_name && name != "Illegal"
+            short_name && short_name != "Illegal"
               ? await knex("tier").where({ short_name, gen }).first(["id"])
               : await knex("tier")
                   .where({ name: "Untiered", gen })

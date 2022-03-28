@@ -96,6 +96,7 @@
 	},
 	{
 		"name": "Uber",
+		"shortName": "Uber",
 		"playable": true,
 		"usageName": "ubers",
 		"rank": 2,
