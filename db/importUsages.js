@@ -66,7 +66,6 @@ const fs = require("fs");
           for (const [property, tableName] of [
             ["abilities", "ability"],
             ["items", "item"],
-            ["moves", "move"],
           ]) {
             for (const entityData of usageData[property]) {
               const entityRow = await knex(tableName)
