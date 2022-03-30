@@ -1,4 +1,4 @@
-const { LAST_GEN, folderUsage, range } = require("../util");
+const { LAST_GEN, folderUsage, range, withoutSpaces } = require("../util");
 const { knex } = require("./db");
 
 // Choose latest data folder
@@ -49,7 +49,7 @@ const fs = require("fs");
         let rank = 1;
         for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
           const pokemonRow = await knex("pokemon")
-            .select(["id"])
+            .select(["id", "name"])
             .where({ usage_name: pokemonUsageName, gen })
             .first();
           if (!pokemonRow) continue;
@@ -79,6 +79,66 @@ const fs = require("fs");
                 percent: entityData.usage,
               });
             }
+          }
+
+          // Special case for moves
+
+          for (const entityData of usageData["moves"]) {
+            // In stats, the move "Hidden Power" is referenced
+            // with its TYPE ("Hidden Power Grass" for example)
+            // whereas in database, it is not.
+            // We must then insert the move, for the right gen +
+            // add to the learns for the concerned pokemon
+
+            if (/Hidden Power (\w+)/.test(entityData.name)) {
+              const hiddenPowerRow = await knex("move")
+                .where({ name: entityData.name, gen })
+                .first();
+              let move_id = null;
+              if (!hiddenPowerRow) {
+                console.log(
+                  `${entityData.name} doesn't exist in ${gen} gen : creating move...`
+                );
+                move_id = await knex("move").insert(
+                  {
+                    name: entityData.name,
+                    usage_name: withoutSpaces(entityData.name),
+                    power: 60,
+                    pp: 15,
+                    accuracy: 100,
+                    category: gen > 3 ? "Special" : "Physical",
+                    gen,
+                  },
+                  ["id"]
+                );
+                move_id = move_id[0];
+              } else move_id = hiddenPowerRow.id;
+
+              const existantLearn = await knex("pokemon_move")
+                .where({ pokemon_id: pokemonRow.id, move_id, gen })
+                .first();
+
+              if (!existantLearn) {
+                console.log(
+                  `${entityData.name} not in ${pokemonRow.name}'s movepool for ${gen} gen : adding...`
+                );
+                await knex("pokemon_move").insert({
+                  pokemon_id: pokemonRow.id,
+                  move_id,
+                  gen,
+                });
+              }
+            }
+
+            const entityRow = await knex("move")
+              .where({ name: entityData.name, gen })
+              .first();
+            if (!entityRow) continue;
+            await knex(`usage_move`).insert({
+              tier_usage_id: insertedTierUsageId[pokemonRow.id],
+              [`move_id`]: entityRow.id,
+              percent: entityData.usage,
+            });
           }
         }
       }
@@ -147,3 +207,5 @@ const fs = require("fs");
     knex.destroy();
   }
 })();
+
+const hiddenPowerUpdate = async (pokemonUsageName, moveName, gen) => {};
