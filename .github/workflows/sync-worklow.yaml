@@ -53,5 +53,5 @@ jobs: #this section contains the tasks / jobs that must be executed
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ secrets.REMOTE_DIR }}/dataprovider
+            cd ${{ secrets.REMOTE_DIR }}/dataprovider/prod
             git fetch --tags; latestTag=$(git describe --tags `git rev-list --tags --max-count=1`); git checkout $latestTag
