@@ -1,12 +1,8 @@
-name: "Add JSON files to repository (test/dev usage)"
+name: "Add JSON files to repository (test usage)"
 
 
 on: # This workflow must be triggered on two conditions
         workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
-
-        push: # when we make a push to the main branch
-            branches:
-              - main
 
 jobs: #this section contains the tasks / jobs that must be executed
         downloadJson: # the job name

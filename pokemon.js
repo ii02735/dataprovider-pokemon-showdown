@@ -71,9 +71,7 @@ const cleanAbilities = (gen, object) => {
     if (gen < 5) {
       delete object["abilities"]["H"];
 
-      if (gen === 3) {
-        if (object["abilities"]["1"]) delete object["abilities"]["1"];
-      } else if (gen < 3) delete object["abilities"];
+      if (gen < 3) delete object["abilities"];
     }
   }
 
