@@ -96,8 +96,13 @@ const fs = require("fs");
               let move_id = null;
               if (!hiddenPowerRow) {
                 console.log(
-                  `${entityData.name} doesn't exist in ${gen} gen : creating move...`
+                  `${entityData.name} doesn't exist in gen ${gen} : creating move...`
                 );
+                const hpType = /Hidden Power (\w+)/.exec(entityData.name)[1];
+                const { id: type_id } = await knex("type")
+                  .select("id")
+                  .where({ name: hpType.toLowerCase(), gen })
+                  .first();
                 move_id = await knex("move").insert(
                   {
                     name: entityData.name,
@@ -107,6 +112,7 @@ const fs = require("fs");
                     accuracy: 100,
                     category: gen > 3 ? "Special" : "Physical",
                     gen,
+                    type_id,
                   },
                   ["id"]
                 );
@@ -119,7 +125,7 @@ const fs = require("fs");
 
               if (!existantLearn) {
                 console.log(
-                  `${entityData.name} not in ${pokemonRow.name}'s movepool for ${gen} gen : adding...`
+                  `${entityData.name} not in ${pokemonRow.name}'s movepool for gen ${gen} : adding...`
                 );
                 await knex("pokemon_move").insert({
                   pokemon_id: pokemonRow.id,
