@@ -1,5 +1,8 @@
 name: Workflow to allow MR on main
-on: merge
+on:
+  pull_request:
+    branches: 
+      - main
 
 jobs:
 
