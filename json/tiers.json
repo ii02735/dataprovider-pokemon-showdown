@@ -4,24 +4,21 @@
 		"shortName": "OU",
 		"playable": true,
 		"usageName": "ou",
-		"rank": 3,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"rank": 3
 	},
 	{
 		"name": "Under Used Border Line",
 		"shortName": "UUBL",
 		"playable": false,
 		"rank": 3,
-		"parent": "Over Used",
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"parent": "Over Used"
 	},
 	{
 		"name": "Under Used",
 		"shortName": "UU",
 		"playable": true,
 		"usageName": "uu",
-		"rank": 4,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"rank": 4
 	},
 	{
 		"name": "Rarely Used Border Line",
@@ -44,16 +41,14 @@
 		"shortName": "NUBL",
 		"playable": false,
 		"rank": 5,
-		"parent": "Rarely Used",
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"parent": "Rarely Used"
 	},
 	{
 		"name": "Never Used",
 		"shortName": "NU",
 		"playable": true,
 		"usageName": "nu",
-		"rank": 6,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"rank": 6
 	},
 	{
 		"name": "PU Border Line",
@@ -83,24 +78,21 @@
 		"name": "Not Fully Evolved",
 		"shortName": "NFE",
 		"usageName": "nfe",
-		"playable": false,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"playable": false
 	},
 	{
 		"name": "Little Cup",
 		"shortName": "LC",
 		"playable": true,
 		"usageName": "lc",
-		"rank": 100,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"rank": 100
 	},
 	{
 		"name": "Uber",
 		"shortName": "Uber",
 		"playable": true,
 		"usageName": "ubers",
-		"rank": 2,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"rank": 2
 	},
 	{
 		"name": "Anything Goes",
@@ -122,14 +114,14 @@
 		"playable": true,
 		"usageName": "vgc",
 		"isDouble": true,
-		"gen": [4, 5, 6, 7, 8]
+		"gen": "LAST GEN ONLY"
 	},
 	{
 		"name": "Battle Stadium Singles",
 		"shortName": "BSS",
 		"usageName": "battlestadiumsingles",
 		"playable": true,
-		"gen": [6, 7, 8]
+		"gen": "LAST GEN ONLY"
 	},
 	{
 		"name": "1v1",
@@ -145,11 +137,10 @@
 		"usageName": "doublesou",
 		"ladderRef": 1695,
 		"isDouble": true,
-		"gen": [3, 4, 5, 6, 7, 8]
+		"gen": [5, 6, 7, 8]
 	},
 	{
 		"name": "Untiered",
-		"playable": false,
-		"gen": [1, 2, 3, 4, 5, 6, 7, 8]
+		"playable": false
 	}
 ]

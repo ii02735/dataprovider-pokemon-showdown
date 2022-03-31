@@ -1,10 +1,42 @@
 const { insertOrUpdate, knex, resultRecords } = require("./db");
 const fs = require("fs");
-const { folderUsage } = require("../util");
+const path = require("path");
+const { folderUsage, LAST_GEN, range } = require("../util");
 const formats = JSON.parse(fs.readFileSync(folderUsage + "/formats.json"));
-const tiers = JSON.parse(fs.readFileSync("json/tiers.json")).flatMap((tier) =>
-  tier.gen.map((gen) => ({ ...tier, gen }))
+const rawTiers = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "..", "json", "tiers.json"))
 );
+
+// Add tiers for specific gens
+
+let tiers = rawTiers
+  .filter((tier) => tier.hasOwnProperty("gen") && tier.gen !== "LAST GEN ONLY")
+  .flatMap((tier) => tier.gen.map((gen) => ({ ...tier, gen })));
+
+// Add tiers that are played in all gen
+
+tiers = tiers.concat(
+  rawTiers
+    .filter((tier) => !tier.hasOwnProperty("gen"))
+    .flatMap((tier) => range(1, LAST_GEN).map((gen) => ({ ...tier, gen })))
+);
+
+// Add tiers that are only played in the last gen
+
+tiers = tiers.concat(
+  rawTiers
+    .filter(
+      (tier) => tier.hasOwnProperty("gen") && tier.gen === "LAST GEN ONLY"
+    )
+    .map((tier) => {
+      tier.gen = LAST_GEN;
+      return tier;
+    })
+);
+
+console.log(tiers);
+
+exit();
 
 Promise.all(
   insertOrUpdate(knex, "tier", tiers, {
