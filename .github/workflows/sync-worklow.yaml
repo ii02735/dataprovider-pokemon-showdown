@@ -1,11 +1,7 @@
 name: "Sync with pokemon-showdown"
 
-on: # This workflow must be triggered on two conditions
+on: # This workflow must be triggered on one condition only
   workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
-
-  push: # when we make a push to the main branch
-    branches:
-      - main
 
 jobs: #this section contains the tasks / jobs that must be executed
   sync: # the job name
