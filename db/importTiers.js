@@ -33,11 +33,6 @@ tiers = tiers.concat(
       return tier;
     })
 );
-
-console.log(tiers);
-
-exit();
-
 Promise.all(
   insertOrUpdate(knex, "tier", tiers, {
     hasGen: true,
