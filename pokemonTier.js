@@ -86,6 +86,7 @@ for (const { name: key, gens } of absentPokemon) {
       tier: removeParenthesis(tier),
       technically: tier.startsWith("("),
       doublesTier: doublesTier ? removeParenthesis(doublesTier) : undefined,
+      gen,
     });
   }
 }
