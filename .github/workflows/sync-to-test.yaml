@@ -1,4 +1,4 @@
-name: "Sync with pokemon-showdown (TEST)"
+name: "Update test environment"
 
 on: # This workflow must be triggered on two conditions
   workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
