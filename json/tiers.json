@@ -78,7 +78,7 @@
 		"name": "Not Fully Evolved",
 		"shortName": "NFE",
 		"usageName": "nfe",
-		"playable": true
+		"playable": false
 	},
 	{
 		"name": "Little Cup",
