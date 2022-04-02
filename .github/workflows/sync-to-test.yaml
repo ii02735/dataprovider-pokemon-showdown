@@ -1,7 +1,11 @@
-name: "Sync with pokemon-showdown"
+name: "Update test environment"
 
-on: # This workflow must be triggered on one condition only
+on: # This workflow must be triggered on two conditions
   workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
+
+  push: # when we make a push to the develop branch
+    branches:
+      - develop
 
 jobs: #this section contains the tasks / jobs that must be executed
   sync: # the job name
@@ -31,11 +35,6 @@ jobs: #this section contains the tasks / jobs that must be executed
     needs: [sync]
     runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
     steps:
-      - name: checkout on main
-        uses: actions/checkout@main # action that make a checkout on the main branch
-        with:
-          ref: ${{ github.read_ref }}
-
       - name: "Update local repository version"
         uses: appleboy/ssh-action@master
         with:
@@ -45,5 +44,5 @@ jobs: #this section contains the tasks / jobs that must be executed
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ secrets.REMOTE_DIR }}/dataprovider/prod
-            git fetch --tags; latestTag=$(git describe --tags `git rev-list --tags --max-count=1`); git checkout $latestTag
+            cd ${{ secrets.REMOTE_DIR }}/dataprovider/test
+            git pull origin develop
