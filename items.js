@@ -56,7 +56,7 @@ Object.keys(itemsCollection).forEach((key) => {
 const items = Object.values(itemsCollection);
 items.push({
   usageName: "noitem",
-  name: "No item",
+  name: "No Item",
   description: "Pas d'objet tenu",
   gen: range(1, LAST_GEN),
 });
