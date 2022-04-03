@@ -9,6 +9,7 @@ module.exports.insertOrUpdate = (
     replaceColumns = null,
     relations = null,
     ignoreColumns = [],
+    noOverrideColumns = [],
   } = {}
 ) => {
   return objectArray.map(async (entry) => {
@@ -49,6 +50,11 @@ module.exports.insertOrUpdate = (
         )
         .first(["id"]);
       if (row && row.id) {
+        if (noOverrideColumns.length > 0) {
+          for (const column of noOverrideColumns) {
+            if (entry[column]) delete entry[column];
+          }
+        }
         await knex(tableName).update(entry).where("id", row.id);
         return { tableName, INSERTED: 0, UPDATED: 1 };
       } else {
