@@ -1,4 +1,8 @@
-const { LAST_GEN, folderUsage, range, withoutSpaces } = require("../util");
+const { loadResource, LIBS } = require("../libs/fileLoader");
+const { LAST_GEN, folderUsage, range, withoutSpaces } = loadResource(
+  LIBS,
+  "util"
+);
 const { knex } = require("./db");
 
 // Choose latest data folder
