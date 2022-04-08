@@ -1,4 +1,5 @@
-const { LAST_GEN, folderUsage } = require("../util");
+const { loadResource, LIBS } = require("../libs/fileLoader");
+const { LAST_GEN, folderUsage } = loadResource(LIBS, "util");
 const { knex } = require("./db");
 
 const gen = LAST_GEN;
