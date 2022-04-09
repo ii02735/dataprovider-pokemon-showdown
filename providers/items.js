@@ -1,6 +1,12 @@
-const { Items } = require("./pokemon-showdown/.data-dist/items");
-const { ItemsText } = require("./pokemon-showdown/.data-dist/text/items");
-const { LAST_GEN, range, getGenAttributes } = require("./util");
+const {
+  loadResource,
+  LIBS,
+  POKEMON_SHOWDOWN_RESOURCE,
+} = require("../libs/fileLoader");
+const path = require("path");
+const { Items } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "items");
+const { ItemsText } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "text", "items");
+const { LAST_GEN, range, getGenAttributes } = loadResource(LIBS, "util");
 
 const itemsCollection = Object.entries(Items)
   .filter(

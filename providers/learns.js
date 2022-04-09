@@ -1,14 +1,31 @@
-const { PokedexText } = require("./pokemon-showdown/.data-dist/text/pokedex");
-const { Learnsets } = require("./pokemon-showdown/.data-dist/learnsets");
+const path = require("path");
 const {
-  Learnsets: oldGenLearnsets,
-} = require("./pokemon-showdown/.data-dist/mods/gen2/learnsets");
-const { MovesText } = require("./pokemon-showdown/.data-dist/text/moves");
-const { FormatsData } = require("./pokemon-showdown/.data-dist/formats-data");
-const { pokemonIsStandard, range, getPokemonKeyFromName } = require("./util");
-const { Pokedex } = require("./pokemon-showdown/.data-dist/pokedex");
-const moves = require("./moves");
-const { gensByPokemon } = require("./pokemon");
+  loadResource,
+  LIBS,
+  POKEMON_SHOWDOWN_RESOURCE,
+  PROVIDER,
+} = require("../libs/fileLoader");
+const { PokedexText } = loadResource(
+  POKEMON_SHOWDOWN_RESOURCE,
+  "text",
+  "pokedex"
+);
+const { Learnsets } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "learnsets");
+const { Learnsets: oldGenLearnsets } = loadResource(
+  POKEMON_SHOWDOWN_RESOURCE,
+  "mods",
+  "gen2",
+  "learnsets"
+);
+const { MovesText } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "text", "moves");
+const { FormatsData } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "formats-data");
+const { pokemonIsStandard, range, getPokemonKeyFromName } = loadResource(
+  LIBS,
+  "util"
+);
+const { Pokedex } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "pokedex");
+const moves = loadResource(PROVIDER, "moves");
+const { gensByPokemon } = loadResource(PROVIDER, "pokemon");
 
 const learns = [];
 

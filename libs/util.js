@@ -1,8 +1,17 @@
+const { loadResource, POKEMON_SHOWDOWN_RESOURCE } = require("./fileLoader");
 const fileSystem = require("fs");
-const { Learnsets } = require("./pokemon-showdown/.data-dist/learnsets");
-const {
-  Learnsets: oldLearnsets,
-} = require("./pokemon-showdown/.data-dist/mods/gen2/learnsets");
+const { Learnsets } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "learnsets");
+const { Learnsets: oldLearnsets } = loadResource(
+  POKEMON_SHOWDOWN_RESOURCE,
+  "mods",
+  "gen2",
+  "learnsets"
+);
+const { PokedexText } = loadResource(
+  POKEMON_SHOWDOWN_RESOURCE,
+  "text",
+  "pokedex"
+);
 
 const LAST_GEN = 8;
 
@@ -30,7 +39,6 @@ const pokemonIsStandard = ({ isNonstandard }) =>
   isNonstandard === "Gigantamax" || // keep Gmax forms
   isNonstandard === "Unobtainable"; // keep Unobtainable real mons
 
-const { PokedexText } = require("./pokemon-showdown/.data-dist/text/pokedex");
 const pokedexEntries = Object.entries(PokedexText);
 // Applying GeoDaz's modifications from 0088816fc5ec17b71d085edf26fd7287d1b9b4b6
 const getPokemonKeyFromName = (pokemonName) => {

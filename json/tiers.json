@@ -9,6 +9,7 @@
 	{
 		"name": "Under Used Border Line",
 		"shortName": "UUBL",
+		"usageName": "uubl",
 		"playable": false,
 		"rank": 3,
 		"parent": "Over Used"
@@ -23,6 +24,7 @@
 	{
 		"name": "Rarely Used Border Line",
 		"shortName": "RUBL",
+		"usageName": "rubl",
 		"playable": false,
 		"rank": 4,
 		"parent": "Under Used",
@@ -39,6 +41,7 @@
 	{
 		"name": "Never Used Border Line",
 		"shortName": "NUBL",
+		"usageName": "nubl",
 		"playable": false,
 		"rank": 5,
 		"parent": "Rarely Used"
@@ -53,6 +56,7 @@
 	{
 		"name": "PU Border Line",
 		"shortName": "PUBL",
+		"usageName": "publ",
 		"playable": false,
 		"rank": 6,
 		"parent": "Never Used",

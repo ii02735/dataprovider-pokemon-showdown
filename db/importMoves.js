@@ -1,5 +1,6 @@
+const { loadResource, PROVIDER } = require("../libs/fileLoader");
 const { knex, insertOrUpdate, resultRecords } = require("./db");
-const moves = require("../moves").flatMap((move) =>
+const moves = loadResource(PROVIDER, "moves").flatMap((move) =>
   move.gen.map((gen) => ({ ...move, gen }))
 );
 

@@ -1,10 +1,14 @@
-const { Pokedex } = require("./pokemon-showdown/.data-dist/pokedex");
-const { FormatsData } = require("./pokemon-showdown/.data-dist/formats-data");
 const {
-  pokemonIsStandard,
-  LAST_GEN,
-  getPokemonKeyFromName,
-} = require("./util");
+  loadResource,
+  LIBS,
+  POKEMON_SHOWDOWN_RESOURCE,
+} = require("../libs/fileLoader");
+const { Pokedex } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "pokedex");
+const { FormatsData } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "formats-data");
+const { pokemonIsStandard, LAST_GEN, getPokemonKeyFromName } = loadResource(
+  LIBS,
+  "util"
+);
 const gensByPokemon = {}; // will be used for learns
 const createDiscriminant = ({ name, baseStats, types, abilities }) =>
   JSON.stringify({ name, baseStats, types, abilities });
@@ -31,9 +35,12 @@ const pokemons = Object.entries(Pokedex)
  * @returns an object with the FormatsData and the Pokedex for the specified gen
  */
 const mods = (gen) => {
-  const {
-    FormatsData,
-  } = require(`./pokemon-showdown/.data-dist/mods/gen${gen}/formats-data`);
+  const { FormatsData } = loadResource(
+    POKEMON_SHOWDOWN_RESOURCE,
+    "mods",
+    `gen${gen}`,
+    "formats-data"
+  );
   const cleanedFormatsData = Object.keys(FormatsData).reduce(
     (accumulator, key) => {
       if (pokemonIsStandard(FormatsData[key])) {
@@ -48,9 +55,12 @@ const mods = (gen) => {
 
   let ModPokedex = null;
   if (gen != 3) {
-    const {
-      Pokedex,
-    } = require(`./pokemon-showdown/.data-dist/mods/gen${gen}/pokedex`);
+    const { Pokedex } = loadResource(
+      POKEMON_SHOWDOWN_RESOURCE,
+      "mods",
+      `gen${gen}`,
+      "pokedex"
+    );
     ModPokedex = Pokedex;
   }
 

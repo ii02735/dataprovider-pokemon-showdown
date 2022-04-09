@@ -1,4 +1,8 @@
-const { LAST_GEN, folderUsage, range, withoutSpaces } = require("../util");
+const { loadResource, LIBS } = require("../libs/fileLoader");
+const { LAST_GEN, folderUsage, range, withoutSpaces } = loadResource(
+  LIBS,
+  "util"
+);
 const { knex } = require("./db");
 
 // Choose latest data folder
@@ -90,22 +94,23 @@ const fs = require("fs");
             // add to the learns for the concerned pokemon
 
             if (/Hidden Power (\w+)/.test(entityData.name)) {
+              const hpType = /Hidden Power (\w+)/.exec(entityData.name)[1];
+              const moveName = `Hidden Power [${hpType}]`;
               const hiddenPowerRow = await knex("move")
-                .where({ name: entityData.name, gen })
+                .where({ name: moveName, gen })
                 .first();
               let move_id = null;
               if (!hiddenPowerRow) {
                 console.log(
                   `${entityData.name} doesn't exist in gen ${gen} : creating move...`
                 );
-                const hpType = /Hidden Power (\w+)/.exec(entityData.name)[1];
                 const { id: type_id } = await knex("type")
                   .select("id")
                   .where({ name: hpType.toLowerCase(), gen })
                   .first();
                 move_id = await knex("move").insert(
                   {
-                    name: entityData.name,
+                    name: moveName,
                     usage_name: withoutSpaces(entityData.name),
                     power: 60,
                     pp: 15,

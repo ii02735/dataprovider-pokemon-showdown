@@ -1,6 +1,6 @@
+const { loadResource, PROVIDER } = require("../libs/fileLoader");
 const { knex } = require("./db");
-const pokemonTiers = require("../pokemonTier");
-const { withoutSpaces } = require("../util");
+const pokemonTiers = loadResource(PROVIDER, "pokemonTier");
 const results = { table: "pokemon", UPDATED: 0 };
 
 (async () => {

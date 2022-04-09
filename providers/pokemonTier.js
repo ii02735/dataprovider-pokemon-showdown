@@ -1,15 +1,26 @@
-const { gensByPokemon } = require("./pokemon");
 const {
-  FormatsData: FormatsDataLastGen,
-} = require("./pokemon-showdown/.data-dist/formats-data");
-const { PokedexText } = require("./pokemon-showdown/.data-dist/text/pokedex");
-const { Pokedex } = require("./pokemon-showdown/.data-dist/pokedex");
+  loadResource,
+  LIBS,
+  POKEMON_SHOWDOWN_RESOURCE,
+  PROVIDER,
+} = require("../libs/fileLoader");
+const { gensByPokemon } = loadResource(PROVIDER, "pokemon");
+const { FormatsData: FormatsDataLastGen } = loadResource(
+  POKEMON_SHOWDOWN_RESOURCE,
+  "formats-data"
+);
+const { PokedexText } = loadResource(
+  POKEMON_SHOWDOWN_RESOURCE,
+  "text",
+  "pokedex"
+);
+const { Pokedex } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "pokedex");
 const {
   pokemonIsStandard,
   removeParenthesis,
   LAST_GEN,
   getPokemonKeyFromName,
-} = require("./util");
+} = loadResource(LIBS, "util");
 
 /**
  * Forms that appear during battle (for Castform, Euice...)
@@ -39,9 +50,12 @@ let pokemonTier = Object.entries(FormatsDataLastGen)
   }));
 
 for (let gen = 1; gen < LAST_GEN; gen++) {
-  const {
-    FormatsData: FormatsDataOldGen,
-  } = require(`./pokemon-showdown/.data-dist/mods/gen${gen}/formats-data`);
+  const { FormatsData: FormatsDataOldGen } = loadResource(
+    POKEMON_SHOWDOWN_RESOURCE,
+    "mods",
+    `gen${gen}`,
+    "formats-data"
+  );
   pokemonTier = pokemonTier.concat(
     Object.entries(FormatsDataOldGen)
       .filter(([key, value]) => pokemonIsStandard(value))
