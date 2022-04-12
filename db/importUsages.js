@@ -181,7 +181,7 @@ const fs = require("fs");
         const percentProperty = { teammates: "usage", counters: "eff" };
         for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
           const pokemonRow = await knex("pokemon")
-            .where({ usage_name: pokemonUsageName, gen, tier_id })
+            .where({ usage_name: pokemonUsageName, gen })
             .first(["id"]);
           if (!pokemonRow) continue;
 
@@ -195,7 +195,7 @@ const fs = require("fs");
           ]) {
             for (const entityData of usageData[property]) {
               const entityRow = await knex("pokemon")
-                .where({ name: entityData.name, gen, tier_id })
+                .where({ name: entityData.name, gen })
                 .first();
 
               if (!entityRow) continue;
