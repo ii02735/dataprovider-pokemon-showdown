@@ -58,6 +58,7 @@ const fs = require("fs");
             .where({ usage_name: pokemonUsageName, gen })
             .first();
           if (!pokemonRow) continue;
+          if (usageData.usage < 3) continue;
           const insertedTierRow = await knex("tier_usage").insert(
             {
               tier_id,
@@ -67,7 +68,7 @@ const fs = require("fs");
             },
             "id"
           );
-          insertedTierUsageId[pokemonRow.id] = insertedTierRow[0];
+          insertedTierUsageId[pokemonUsageName + tier_id] = insertedTierRow[0];
           for (const [property, tableName] of [
             ["abilities", "ability"],
             ["items", "item"],
@@ -78,7 +79,7 @@ const fs = require("fs");
                 .first();
               if (!entityRow) continue;
               await knex(`usage_${tableName}`).insert({
-                tier_usage_id: insertedTierUsageId[pokemonRow.id],
+                tier_usage_id: insertedTierUsageId[pokemonUsageName + tier_id],
                 [`${tableName}_id`]: entityRow.id,
                 percent: entityData.usage,
               });
@@ -146,7 +147,7 @@ const fs = require("fs");
               .first();
             if (!entityRow) continue;
             await knex(`usage_move`).insert({
-              tier_usage_id: insertedTierUsageId[pokemonRow.id],
+              tier_usage_id: insertedTierUsageId[pokemonUsageName + tier_id],
               [`move_id`]: entityRow.id,
               percent: entityData.usage,
             });
@@ -190,8 +191,8 @@ const fs = require("fs");
            * Example : Ninjask is playable in OU, but its usage stats
            * cannot be found in gen4ou/1630/pokedata.json
            */
-          if (!insertedTierUsageId[pokemonRow.id]) continue;
-          const tier_usage_id = insertedTierUsageId[pokemonRow.id];
+          if (!insertedTierUsageId[pokemonUsageName + tier_id]) continue;
+          const tier_usage_id = insertedTierUsageId[pokemonUsageName + tier_id];
           for (const [property, tableName] of [
             ["teammates", "team_mate"],
             ["counters", "pokemon_check"],
@@ -218,5 +219,3 @@ const fs = require("fs");
     knex.destroy();
   }
 })();
-
-const hiddenPowerUpdate = async (pokemonUsageName, moveName, gen) => {};
