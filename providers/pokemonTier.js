@@ -39,15 +39,24 @@ const determineTierForSpecialForm = (value, formatsData, isDoubleTier) =>
 
 let pokemonTier = Object.entries(FormatsDataLastGen)
   .filter(([key, value]) => pokemonIsStandard(value))
-  .map(([key, value]) => ({
-    pokemon: PokedexText[key] ? PokedexText[key].name : key,
-    tier: value.tier ? removeParenthesis(value.tier) : undefined,
-    technically: value.tier ? value.tier.startsWith("(") : false,
-    doublesTier: value.doublesTier
+  .map(([key, value]) => {
+    const doublesTier = value.doublesTier
       ? removeParenthesis(value.doublesTier)
-      : undefined,
-    gen: LAST_GEN,
-  }));
+      : undefined;
+    return {
+      pokemon: PokedexText[key] ? PokedexText[key].name : key,
+      tier: value.tier
+        ? removeParenthesis(value.tier)
+        : determineTierForSpecialForm(
+            Pokedex[key],
+            FormatsDataLastGen,
+            doublesTier
+          ),
+      technically: value.tier ? value.tier.startsWith("(") : false,
+      doublesTier,
+      gen: LAST_GEN,
+    };
+  });
 
 for (let gen = 1; gen < LAST_GEN; gen++) {
   const { FormatsData: FormatsDataOldGen } = loadResource(
@@ -59,15 +68,24 @@ for (let gen = 1; gen < LAST_GEN; gen++) {
   pokemonTier = pokemonTier.concat(
     Object.entries(FormatsDataOldGen)
       .filter(([key, value]) => pokemonIsStandard(value))
-      .map(([key, value]) => ({
-        pokemon: PokedexText[key] ? PokedexText[key].name : key,
-        tier: value.tier ? removeParenthesis(value.tier) : undefined,
-        technically: value.tier ? value.tier.startsWith("(") : false,
-        doublesTier: value.doublesTier
+      .map(([key, value]) => {
+        const doublesTier = value.doublesTier
           ? removeParenthesis(value.doublesTier)
-          : undefined,
-        gen,
-      }))
+          : undefined;
+        return {
+          pokemon: PokedexText[key] ? PokedexText[key].name : key,
+          tier: value.tier
+            ? removeParenthesis(value.tier)
+            : determineTierForSpecialForm(
+                Pokedex[key],
+                FormatsDataLastGen,
+                doublesTier
+              ),
+          technically: value.tier ? value.tier.startsWith("(") : false,
+          doublesTier,
+          gen: LAST_GEN,
+        };
+      })
   );
 }
 
