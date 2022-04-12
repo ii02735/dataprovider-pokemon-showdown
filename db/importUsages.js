@@ -185,12 +185,8 @@ const fs = require("fs");
             .first(["id"]);
           if (!pokemonRow) continue;
 
-          /**
-           * If the pokemon is not in insertedTierUsageId,
-           * It means that the pokemon is not in the pokedata file
-           * Example : Ninjask is playable in OU, but its usage stats
-           * cannot be found in gen4ou/1630/pokedata.json
-           */
+          // If tier_usage_id couldn't be found, it means that it has been ignored
+          // because its usage is less than 3%
           if (!insertedTierUsageId[pokemonUsageName + tier_id]) continue;
           const tier_usage_id = insertedTierUsageId[pokemonUsageName + tier_id];
           for (const [property, tableName] of [

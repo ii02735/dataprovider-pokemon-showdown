@@ -87,6 +87,9 @@ const fs = require("fs");
         .first(["id"]);
 
       const tier_usage_id = insertedTierUsageId[pokemonRow.id];
+      // If tier_usage_id couldn't be found, it means that it has been ignored
+      // because its usage is less than 3%
+      if (!tier_usage_id) continue;
       for (const [property, tableName] of [
         ["teammates", "team_mate"],
         ["counters", "pokemon_check"],
