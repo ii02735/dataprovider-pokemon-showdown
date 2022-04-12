@@ -68,7 +68,7 @@ const fs = require("fs");
             },
             "id"
           );
-          insertedTierUsageId[pokemonRow.id] = insertedTierRow[0];
+          insertedTierUsageId[pokemonUsageName + tier_id] = insertedTierRow[0];
           for (const [property, tableName] of [
             ["abilities", "ability"],
             ["items", "item"],
@@ -79,7 +79,7 @@ const fs = require("fs");
                 .first();
               if (!entityRow) continue;
               await knex(`usage_${tableName}`).insert({
-                tier_usage_id: insertedTierUsageId[pokemonRow.id],
+                tier_usage_id: insertedTierUsageId[pokemonUsageName + tier_id],
                 [`${tableName}_id`]: entityRow.id,
                 percent: entityData.usage,
               });
@@ -147,7 +147,7 @@ const fs = require("fs");
               .first();
             if (!entityRow) continue;
             await knex(`usage_move`).insert({
-              tier_usage_id: insertedTierUsageId[pokemonRow.id],
+              tier_usage_id: insertedTierUsageId[pokemonUsageName + tier_id],
               [`move_id`]: entityRow.id,
               percent: entityData.usage,
             });
@@ -181,7 +181,7 @@ const fs = require("fs");
         const percentProperty = { teammates: "usage", counters: "eff" };
         for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
           const pokemonRow = await knex("pokemon")
-            .where({ usage_name: pokemonUsageName, gen, tier_id })
+            .where({ usage_name: pokemonUsageName, gen })
             .first(["id"]);
           if (!pokemonRow) continue;
 
@@ -191,15 +191,15 @@ const fs = require("fs");
            * Example : Ninjask is playable in OU, but its usage stats
            * cannot be found in gen4ou/1630/pokedata.json
            */
-          if (!insertedTierUsageId[pokemonRow.id]) continue;
-          const tier_usage_id = insertedTierUsageId[pokemonRow.id];
+          if (!insertedTierUsageId[pokemonUsageName + tier_id]) continue;
+          const tier_usage_id = insertedTierUsageId[pokemonUsageName + tier_id];
           for (const [property, tableName] of [
             ["teammates", "team_mate"],
             ["counters", "pokemon_check"],
           ]) {
             for (const entityData of usageData[property]) {
               const entityRow = await knex("pokemon")
-                .where({ name: entityData.name, gen, tier_id })
+                .where({ name: entityData.name, gen })
                 .first();
 
               if (!entityRow) continue;
@@ -219,4 +219,3 @@ const fs = require("fs");
     knex.destroy();
   }
 })();
-
