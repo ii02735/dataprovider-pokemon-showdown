@@ -47,6 +47,7 @@ const fs = require("fs");
         .where({ usage_name: pokemonUsageName, gen })
         .first();
       if (!pokemonRow) continue;
+      if (usageData.usage < 3) continue;
       const insertedTierRow = await knex("tier_usage").insert(
         {
           tier_id,

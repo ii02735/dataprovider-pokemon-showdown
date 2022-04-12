@@ -15,6 +15,7 @@ const fs = require("fs");
 
       const tiersRows = await knex("tier")
         .where({ gen })
+        .whereNot({ usage_name: "vgc" })
         .whereNotNull("usage_name")
         .whereNotNull("ladder_ref");
 
@@ -57,6 +58,7 @@ const fs = require("fs");
             .where({ usage_name: pokemonUsageName, gen })
             .first();
           if (!pokemonRow) continue;
+          if (usageData.usage < 3) continue;
           const insertedTierRow = await knex("tier_usage").insert(
             {
               tier_id,
@@ -179,7 +181,7 @@ const fs = require("fs");
         const percentProperty = { teammates: "usage", counters: "eff" };
         for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
           const pokemonRow = await knex("pokemon")
-            .where({ usage_name: pokemonUsageName, gen })
+            .where({ usage_name: pokemonUsageName, gen, tier_id })
             .first(["id"]);
           if (!pokemonRow) continue;
 
@@ -197,7 +199,7 @@ const fs = require("fs");
           ]) {
             for (const entityData of usageData[property]) {
               const entityRow = await knex("pokemon")
-                .where({ name: entityData.name, gen })
+                .where({ name: entityData.name, gen, tier_id })
                 .first();
 
               if (!entityRow) continue;
@@ -218,4 +220,3 @@ const fs = require("fs");
   }
 })();
 
-const hiddenPowerUpdate = async (pokemonUsageName, moveName, gen) => {};
