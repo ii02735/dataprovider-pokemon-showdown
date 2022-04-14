@@ -3,15 +3,14 @@ const {
   loadResource,
   LIBS,
   POKEMON_SHOWDOWN_RESOURCE,
-  PROVIDER,
 } = require("../libs/fileLoader");
+const { Ability } = require("../pokemon-showdown/.sim-dist/dex-abilities");
 const { Abilities } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "abilities");
 const { AbilitiesText } = loadResource(
   POKEMON_SHOWDOWN_RESOURCE,
   "text",
   "abilities"
 );
-const pokemonCollection = loadResource(PROVIDER, "pokemon");
 const { getGenAttributes, range, LAST_GEN } = loadResource(LIBS, "util");
 
 const findInheritedAbilityTextGenProperty = (key, gen, property) => {
@@ -42,9 +41,6 @@ const abilitiesTextCollection = Object.entries(Abilities)
     return accumulator;
   }, {});
 
-// Method in order to create keys for abilitiesGen and to use them in abilities object
-const createKey = (name) => name.replace(/\W+/g, "").toLowerCase();
-
 /**
  * Objects that give for each ability their valid gens :
  * {
@@ -52,24 +48,10 @@ const createKey = (name) => name.replace(/\W+/g, "").toLowerCase();
  * 	 gen: [3,4,5,6,7,8]
  * }
  */
-const abilitiesGen = pokemonCollection
-  .filter(
-    ({ ability_1, ability_2, ability_hidden }) =>
-      ability_1 || ability_2 || ability_hidden
-  )
-  .reduce((accumulator, { ability_1, ability_2, ability_hidden, gen }) => {
-    for (const ability of [ability_1, ability_2, ability_hidden]) {
-      if (ability) {
-        abilityKey = createKey(ability);
-        if (accumulator[abilityKey])
-          accumulator[abilityKey] = Array.from(
-            new Set([...accumulator[abilityKey], ...gen])
-          ).sort();
-        else accumulator[abilityKey] = gen;
-      }
-    }
-    return accumulator;
-  }, {});
+const abilityGens = (key) => {
+  const ability = new Ability(Abilities[key]);
+  return range(ability.gen, LAST_GEN);
+};
 
 let abilities = [];
 
@@ -84,7 +66,7 @@ Object.entries(abilitiesTextCollection).forEach(([key, value]) => {
   // If that's the case the initial gen array must be split in different objects :
   /**
    * For example :
-   * If the ability in abilitiesGen has an array like that : [3,4,5,6,7,8]
+   * If the ability in abilityGens has an array like that : [3,4,5,6,7,8]
    * And the ability in abilitiesTextCollection has in otherGens, an array like [4] (gen4)
    * So its structure is like that :
    * {
@@ -112,7 +94,7 @@ Object.entries(abilitiesTextCollection).forEach(([key, value]) => {
 
   if (otherGens.length > 0) {
     // Fill possible gaps
-    otherGens = range(abilitiesGen[key][0], otherGens[otherGens.length - 1]);
+    otherGens = range(abilityGens(key)[0], otherGens[otherGens.length - 1]);
     const similarDescriptions = {};
 
     otherGens.forEach((otherGen, index) => {
@@ -158,13 +140,14 @@ Object.entries(abilitiesTextCollection).forEach(([key, value]) => {
       gen: gens,
     });
   } else {
-    // If the object has no gens, we push the initial gen array stored in abilitiesGen in the gen attribute
+    // If the object has no gens, we push the initial gen array stored in abilityGens in the gen attribute
+    const initialAbility = new Ability(Abilities[key]);
     abilities.push({
       usageName: key,
       name: value.name,
       description: value.description || value.shortDescription,
       shortDescription: value.shortDescription,
-      gen: abilitiesGen[key],
+      gen: range(initialAbility.gen, LAST_GEN),
     });
   }
 });
