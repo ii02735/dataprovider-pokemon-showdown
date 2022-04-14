@@ -3,7 +3,9 @@ const {
   LIBS,
   POKEMON_SHOWDOWN_RESOURCE,
 } = require("../libs/fileLoader");
+const { Ability } = require("../pokemon-showdown/.sim-dist/dex-abilities");
 const { Pokedex } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "pokedex");
+const { Abilities } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "abilities");
 const { FormatsData } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "formats-data");
 const { pokemonIsStandard, LAST_GEN, getPokemonKeyFromName } = loadResource(
   LIBS,
@@ -76,14 +78,23 @@ const mods = (gen) => {
  */
 const cleanAbilities = (gen, object) => {
   object = JSON.parse(JSON.stringify(object));
-
+  let ability = null;
+  // Purge abilities that are not compatible with pokemon's gen
   if (object["abilities"]) {
-    if (gen < 5) {
-      delete object["abilities"]["H"];
-
-      if (gen < 3) delete object["abilities"];
+    const createKey = (name) => name.replace(/\W+/g, "").toLowerCase();
+    const abilityKeys = Object.keys(object["abilities"]);
+    if (abilityKeys.length > 0) {
+      abilityKeys.forEach((key) => {
+        ability = new Ability(Abilities[createKey(object["abilities"][key])]);
+        if (ability.gen > gen) delete object["abilities"][key];
+      });
     }
   }
+
+  // Purge entries that cannot exist in specific gens
+  if (gen < 5 && object["abilities"]["H"]) delete object["abilities"]["H"];
+
+  if (gen < 3 && object["abilities"]) delete object["abilities"];
 
   return object;
 };
