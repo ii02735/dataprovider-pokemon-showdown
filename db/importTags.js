@@ -1,5 +1,4 @@
 const { insertOrUpdate, knex, resultRecords } = require("./db");
-const fs = require("fs");
 const { loadResource, JSON } = require("../libs/fileLoader");
 const tags = loadResource(JSON, "tags.json");
 
