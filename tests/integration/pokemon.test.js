@@ -1,5 +1,8 @@
-const pokemonCollection = require("../../pokemon").flatMap((pokemon_object) =>
-  pokemon_object.gen.map((gen) => ({ ...pokemon_object, gen }))
+const { loadResource, PROVIDER } = require("../../libs/fileLoader");
+
+const pokemonCollection = loadResource(PROVIDER, "pokemon").flatMap(
+  (pokemon_object) =>
+    pokemon_object.gen.map((gen) => ({ ...pokemon_object, gen }))
 );
 
 test("Pokemon from 3G should have 2 abilities", () => {

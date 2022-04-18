@@ -106,7 +106,9 @@ const lastGenMoves = Object.entries(Moves)
       ...accumulator,
       [key]: {
         usageName: key,
-        name: value.name,
+        name: /Hidden Power (\w+)/.test(value.name)
+          ? `Hidden Power [${/Hidden Power (\w+)/.exec(value.name)[1]}]`
+          : value.name,
         category: value.category,
         description:
           value.isNonstandard === "Past"
@@ -157,7 +159,9 @@ for (let gen = LAST_GEN - 1; gen > 0; gen--) {
 
       const moveGen = {
         usageName: key,
-        name: MovesText[key].name,
+        name: /Hidden Power (\w+)/.test(value.name)
+          ? `Hidden Power [${/Hidden Power (\w+)/.exec(value.name)[1]}]`
+          : value.name,
         category: determineCategory(
           gen,
           lastGenMoves[key].type,

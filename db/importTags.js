@@ -1,6 +1,6 @@
 const { insertOrUpdate, knex, resultRecords } = require("./db");
-const fs = require("fs");
-const tags = JSON.parse(fs.readFileSync("json/tags.json"));
+const { loadResource, JSON } = require("../libs/fileLoader");
+const tags = loadResource(JSON, "tags.json");
 
 Promise.all(
   insertOrUpdate(knex, "tag", tags, {

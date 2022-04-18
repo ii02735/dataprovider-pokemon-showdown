@@ -1,4 +1,8 @@
-const { LAST_GEN, folderUsage, range, withoutSpaces } = require("../util");
+const { loadResource, LIBS } = require("../libs/fileLoader");
+const { LAST_GEN, folderUsage, range, withoutSpaces } = loadResource(
+  LIBS,
+  "util"
+);
 const { knex } = require("./db");
 
 // Choose latest data folder
@@ -11,6 +15,7 @@ const fs = require("fs");
 
       const tiersRows = await knex("tier")
         .where({ gen })
+        .whereNot({ usage_name: "vgc" })
         .whereNotNull("usage_name")
         .whereNotNull("ladder_ref");
 
@@ -53,6 +58,7 @@ const fs = require("fs");
             .where({ usage_name: pokemonUsageName, gen })
             .first();
           if (!pokemonRow) continue;
+          if (usageData.usage < 3) continue;
           const insertedTierRow = await knex("tier_usage").insert(
             {
               tier_id,
@@ -62,7 +68,7 @@ const fs = require("fs");
             },
             "id"
           );
-          insertedTierUsageId[pokemonRow.id] = insertedTierRow[0];
+          insertedTierUsageId[pokemonUsageName + tier_id] = insertedTierRow[0];
           for (const [property, tableName] of [
             ["abilities", "ability"],
             ["items", "item"],
@@ -73,7 +79,7 @@ const fs = require("fs");
                 .first();
               if (!entityRow) continue;
               await knex(`usage_${tableName}`).insert({
-                tier_usage_id: insertedTierUsageId[pokemonRow.id],
+                tier_usage_id: insertedTierUsageId[pokemonUsageName + tier_id],
                 [`${tableName}_id`]: entityRow.id,
                 percent: entityData.usage,
               });
@@ -90,22 +96,23 @@ const fs = require("fs");
             // add to the learns for the concerned pokemon
 
             if (/Hidden Power (\w+)/.test(entityData.name)) {
+              const hpType = /Hidden Power (\w+)/.exec(entityData.name)[1];
+              const moveName = `Hidden Power [${hpType}]`;
               const hiddenPowerRow = await knex("move")
-                .where({ name: entityData.name, gen })
+                .where({ name: moveName, gen })
                 .first();
               let move_id = null;
               if (!hiddenPowerRow) {
                 console.log(
                   `${entityData.name} doesn't exist in gen ${gen} : creating move...`
                 );
-                const hpType = /Hidden Power (\w+)/.exec(entityData.name)[1];
                 const { id: type_id } = await knex("type")
                   .select("id")
                   .where({ name: hpType.toLowerCase(), gen })
                   .first();
                 move_id = await knex("move").insert(
                   {
-                    name: entityData.name,
+                    name: moveName,
                     usage_name: withoutSpaces(entityData.name),
                     power: 60,
                     pp: 15,
@@ -140,7 +147,7 @@ const fs = require("fs");
               .first();
             if (!entityRow) continue;
             await knex(`usage_move`).insert({
-              tier_usage_id: insertedTierUsageId[pokemonRow.id],
+              tier_usage_id: insertedTierUsageId[pokemonUsageName + tier_id],
               [`move_id`]: entityRow.id,
               percent: entityData.usage,
             });
@@ -178,14 +185,10 @@ const fs = require("fs");
             .first(["id"]);
           if (!pokemonRow) continue;
 
-          /**
-           * If the pokemon is not in insertedTierUsageId,
-           * It means that the pokemon is not in the pokedata file
-           * Example : Ninjask is playable in OU, but its usage stats
-           * cannot be found in gen4ou/1630/pokedata.json
-           */
-          if (!insertedTierUsageId[pokemonRow.id]) continue;
-          const tier_usage_id = insertedTierUsageId[pokemonRow.id];
+          // If tier_usage_id couldn't be found, it means that it has been ignored
+          // because its usage is less than 3%
+          if (!insertedTierUsageId[pokemonUsageName + tier_id]) continue;
+          const tier_usage_id = insertedTierUsageId[pokemonUsageName + tier_id];
           for (const [property, tableName] of [
             ["teammates", "team_mate"],
             ["counters", "pokemon_check"],
@@ -212,5 +215,3 @@ const fs = require("fs");
     knex.destroy();
   }
 })();
-
-const hiddenPowerUpdate = async (pokemonUsageName, moveName, gen) => {};

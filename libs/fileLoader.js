@@ -2,6 +2,7 @@ const path = require("path");
 module.exports.PROVIDER = "PROVIDER";
 module.exports.POKEMON_SHOWDOWN_RESOURCE = "POKEMON_SHOWDOWN_RESOURCE";
 module.exports.LIBS = "LIBS";
+module.exports.JSON = "JSON";
 
 module.exports.loadResource = (resourceType, ...pathArray) => {
   switch (resourceType) {
@@ -17,5 +18,7 @@ module.exports.loadResource = (resourceType, ...pathArray) => {
         ".data-dist",
         ...pathArray
       ));
+    case this.JSON:
+      return require(path.join(__dirname, "..", "json", ...pathArray));
   }
 };

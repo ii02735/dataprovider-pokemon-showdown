@@ -1,4 +1,5 @@
-const { LAST_GEN, folderUsage } = require("../util");
+const { loadResource, LIBS } = require("../libs/fileLoader");
+const { LAST_GEN, folderUsage } = loadResource(LIBS, "util");
 const { knex } = require("./db");
 
 const gen = LAST_GEN;
@@ -46,6 +47,7 @@ const fs = require("fs");
         .where({ usage_name: pokemonUsageName, gen })
         .first();
       if (!pokemonRow) continue;
+      if (usageData.usage < 3) continue;
       const insertedTierRow = await knex("tier_usage").insert(
         {
           tier_id,
@@ -85,6 +87,9 @@ const fs = require("fs");
         .first(["id"]);
 
       const tier_usage_id = insertedTierUsageId[pokemonRow.id];
+      // If tier_usage_id couldn't be found, it means that it has been ignored
+      // because its usage is less than 3%
+      if (!tier_usage_id) continue;
       for (const [property, tableName] of [
         ["teammates", "team_mate"],
         ["counters", "pokemon_check"],
