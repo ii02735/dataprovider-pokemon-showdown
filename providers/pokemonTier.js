@@ -103,7 +103,6 @@ const absentPokemon = Object.keys(PokedexText)
   .map((key) => ({ name: key, gens: gensByPokemon[key] }));
 
 // Then we give them the appropriate tier
-console.log(absentPokemon);
 for (const { name: key, gens } of absentPokemon) {
   for (const gen of gens) {
     let FormatsData = null;
