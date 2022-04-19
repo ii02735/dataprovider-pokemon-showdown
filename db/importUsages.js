@@ -58,7 +58,7 @@ const fs = require("fs");
             .where({ usage_name: pokemonUsageName, gen })
             .first();
           if (!pokemonRow) continue;
-          if (usageData.usage < 3) continue;
+          if (usageData.usage < 1) continue;
           const insertedTierRow = await knex("tier_usage").insert(
             {
               tier_id,
@@ -186,7 +186,7 @@ const fs = require("fs");
           if (!pokemonRow) continue;
 
           // If tier_usage_id couldn't be found, it means that it has been ignored
-          // because its usage is less than 3%
+          // because its usage is less than 1%
           if (!insertedTierUsageId[pokemonUsageName + tier_id]) continue;
           const tier_usage_id = insertedTierUsageId[pokemonUsageName + tier_id];
           for (const [property, tableName] of [
