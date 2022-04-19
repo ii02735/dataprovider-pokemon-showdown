@@ -1,6 +1,7 @@
-const { loadResource, PROVIDER } = require("../libs/fileLoader");
+const { loadResource, PROVIDER, LIBS } = require("../libs/fileLoader");
 const { knex } = require("./db");
 const pokemonTiers = loadResource(PROVIDER, "pokemonTier");
+const { removeParenthesis } = loadResource(LIBS, "util");
 const results = { table: "pokemon", UPDATED: 0 };
 
 (async () => {
@@ -29,7 +30,9 @@ const results = { table: "pokemon", UPDATED: 0 };
           }
           let rowTier =
             short_name && short_name != "Illegal"
-              ? await knex("tier").where({ short_name, gen }).first(["id"])
+              ? await knex("tier")
+                  .where({ short_name: removeParenthesis(short_name), gen })
+                  .first(["id"])
               : await knex("tier")
                   .where({ name: "Untiered", gen })
                   .first(["id"]);
