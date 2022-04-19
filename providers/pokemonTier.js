@@ -24,7 +24,7 @@ const {
 
 /**
  * Forms that appear during battle (for Castform, Euice...)
- * don'h have an assigned tier.
+ * don't have an assigned tier.
  * To assign one, we must determine their
  * base form one (with the baseForm attribute in Pokedex)
  *
@@ -33,9 +33,15 @@ const {
  * @param {boolean} isDoubleTier the desired tier is a double one ?
  */
 const determineTierForSpecialForm = (value, formatsData, isDoubleTier) =>
-  formatsData[getPokemonKeyFromName(value.baseSpecies)][
-    isDoubleTier ? "doublesTier" : "tier"
-  ] || null;
+  // Priorize form that is enabled in battle first (battleOnly attribute)
+  // If not defined, fetch baseForm (baseSpecies) data
+  value.battleOnly
+    ? formatsData[getPokemonKeyFromName(value.battleOnly)][
+        isDoubleTier ? "doublesTier" : "tier"
+      ]
+    : formatsData[getPokemonKeyFromName(value.baseSpecies)][
+        isDoubleTier ? "doublesTier" : "tier"
+      ] || null;
 
 let pokemonTier = Object.entries(FormatsDataLastGen)
   .filter(([key, value]) => pokemonIsStandard(value))
@@ -83,7 +89,7 @@ for (let gen = 1; gen < LAST_GEN; gen++) {
               ),
           technically: value.tier ? value.tier.startsWith("(") : false,
           doublesTier,
-          gen: LAST_GEN,
+          gen,
         };
       })
   );
@@ -97,7 +103,7 @@ const absentPokemon = Object.keys(PokedexText)
   .map((key) => ({ name: key, gens: gensByPokemon[key] }));
 
 // Then we give them the appropriate tier
-
+console.log(absentPokemon);
 for (const { name: key, gens } of absentPokemon) {
   for (const gen of gens) {
     let FormatsData = null;
