@@ -10,9 +10,11 @@
 	"Ghost": "Spectre",
 	"Grass": "Plante",
 	"Ground": "Sol",
+	"Ice": "Glace",
 	"Normal": "Normal",
 	"Poison": "Poison",
 	"Psychic": "Psy",
 	"Rock": "Roche",
+	"Steel": "Acier",
 	"Water": "Eau"
 }

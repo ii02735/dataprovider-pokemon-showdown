@@ -1,11 +1,10 @@
 {
   "name": "api-pokemon-showdown",
-  "version": "2.1.2",
+  "version": "2.1.7",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "dev": "node dev_server.js",
     "build": "cd pokemon-showdown && npm i && node build",
     "postbuild": "node dataToJson.js",
     "prepare": "husky install"
