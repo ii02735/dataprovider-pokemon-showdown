@@ -3,6 +3,10 @@
  * Zacian with following gens :
  * [3,4,5,6,7,8]
  * However, he only exists in 8th Gen !
+ * --> Check if fixed
+ *
+ * TODO (later) : special forms (cosmetic), and
+ * accept GeoDaz"s exceptions
  */
 
 const {
@@ -10,217 +14,81 @@ const {
   LIBS,
   POKEMON_SHOWDOWN_RESOURCE,
 } = require("../libs/fileLoader");
-const { Ability } = require("../pokemon-showdown/.sim-dist/dex-abilities");
-const { Pokedex } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "pokedex");
-const { Abilities } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "abilities");
-const { FormatsData } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "formats-data");
-const { pokemonIsStandard, LAST_GEN, getPokemonKeyFromName } = loadResource(
-  LIBS,
-  "util"
-);
-const gensByPokemon = {}; // will be used for learns
-const createDiscriminant = ({ name, baseStats, types, abilities }) =>
-  JSON.stringify({ name, baseStats, types, abilities });
+const { LAST_GEN } = require("../libs/util");
+const { Dex } = require("../pokemon-showdown/.sim-dist/dex");
+const pokemonsFromShowdown = Dex.species.all();
+let pokemonsCollection = [];
 
-const pokemons = Object.entries(Pokedex)
-  .filter(
-    ([key, value]) => !FormatsData[key] || pokemonIsStandard(FormatsData[key])
-  )
-  .reduce((accumulator, [key, value]) => {
-    gensByPokemon[key] = [LAST_GEN];
-
-    accumulator[createDiscriminant(value)] = {
-      usageName: key,
-      ...value,
-      gen: [LAST_GEN],
-    };
-
-    return accumulator;
-  }, {});
-
-/**
- * Prepare mods' dataset
- * @param {number} gen generation number
- * @returns an object with the FormatsData and the Pokedex for the specified gen
- */
-const mods = (gen) => {
-  const { FormatsData } = loadResource(
-    POKEMON_SHOWDOWN_RESOURCE,
-    "mods",
-    `gen${gen}`,
-    "formats-data"
-  );
-  const cleanedFormatsData = Object.keys(FormatsData).reduce(
-    (accumulator, key) => {
-      if (pokemonIsStandard(FormatsData[key])) {
-        const FormatsDataPokemon = FormatsData[key];
-        accumulator[key] = FormatsDataPokemon;
-        return accumulator;
-      }
-      return accumulator;
-    },
-    {}
-  );
-
-  let ModPokedex = null;
-  if (gen != 3) {
-    const { Pokedex } = loadResource(
-      POKEMON_SHOWDOWN_RESOURCE,
-      "mods",
-      `gen${gen}`,
-      "pokedex"
-    );
-    ModPokedex = Pokedex;
+const makePokemonObject = (
+  {
+    abilities,
+    id: usageName,
+    num: pokedex,
+    name,
+    types,
+    baseForme,
+    weighthg: weight,
+    baseStats,
+  },
+  gen
+) => {
+  const { hp, atk, def, spa, spd, spe, prevo } = baseStats;
+  const [type_1, type_2] = types;
+  if (gen < 5) abilities["H"] = null;
+  else if (gen < 3) {
+    abilities["0"] = null;
+    abilities["1"] = null;
+  }
+  // Sometimes abilities are not put in the pokemon's data with the correct gen
+  for (const abilityClassifier of ["0", "1", "H"]) {
+    if (abilities[abilityClassifier]) {
+      const DexAbility = Dex.mod(`gen${gen}`).abilities.get(
+        abilities[abilityClassifier]
+      );
+      abilities[abilityClassifier] = DexAbility.exists ? DexAbility.name : null;
+    } else abilities[abilityClassifier] = null;
   }
 
-  return { ModFormatsData: cleanedFormatsData, ModPokedex };
-};
+  const baseForm = baseForme.length > 0 ? baseForme : null;
 
-/**
- * Remove incompatible abilities' parameters
- * regarding a specific gen
- * @param {number} gen
- * @param {{}} object
- * @returns
- */
-const cleanAbilities = (gen, object) => {
-  object = JSON.parse(JSON.stringify(object));
-  let ability = null;
-  // Purge abilities that are not compatible with pokemon's gen
-  if (object["abilities"]) {
-    const createKey = (name) => name.replace(/\W+/g, "").toLowerCase();
-    const abilityKeys = Object.keys(object["abilities"]);
-    if (abilityKeys.length > 0) {
-      abilityKeys.forEach((key) => {
-        ability = new Ability(Abilities[createKey(object["abilities"][key])]);
-        if (ability.gen > gen) delete object["abilities"][key];
-      });
-    }
-  }
-
-  // Purge entries that cannot exist in specific gens
-  if (gen < 5 && object["abilities"]["H"]) delete object["abilities"]["H"];
-
-  if (gen < 3 && object["abilities"]) delete object["abilities"];
-
-  return object;
-};
-
-let modsByGen = {};
-
-for (let gen = LAST_GEN; gen > 0; gen--) {
-  modsByGen[gen] = {};
-  if (gen == LAST_GEN) {
-    modsByGen[gen]["Pokedex"] = Pokedex;
-    modsByGen[gen]["FormatsData"] = FormatsData;
-  } else if (gen != 3) {
-    const { ModFormatsData, ModPokedex } = mods(gen);
-    modsByGen[gen]["Pokedex"] = ModPokedex;
-    modsByGen[gen]["FormatsData"] = ModFormatsData;
-  } else {
-    const { ModFormatsData } = mods(gen);
-    modsByGen[gen]["FormatsData"] = ModFormatsData;
-  }
-}
-
-const findInheritedPokemonGenProperty = (gen, pokemonName, property) => {
-  for (let _gen = gen; _gen < LAST_GEN; _gen++) {
-    let nextPokemonGen = null;
-    if (_gen == 3) nextPokemonGen = modsByGen[4]["Pokedex"][pokemonName];
-    else nextPokemonGen = modsByGen[_gen]["Pokedex"][pokemonName];
-
-    if (nextPokemonGen) {
-      if (nextPokemonGen[property]) {
-        return nextPokemonGen[property];
-      }
-    }
-  }
-
-  return modsByGen[LAST_GEN]["Pokedex"][pokemonName][property];
-};
-
-for (let gen = LAST_GEN - 1; gen > 0; gen--) {
-  Object.entries(modsByGen[gen]["FormatsData"])
-    .filter(
-      ([key, object]) =>
-        !modsByGen[gen]["FormatsData"][key] ||
-        pokemonIsStandard(FormatsData[key])
-    )
-    .forEach(([key, object]) => {
-      if (key != "missingno" && modsByGen[LAST_GEN]["Pokedex"][key]) {
-        //missingno is Custom in 8th gen however, it is Unobtainable in 1st gen
-
-        /**
-         * We retrieve the latest pokemon's gen
-         * And we modify it with the correct parameters according to the other gens
-         * (no abilities, no fairy type etc.)
-         *
-         * Because the pokemon object has nested objects
-         * We must make a DEEP COPY of it
-         */
-
-        const lastGenPokemon = JSON.parse(
-          JSON.stringify(modsByGen[LAST_GEN]["Pokedex"][key])
-        );
-
-        // Will check and fetch values of next gen (smogon system uses reverse inheritence, example : gen1 inherit values from gen2)
-        const inheritedPokemonInfo = {
-          baseStats: findInheritedPokemonGenProperty(gen, key, "baseStats"),
-          abilities: findInheritedPokemonGenProperty(gen, key, "abilities"),
-          types: findInheritedPokemonGenProperty(gen, key, "types"),
-        };
-
-        const richGenPokemonObject = cleanAbilities(
-          gen,
-          Object.assign(lastGenPokemon, inheritedPokemonInfo)
-        );
-        const discriminant = createDiscriminant(richGenPokemonObject);
-        richGenPokemonObject.usageName = key;
-        if (pokemons.hasOwnProperty(discriminant)) {
-          pokemons[discriminant]["gen"].push(gen);
-          gensByPokemon[key].push(gen);
-        } else {
-          pokemons[discriminant] = richGenPokemonObject;
-          pokemons[discriminant]["gen"] = [gen];
-          if (gensByPokemon[key]) gensByPokemon[key].push(gen);
-        }
-      }
-    });
-}
-
-const resultPokemons = Object.values(pokemons).map((value) => {
-  const pokedexInfo = Pokedex[getPokemonKeyFromName(value.name)];
-  const object = {
-    usageName: value.usageName,
-    pokedex: pokedexInfo
-      ? pokedexInfo["num"]
-      : value.baseSpecies
-      ? Pokedex[getPokemonKeyFromName(value.baseSpecies)]["num"]
-      : null,
-    name: value.name,
-    type_1: value.types[0].toLowerCase(),
-    type_2: value.types.length > 1 ? value.types[1].toLowerCase() : null,
-    hp: value.baseStats.hp,
-    atk: value.baseStats.atk,
-    def: value.baseStats.def,
-    spa: value.baseStats.spa,
-    spd: value.baseStats.spd,
-    spe: value.baseStats.spe,
-    weight: value.weightkg,
-    baseForm: value.baseSpecies ? value.baseSpecies : null,
-    prevo: value.prevo ? value.prevo : null,
-    gen: value.gen.sort(),
+  return {
+    pokedex,
+    usageName,
+    name,
+    type_1,
+    type_2,
+    hp,
+    atk,
+    def,
+    spa,
+    spd,
+    spe,
+    weight,
+    baseForm,
+    prevo,
+    gen,
+    ability_1: abilities["0"],
+    ability_2: abilities["1"],
+    ability_hidden: abilities["H"],
   };
+};
 
-  if (value.abilities) {
-    if (value.abilities["0"]) object["ability_1"] = value.abilities["0"];
-    if (value.abilities["1"]) object["ability_2"] = value.abilities["1"];
-    if (value.abilities["H"]) object["ability_hidden"] = value.abilities["H"];
+for (const pokemonFromShowdown of pokemonsFromShowdown) {
+  if (
+    pokemonFromShowdown.isNonstandard &&
+    pokemonFromShowdown.isNonstandard !== "Past"
+  )
+    continue;
+  if (pokemonFromShowdown.gen != LAST_GEN) {
+    let oldPokemonItem = null;
+    for (let gen = pokemonFromShowdown.gen; gen < LAST_GEN; gen++) {
+      oldPokemonItem = Dex.mod(`gen${gen}`).species.get(
+        pokemonFromShowdown.name
+      );
+      pokemonsCollection.push(makePokemonObject(oldPokemonItem, gen));
+    }
   }
+  pokemonsCollection.push(makePokemonObject(pokemonFromShowdown, LAST_GEN));
+}
 
-  return object;
-});
-
-Object.values(gensByPokemon).forEach((value) => value.sort());
-module.exports = resultPokemons;
-module.exports.gensByPokemon = gensByPokemon;
+module.exports = pokemonsCollection;
