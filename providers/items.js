@@ -3,10 +3,10 @@ const {
   LIBS,
   POKEMON_SHOWDOWN_SIMULATOR,
 } = require("../libs/fileLoader");
-const path = require("path");
-const { Items } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "items");
-const { ItemsText } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "text", "items");
-const { LAST_GEN, range, getGenAttributes } = loadResource(LIBS, "util");
+const { Dex } = loadResource(POKEMON_SHOWDOWN_SIMULATOR, "dex");
+const { LAST_GEN, range } = loadResource(LIBS, "util");
+const itemsFromShowdown = Dex.items.all();
+let itemsCollection = [];
 
 const makeItemObject = (rawObject, gen) => ({
   usageName: rawObject.id,
