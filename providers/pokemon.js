@@ -1,3 +1,10 @@
+/**
+ * FIXME: bug for provider
+ * Zacian with following gens :
+ * [3,4,5,6,7,8]
+ * However, he only exists in 8th Gen !
+ */
+
 const {
   loadResource,
   LIBS,
@@ -191,8 +198,8 @@ const resultPokemons = Object.values(pokemons).map((value) => {
       ? Pokedex[getPokemonKeyFromName(value.baseSpecies)]["num"]
       : null,
     name: value.name,
-    type_1: value.types[0],
-    type_2: value.types.length > 1 ? value.types[1] : null,
+    type_1: value.types[0].toLowerCase(),
+    type_2: value.types.length > 1 ? value.types[1].toLowerCase() : null,
     hp: value.baseStats.hp,
     atk: value.baseStats.atk,
     def: value.baseStats.def,

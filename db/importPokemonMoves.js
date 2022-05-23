@@ -1,8 +1,8 @@
-const { loadResource, LIBS, PROVIDER } = require("../libs/fileLoader");
+const { loadResource, LIBS, JSON } = require("../libs/fileLoader");
 const { knex } = require("./db");
 const { withoutSpaces } = loadResource(LIBS, "util");
 const bluebird = require("bluebird");
-const learns = loadResource(PROVIDER, "pokemonMove").flatMap((learn) =>
+const learns = loadResource(JSON, "learns.json").flatMap((learn) =>
   learn.gen.map((gen) => ({ ...learn, gen }))
 );
 const cliProgress = require("cli-progress");

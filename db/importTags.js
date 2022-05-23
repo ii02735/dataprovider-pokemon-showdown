@@ -1,5 +1,6 @@
 const { insertOrUpdate, knex, resultRecords } = require("./db");
 const { loadResource, JSON } = require("../libs/fileLoader");
+const path = require("path");
 const tags = loadResource(JSON, "tags.json");
 
 Promise.all(

@@ -1,6 +1,6 @@
-const { loadResource, PROVIDER, LIBS } = require("../libs/fileLoader");
+const { loadResource, JSON, LIBS } = require("../libs/fileLoader");
 const { knex } = require("./db");
-const pokemonTiers = loadResource(PROVIDER, "pokemonTier");
+const pokemonTiers = loadResource(JSON, "pokemonTier.json");
 const { removeParenthesis } = loadResource(LIBS, "util");
 const results = { table: "pokemon", UPDATED: 0 };
 
@@ -45,7 +45,10 @@ const results = { table: "pokemon", UPDATED: 0 };
 
           await knex("pokemon")
             .update({ tier_id: rowTier.id, technically })
-            .where({ [usage_name ? "usage_name" : "name"]: name, gen });
+            .where({
+              [usage_name ? "usage_name" : "name"]: name,
+              gen,
+            });
           results.UPDATED++;
         }
       )
