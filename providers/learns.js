@@ -7,6 +7,14 @@ const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
 const { Dex } = loadResource(POKEMON_SHOWDOWN_SIMULATOR, "dex");
 let learns = [];
 
+/**
+ * Unfortunately, a pokemon learnset doesn't exist for each gen.
+ * Instead, smogon gathers multiple gen for each move, so some of them
+ * cannot be learnt for a specific gen. So we must clean it first.
+ * @param {*} pokemonLearnset
+ * @param {int} gen desired gen
+ * @returns an array with the name of the moves of the correct gen
+ */
 const getEligibleMovesForGen = (pokemonLearnset, gen) => {
   return Object.entries(pokemonLearnset)
     .filter(([_, genArray]) => {
@@ -18,16 +26,29 @@ const getEligibleMovesForGen = (pokemonLearnset, gen) => {
     .flatMap(([moveKey, _]) => moveKey);
 };
 
+/**
+ * Fetch the correct learnset's asset
+ * @param {int} gen the desired gen
+ * @param {*} id the pokemon object (the id is the contained usage name)
+ * @returns
+ */
 const DexLearnset = (gen, { id }) => {
   return gen > 2
     ? Dex.species.getLearnset(id)
     : Dex.mod(`gen${gen}`).species.getLearnset(id);
 };
 
+const makeLearnsObject = ({ name: pokemon }, pokemonLearns, gen) => ({
+  pokemon,
+  moves: pokemonLearns.map((moveKey) => Dex.moves.get(moveKey).name),
+  gen,
+});
+
 for (let gen = 1; gen <= LAST_GEN; gen++) {
-  for (const pokemonFromShowdown of Dex.mod(`gen${gen}`)
+  const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
     .species.all()
-    .filter((pokemon) => pokemonIsStandard(pokemon))) {
+    .filter((pokemon) => pokemonIsStandard(pokemon));
+  for (const pokemonFromShowdown of pokemonsFromShowdown) {
     let pokemonLearns = DexLearnset(gen, pokemonFromShowdown);
     let otherLearnset = null;
     if (pokemonLearns)
@@ -74,11 +95,7 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
       pokemonLearns = Object.values(pokemonLearns);
     }
     if (pokemonLearns)
-      learns.push({
-        pokemon: pokemonFromShowdown.name,
-        moves: pokemonLearns.map((moveKey) => Dex.moves.get(moveKey).name),
-        gen,
-      });
+      learns.push(makeLearnsObject(pokemonFromShowdown, pokemonLearns, gen));
   }
 }
 

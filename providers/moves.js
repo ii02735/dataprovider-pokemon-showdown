@@ -1,7 +1,9 @@
-const { LAST_GEN } = require("../libs/util");
+const { LAST_GEN, pokemonIsStandard } = require("../libs/util");
 const { Dex } = require("../pokemon-showdown/.sim-dist/dex");
 let movesCollection = [];
-let movesFromShowdown = Dex.moves.all();
+let movesFromShowdown = Dex.moves
+  .all()
+  .filter((move) => pokemonIsStandard(move));
 
 const makeMoveObject = (rawObject, gen) => ({
   usageName: rawObject.id,
@@ -17,11 +19,6 @@ const makeMoveObject = (rawObject, gen) => ({
 });
 
 for (const moveFromShowdown of movesFromShowdown) {
-  if (
-    moveFromShowdown.isNonstandard &&
-    moveFromShowdown.isNonstandard !== "Past"
-  )
-    continue;
   if (moveFromShowdown.gen != LAST_GEN) {
     let oldGenMove = null;
     for (let gen = moveFromShowdown.gen; gen < LAST_GEN; gen++) {

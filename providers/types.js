@@ -3,6 +3,7 @@ const {
   LIBS,
   POKEMON_SHOWDOWN_RESOURCE,
 } = require("../libs/fileLoader");
+const { default: Dex } = require("../pokemon-showdown/.sim-dist/dex");
 const { TypeChart } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "typechart");
 const { range, LAST_GEN } = loadResource(LIBS, "util");
 /**
@@ -15,29 +16,29 @@ const IMMUNE = 3;
 
 const WEAKNESS = { [NORMAL]: 1, [STRONG]: 2, [WEAK]: 0.5, [IMMUNE]: 0 }; // translate weakness ratio
 
-let types = Object.entries(TypeChart).flatMap(([key, value]) => {
+let types = Dex.types.all().flatMap((type) => {
   // Fairy type only exists since 6th gen
-  if (key === "fairy") {
+  if (type.id === "fairy") {
     return {
-      name: key,
-      damageTaken: value.damageTaken,
+      name: type.id,
+      damageTaken: type.damageTaken,
       gen: range(6, LAST_GEN),
     };
   }
   // Steel and dark types exist since 2nd gen
-  if (key === "steel" || key === "dark") {
-    let copyDamageTaken = { ...value.damageTaken };
-    if (key === "steel") copyDamageTaken.Dark = WEAK; // Dark type is weak against steel type from 2 to 5th gen
+  if (type.id === "steel" || type.id === "dark") {
+    let copyDamageTaken = { ...type.damageTaken };
+    if (type.id === "steel") copyDamageTaken.Dark = WEAK; // Dark type is weak against steel type from 2 to 5th gen
     delete copyDamageTaken.Fairy;
     return [
       {
-        name: key,
+        name: type.id,
         damageTaken: copyDamageTaken, // Fairy type doesn't exist between second and 5th gen
         gen: range(2, 5),
       },
       {
-        name: key,
-        damageTaken: value.damageTaken,
+        name: type.id,
+        damageTaken: type.damageTaken,
         gen: range(6, LAST_GEN),
       },
     ];
@@ -46,9 +47,9 @@ let types = Object.entries(TypeChart).flatMap(([key, value]) => {
   // Return others types that have common rules (unlike steel, dark and fairy)
   return [
     {
-      name: key,
-      damageTaken: Object.keys(value.damageTaken).reduce((acc, typeName) => {
-        let copyDamageTaken = { ...value.damageTaken };
+      name: type.id,
+      damageTaken: Object.keys(type.damageTaken).reduce((acc, typeName) => {
+        let copyDamageTaken = { ...type.damageTaken };
         delete copyDamageTaken.Fairy; // Fairy type doesn't exist in first gen
         delete copyDamageTaken.Steel; // Steel type doesn't exist in first gen
         delete copyDamageTaken.Dark; // Dark type doesn't exist in first gen
@@ -59,9 +60,9 @@ let types = Object.entries(TypeChart).flatMap(([key, value]) => {
       gen: [1],
     },
     {
-      name: key,
-      damageTaken: Object.keys(value.damageTaken).reduce((acc, typeName) => {
-        let copyDamageTaken = { ...value.damageTaken };
+      name: type.id,
+      damageTaken: Object.keys(type.damageTaken).reduce((acc, typeName) => {
+        let copyDamageTaken = { ...type.damageTaken };
         delete copyDamageTaken.Fairy; // Fairy type doesn't exist between second and 5th gen
         if (typeName !== "Fairy") acc[typeName] = copyDamageTaken[typeName];
         return acc;
@@ -69,8 +70,8 @@ let types = Object.entries(TypeChart).flatMap(([key, value]) => {
       gen: range(2, 5),
     },
     {
-      name: key,
-      damageTaken: value.damageTaken,
+      name: type.id,
+      damageTaken: type.damageTaken,
       gen: range(6, LAST_GEN),
     },
   ];

@@ -12,11 +12,13 @@
 const {
   loadResource,
   LIBS,
-  POKEMON_SHOWDOWN_RESOURCE,
+  POKEMON_SHOWDOWN_SIMULATOR,
 } = require("../libs/fileLoader");
-const { LAST_GEN } = require("../libs/util");
-const { Dex } = require("../pokemon-showdown/.sim-dist/dex");
-const pokemonsFromShowdown = Dex.species.all();
+const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
+const { Dex } = loadResource(POKEMON_SHOWDOWN_SIMULATOR, "dex");
+const pokemonsFromShowdown = Dex.species
+  .all()
+  .filter((pokemon) => pokemonIsStandard(pokemon));
 let pokemonsCollection = [];
 
 const makePokemonObject = (
@@ -74,18 +76,13 @@ const makePokemonObject = (
 };
 
 for (const pokemonFromShowdown of pokemonsFromShowdown) {
-  if (
-    pokemonFromShowdown.isNonstandard &&
-    pokemonFromShowdown.isNonstandard !== "Past"
-  )
-    continue;
   if (pokemonFromShowdown.gen != LAST_GEN) {
-    let oldPokemonItem = null;
+    let oldGenPokemon = null;
     for (let gen = pokemonFromShowdown.gen; gen < LAST_GEN; gen++) {
-      oldPokemonItem = Dex.mod(`gen${gen}`).species.get(
+      oldGenPokemon = Dex.mod(`gen${gen}`).species.get(
         pokemonFromShowdown.name
       );
-      pokemonsCollection.push(makePokemonObject(oldPokemonItem, gen));
+      pokemonsCollection.push(makePokemonObject(oldGenPokemon, gen));
     }
   }
   pokemonsCollection.push(makePokemonObject(pokemonFromShowdown, LAST_GEN));
