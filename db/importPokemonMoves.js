@@ -2,9 +2,7 @@ const { loadResource, LIBS, JSON } = require("../libs/fileLoader");
 const { knex } = require("./db");
 const { withoutSpaces } = loadResource(LIBS, "util");
 const bluebird = require("bluebird");
-const learns = loadResource(JSON, "learns.json").flatMap((learn) =>
-  learn.gen.map((gen) => ({ ...learn, gen }))
-);
+const learns = loadResource(JSON, "learns.json");
 const cliProgress = require("cli-progress");
 const progressBar = new cliProgress.SingleBar(
   { clearOnComplete: true, stopOnComplete: true },

@@ -1,8 +1,6 @@
 const { loadResource, JSON } = require("../libs/fileLoader");
 const { insertOrUpdate, knex, resultRecords } = require("./db");
-const abilities = loadResource(JSON, "abilities.json").flatMap((ability) =>
-  ability.gen.map((gen) => ({ ...ability, gen }))
-);
+const abilities = loadResource(JSON, "abilities.json");
 
 Promise.all(
   insertOrUpdate(knex, "ability", abilities, {
