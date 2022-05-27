@@ -1,9 +1,5 @@
-const {
-  loadResource,
-  LIBS,
-  POKEMON_SHOWDOWN_SIMULATOR,
-} = require("../libs/fileLoader");
-const { Dex } = loadResource(POKEMON_SHOWDOWN_SIMULATOR, "dex");
+const { loadResource, LIBS } = require("../libs/fileLoader");
+const { Dex } = require("pokemon-showdown");
 const { LAST_GEN, range, pokemonIsStandard } = loadResource(LIBS, "util");
 const itemsFromShowdown = Dex.items
   .all()

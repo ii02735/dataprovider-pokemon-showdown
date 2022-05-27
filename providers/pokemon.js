@@ -1,21 +1,11 @@
 /**
- * FIXME: bug for provider
- * Zacian with following gens :
- * [3,4,5,6,7,8]
- * However, he only exists in 8th Gen !
- * --> Check if fixed
- *
  * TODO (later) : special forms (cosmetic), and
  * accept GeoDaz"s exceptions
  */
 
-const {
-  loadResource,
-  LIBS,
-  POKEMON_SHOWDOWN_SIMULATOR,
-} = require("../libs/fileLoader");
+const { loadResource, LIBS } = require("../libs/fileLoader");
 const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
-const { Dex } = loadResource(POKEMON_SHOWDOWN_SIMULATOR, "dex");
+const { Dex } = require("pokemon-showdown");
 const pokemonsFromShowdown = Dex.species
   .all()
   .filter((pokemon) => pokemonIsStandard(pokemon));

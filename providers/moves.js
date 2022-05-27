@@ -1,5 +1,5 @@
 const { LAST_GEN, pokemonIsStandard } = require("../libs/util");
-const { Dex } = require("../pokemon-showdown/.sim-dist/dex");
+const { Dex } = require("pokemon-showdown");
 let movesCollection = [];
 let movesFromShowdown = Dex.moves
   .all()

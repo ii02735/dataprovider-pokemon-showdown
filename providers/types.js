@@ -1,10 +1,5 @@
-const {
-  loadResource,
-  LIBS,
-  POKEMON_SHOWDOWN_RESOURCE,
-} = require("../libs/fileLoader");
-const { default: Dex } = require("../pokemon-showdown/.sim-dist/dex");
-const { TypeChart } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "typechart");
+const { loadResource, LIBS } = require("../libs/fileLoader");
+const { Dex } = require("pokemon-showdown");
 const { range, LAST_GEN } = loadResource(LIBS, "util");
 /**
  * Smogon's damageTaken property with its different values
@@ -14,7 +9,12 @@ const STRONG = 1;
 const WEAK = 2;
 const IMMUNE = 3;
 
-const WEAKNESS = { [NORMAL]: 1, [STRONG]: 2, [WEAK]: 0.5, [IMMUNE]: 0 }; // translate weakness ratio
+const WEAKNESS = {
+  [NORMAL]: 1,
+  [STRONG]: 2,
+  [WEAK]: 0.5,
+  [IMMUNE]: 0,
+}; // translate weakness ratio
 
 let types = Dex.types.all().flatMap((type) => {
   // Fairy type only exists since 6th gen

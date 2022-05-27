@@ -1,9 +1,4 @@
-const {
-  loadResource,
-  POKEMON_SHOWDOWN_SIMULATOR,
-} = require("../libs/fileLoader");
-
-const { Dex } = loadResource(POKEMON_SHOWDOWN_SIMULATOR, "dex");
+const { Dex } = require("pokemon-showdown");
 
 const natures = Object.entries(Dex.natures.all()).map(
   ({ id: key, name, plus, minus }) => {

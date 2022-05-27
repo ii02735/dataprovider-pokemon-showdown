@@ -1,10 +1,6 @@
-const {
-  loadResource,
-  LIBS,
-  POKEMON_SHOWDOWN_SIMULATOR,
-} = require("../libs/fileLoader");
+const { loadResource, LIBS } = require("../libs/fileLoader");
 const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
-const { Dex } = loadResource(POKEMON_SHOWDOWN_SIMULATOR, "dex");
+const { Dex } = require("pokemon-showdown");
 let learns = [];
 
 /**
