@@ -33,34 +33,37 @@ progressBar.start(learns.length, 0);
             return { INSERTED: 0 };
           }
         }
-
-        let moveRow = await knex("move")
-          .where({ name: object.move, gen: object.gen })
-          .first(["id"]);
-
-        if (!moveRow) {
-          moveRow = await knex("move")
-            .where({ usage_name: withoutSpaces(object.move), gen: object.gen })
+        let INSERTED = 0;
+        for (const move of object.moves) {
+          let moveRow = await knex("move")
+            .where({ name: move, gen: object.gen })
             .first(["id"]);
+
           if (!moveRow) {
-            console.log(
-              `Move ${object.move} en génération ${object.gen} introuvable`
-            );
-            return { INSERTED: 0 };
+            moveRow = await knex("move")
+              .where({ usage_name: withoutSpaces(move), gen: object.gen })
+              .first(["id"]);
+            if (!moveRow) {
+              console.log(
+                `Move ${move} en génération ${object.gen} introuvable`
+              );
+              return { INSERTED };
+            }
           }
+
+          const samePokemonMoveRow = await knex("pokemon_move")
+            .where({ pokemon_id: pokemonRow.id, move_id: moveRow.id })
+            .first(["id"]);
+          if (samePokemonMoveRow) return { INSERTED };
+
+          await knex("pokemon_move").insert({
+            pokemon_id: pokemonRow.id,
+            move_id: moveRow.id,
+            gen: object.gen,
+          });
+          INSERTED++;
         }
-
-        const samePokemonMoveRow = await knex("pokemon_move")
-          .where({ pokemon_id: pokemonRow.id, move_id: moveRow.id })
-          .first(["id"]);
-        if (samePokemonMoveRow) return { INSERTED: 0 };
-
-        await knex("pokemon_move").insert({
-          pokemon_id: pokemonRow.id,
-          move_id: moveRow.id,
-          gen: object.gen,
-        });
-        return { INSERTED: 1 };
+        return { INSERTED };
       },
       { concurrency: 150 }
     );
