@@ -43,7 +43,7 @@ const folderUsage = `Smogon-Stats-Viewer/data/months/${fileSystem
   .readdirSync(require("path").resolve("Smogon-Stats-Viewer/data/months"))
   .pop()}`;
 
-const withoutSpaces = (s) => s.replace(/['\s\-.:’%]/, "").toLowerCase();
+const withoutSpaces = (s) => s.replaceAll(/['\s\-.:’%\[\]]/g, "").toLowerCase();
 
 module.exports = {
   writeFile,
