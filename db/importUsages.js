@@ -14,8 +14,12 @@ const fs = require("fs");
       let playableTiers = [];
 
       const tiersRows = await knex("tier")
-        .where({ gen })
-        .whereNot({ usage_name: "vgc" })
+        .where({
+          gen,
+        })
+        .whereNot({
+          usage_name: "vgc",
+        })
         .whereNotNull("usage_name")
         .whereNotNull("ladder_ref");
 
@@ -29,10 +33,16 @@ const fs = require("fs");
       // Clear usages
       console.log(`Clearing usages in gen ${gen}...`);
       for (const { id } of playableTiers) {
-        const rowTierUsages = await knex("tier_usage").where({ tier_id: id });
+        const rowTierUsages = await knex("tier_usage").where({
+          tier_id: id,
+        });
         if (!rowTierUsages) continue;
         for (const rowTierUsage of rowTierUsages)
-          await knex("tier_usage").where({ id: rowTierUsage.id }).del();
+          await knex("tier_usage")
+            .where({
+              id: rowTierUsage.id,
+            })
+            .del();
       }
 
       // Map between pokemon.id and new inserted tier_usage.id
@@ -55,7 +65,10 @@ const fs = require("fs");
         for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
           const pokemonRow = await knex("pokemon")
             .select(["id", "name"])
-            .where({ usage_name: pokemonUsageName, gen })
+            .where({
+              usage_name: pokemonUsageName,
+              gen,
+            })
             .first();
           if (!pokemonRow) continue;
           if (usageData.usage < 1) continue;
@@ -75,7 +88,10 @@ const fs = require("fs");
           ]) {
             for (const entityData of usageData[property]) {
               const entityRow = await knex(tableName)
-                .where({ name: entityData.name, gen })
+                .where({
+                  name: entityData.name,
+                  gen,
+                })
                 .first();
               if (!entityRow) continue;
               await knex(`usage_${tableName}`).insert({
@@ -89,61 +105,11 @@ const fs = require("fs");
           // Special case for moves
 
           for (const entityData of usageData["moves"]) {
-            // In stats, the move "Hidden Power" is referenced
-            // with its TYPE ("Hidden Power Grass" for example)
-            // whereas in database, it is not.
-            // We must then insert the move, for the right gen +
-            // add to the learns for the concerned pokemon
-
-            if (/Hidden Power (\w+)/.test(entityData.name)) {
-              const hpType = /Hidden Power (\w+)/.exec(entityData.name)[1];
-              const moveName = `Hidden Power [${hpType}]`;
-              const hiddenPowerRow = await knex("move")
-                .where({ name: moveName, gen })
-                .first();
-              let move_id = null;
-              if (!hiddenPowerRow) {
-                console.log(
-                  `${entityData.name} doesn't exist in gen ${gen} : creating move...`
-                );
-                const { id: type_id } = await knex("type")
-                  .select("id")
-                  .where({ name: hpType.toLowerCase(), gen })
-                  .first();
-                move_id = await knex("move").insert(
-                  {
-                    name: moveName,
-                    usage_name: withoutSpaces(entityData.name),
-                    power: 60,
-                    pp: 15,
-                    accuracy: 100,
-                    category: gen > 3 ? "Special" : "Physical",
-                    gen,
-                    type_id,
-                  },
-                  ["id"]
-                );
-                move_id = move_id[0];
-              } else move_id = hiddenPowerRow.id;
-
-              const existantLearn = await knex("pokemon_move")
-                .where({ pokemon_id: pokemonRow.id, move_id, gen })
-                .first();
-
-              if (!existantLearn) {
-                console.log(
-                  `${entityData.name} not in ${pokemonRow.name}'s movepool for gen ${gen} : adding...`
-                );
-                await knex("pokemon_move").insert({
-                  pokemon_id: pokemonRow.id,
-                  move_id,
-                  gen,
-                });
-              }
-            }
-
             const entityRow = await knex("move")
-              .where({ name: entityData.name, gen })
+              .where({
+                name: entityData.name,
+                gen,
+              })
               .first();
             if (!entityRow) continue;
             await knex(`usage_move`).insert({
@@ -178,10 +144,16 @@ const fs = require("fs");
             }/${ladder_ref}/pokedata.json`
           )
         );
-        const percentProperty = { teammates: "usage", counters: "eff" };
+        const percentProperty = {
+          teammates: "usage",
+          counters: "eff",
+        };
         for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
           const pokemonRow = await knex("pokemon")
-            .where({ usage_name: pokemonUsageName, gen })
+            .where({
+              usage_name: pokemonUsageName,
+              gen,
+            })
             .first(["id"]);
           if (!pokemonRow) continue;
 
@@ -195,7 +167,10 @@ const fs = require("fs");
           ]) {
             for (const entityData of usageData[property]) {
               const entityRow = await knex("pokemon")
-                .where({ name: entityData.name, gen })
+                .where({
+                  name: entityData.name,
+                  gen,
+                })
                 .first();
 
               if (!entityRow) continue;

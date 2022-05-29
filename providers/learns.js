@@ -40,6 +40,11 @@ const makeLearnsObject = ({ name: pokemon }, pokemonLearns, gen) => ({
   gen,
 });
 
+let typesForHiddenPower = Dex.types
+  .all()
+  .filter((type) => type.name !== "Normal" && type.name !== "Fairy")
+  .map((type) => type.name);
+
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
     .species.all()
@@ -90,8 +95,20 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
       pokemonLearns = { ...pokemonLearns, ...learnsFromOtherForms };
       pokemonLearns = Object.values(pokemonLearns);
     }
-    if (pokemonLearns)
-      learns.push(makeLearnsObject(pokemonFromShowdown, pokemonLearns, gen));
+    if (pokemonLearns) {
+      if (gen >= 2) {
+        const generatedLearns = makeLearnsObject(
+          pokemonFromShowdown,
+          pokemonLearns,
+          gen
+        );
+        generatedLearns.moves = generatedLearns.moves.concat(
+          typesForHiddenPower.map((type) => `Hidden Power [${type}]`)
+        );
+        learns.push(generatedLearns);
+      } else
+        learns.push(makeLearnsObject(pokemonFromShowdown, pokemonLearns, gen));
+    }
   }
 }
 
