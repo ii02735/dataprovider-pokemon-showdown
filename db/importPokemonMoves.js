@@ -5,7 +5,10 @@ const bluebird = require("bluebird");
 const learns = loadResource(JSON, "learns.json");
 const cliProgress = require("cli-progress");
 const progressBar = new cliProgress.SingleBar(
-  { clearOnComplete: true, stopOnComplete: true },
+  {
+    clearOnComplete: true,
+    stopOnComplete: true,
+  },
   cliProgress.Presets.shades_classic
 );
 progressBar.start(learns.length, 0);
@@ -17,7 +20,10 @@ progressBar.start(learns.length, 0);
       async (object) => {
         progressBar.increment();
         let pokemonRow = await knex("pokemon")
-          .where({ name: object.pokemon, gen: object.gen })
+          .where({
+            name: object.pokemon,
+            gen: object.gen,
+          })
           .first(["id"]);
         if (!pokemonRow) {
           pokemonRow = await knex("pokemon")
@@ -30,31 +36,42 @@ progressBar.start(learns.length, 0);
             console.log(
               `Pokémon ${object.pokemon} en génération ${object.gen} introuvable`
             );
-            return { INSERTED: 0 };
+            return {
+              INSERTED: 0,
+            };
           }
         }
         let INSERTED = 0;
         for (const move of object.moves) {
           let moveRow = await knex("move")
-            .where({ name: move, gen: object.gen })
+            .where({
+              name: move,
+              gen: object.gen,
+            })
             .first(["id"]);
 
           if (!moveRow) {
             moveRow = await knex("move")
-              .where({ usage_name: withoutSpaces(move), gen: object.gen })
+              .where({
+                usage_name: withoutSpaces(move),
+                gen: object.gen,
+              })
               .first(["id"]);
             if (!moveRow) {
               console.log(
                 `Move ${move} en génération ${object.gen} introuvable`
               );
-              return { INSERTED };
+              continue;
             }
           }
 
           const samePokemonMoveRow = await knex("pokemon_move")
-            .where({ pokemon_id: pokemonRow.id, move_id: moveRow.id })
+            .where({
+              pokemon_id: pokemonRow.id,
+              move_id: moveRow.id,
+            })
             .first(["id"]);
-          if (samePokemonMoveRow) return { INSERTED };
+          if (samePokemonMoveRow) continue;
 
           await knex("pokemon_move").insert({
             pokemon_id: pokemonRow.id,
@@ -63,9 +80,13 @@ progressBar.start(learns.length, 0);
           });
           INSERTED++;
         }
-        return { INSERTED };
+        return {
+          INSERTED,
+        };
       },
-      { concurrency: 150 }
+      {
+        concurrency: 150,
+      }
     );
 
     console.log({
