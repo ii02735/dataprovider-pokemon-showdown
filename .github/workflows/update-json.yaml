@@ -1,23 +1,24 @@
-name: "Add JSON files to repository"
+name: "Update JSON files in repository"
 
 on: # This workflow must be triggered on two conditions
   workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
 
 jobs: #this section contains the tasks / jobs that must be executed
-  downloadJson: # the job name
+  update_json_files: # the job name
     runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
     steps:
       - name: checkout on main
-        uses: actions/checkout@main # action that make a checkout on the main branch
+        uses: actions/checkout@main # action that makes a checkout
         with:
-          ref: ${{ github.read_ref }}
+          ref: ${{ github.read_ref }} # will checkout on th desired branch
 
       - name: "generate JSON"
         uses: actions/setup-node@v2
         with:
           node-version: "12"
-      - run: git clone https://github.com/smogon/pokemon-showdown.git && git clone https://github.com/ii02735/Smogon-Stats-Viewer.git
+      - run: npm ci && npm run clone-showdown
       - run: npm run build
+      - run: npm run generate-stats
       - name: Commit differences # commit if differences are tracked after updates (previous step)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -25,4 +26,3 @@ jobs: #this section contains the tasks / jobs that must be executed
           commit_user_name: GitHub Actions Bot
           commit_author: GitHub Action <actions@github.com>
           skip_dirty_check: false
-          push_options: --force
