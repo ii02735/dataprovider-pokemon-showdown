@@ -2,5 +2,7 @@
 json/*.json
 json/translations/*.json
 json/translations/descriptions/*.json
+usages/months/**/formats/**/*.json
+usages/**/formats.json
 pokemon-showdown
 Smogon-Stats-Viewer
