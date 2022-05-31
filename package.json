@@ -8,7 +8,8 @@
     "build": "cd pokemon-showdown && npm i && node build",
     "postbuild": "node dataToJson.js",
     "prepare": "husky install",
-    "generate-stats": "npm explore smogon-stats-viewer -- npm start"
+    "generate-stats": "npm explore smogon-stats-viewer -- npm run clone-showdown",
+    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown && npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,6 @@
     "express": "^4.17.1",
     "knex": "^1.0.3",
     "mysql": "^2.18.1",
-    "pokemon-showdown": "^0.11.7",
     "smogon-stats-viewer": "^0.4.0"
   },
   "devDependencies": {

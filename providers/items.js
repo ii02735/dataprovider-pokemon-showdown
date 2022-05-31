@@ -1,6 +1,6 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
-const { Dex } = require("pokemon-showdown");
+const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
 const { LAST_GEN, range, pokemonIsStandard } = loadResource(LIBS, "util");
+const { Dex } = loadResource(DEX);
 const itemsFromShowdown = Dex.items
   .all()
   .filter((move) => pokemonIsStandard(move));

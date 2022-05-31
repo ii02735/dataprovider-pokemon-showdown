@@ -1,6 +1,6 @@
+const { DEX, loadResource } = require("../libs/fileLoader");
 const { LAST_GEN, pokemonIsStandard } = require("../libs/util");
-const { Dex } = require("pokemon-showdown");
-const { range } = require("express/lib/request");
+const { Dex } = loadResource(DEX);
 let movesCollection = [];
 let movesFromShowdown = Dex.moves
   .all()

@@ -1,6 +1,6 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
+const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
 const { LAST_GEN, range } = loadResource(LIBS, "util");
-const { Dex } = require("pokemon-showdown");
+const { Dex } = loadResource(DEX);
 const abilitiesFromShowdown = Dex.abilities.all();
 
 const makeAbilityObject = ({ usageName, name }, gen) => ({

@@ -1,7 +1,6 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
+const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
 const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
-const { Dex } = require("pokemon-showdown");
-const { Species } = require("pokemon-showdown/.sim-dist/dex-species");
+const { Dex } = loadResource(DEX);
 let learns = [];
 
 /**
@@ -59,7 +58,6 @@ const genLearnsetForSpecies = (species, gen) => {
     otherLearnset = DexLearnset(gen, species) || {};
     result = { ...result, ...getEligibleMovesForGen(otherLearnset, gen) };
   }
-  console.log(result);
   return result;
 };
 
