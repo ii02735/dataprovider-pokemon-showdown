@@ -39,8 +39,8 @@ const range = (start, end) =>
     .fill()
     .map((_, idx) => start + idx);
 
-const folderUsage = `Smogon-Stats-Viewer/data/months/${fileSystem
-  .readdirSync(require("path").resolve("Smogon-Stats-Viewer/data/months"))
+const folderUsage = `usages/months/${fileSystem
+  .readdirSync(require("path").resolve("usages/months"))
   .pop()}`;
 
 const withoutSpaces = (s) => s.replaceAll(/['\s\-.:’%\[\]]/g, "").toLowerCase();

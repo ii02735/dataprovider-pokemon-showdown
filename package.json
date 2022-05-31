@@ -7,7 +7,8 @@
     "test": "jest",
     "build": "cd pokemon-showdown && npm i && node build",
     "postbuild": "node dataToJson.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "generate-stats": "npm explore smogon-stats-viewer -- npm start"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,8 @@
     "express": "^4.17.1",
     "knex": "^1.0.3",
     "mysql": "^2.18.1",
-    "pokemon-showdown": "^0.11.7"
+    "pokemon-showdown": "^0.11.7",
+    "smogon-stats-viewer": "^0.4.0"
   },
   "devDependencies": {
     "husky": "^7.0.0",
