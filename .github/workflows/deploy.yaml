@@ -1,4 +1,4 @@
-name: "Update production environment"
+name: "Deploy"
 
 on: # This workflow must be triggered on one condition only
   workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
@@ -30,14 +30,11 @@ jobs: #this section contains the tasks / jobs that must be executed
           commit_author: GitHub Action <actions@github.com>
           skip_dirty_check: false
 
+      - name: "Install sshpass"
+        run: sudo apt-get install sshpass
+
       - name: "Update remote"
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          script: |
-            cd ${{ secrets.REMOTE_DIR }}/dataprovider
-            git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}/ii02735/dataprovider-pokemon-showdown master
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}/ii02735/dataprovider-pokemon-showdown main"
