@@ -19,7 +19,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           GITHUB_TOKEN: ${{ secrets.SPECIAL_PAT }}
         with:
           bump_version_scheme: minor
-          use-github-release-notes: true
+          use_github_release_notes: true
           tag_prefix: v
 
       - name: Change version into package.json
@@ -40,5 +40,5 @@ jobs: #this section contains the tasks / jobs that must be executed
       - name: "Update remote"
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}/ii02735/dataprovider-pokemon-showdown main"
