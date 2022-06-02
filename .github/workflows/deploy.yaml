@@ -11,11 +11,10 @@ jobs: #this section contains the tasks / jobs that must be executed
         uses: actions/checkout@main # action that make a checkout on the main branch
         with:
           ref: ${{ github.read_ref }}
+          token: ${{ secrets.SPECIAL_PAT }} # to allow commit on protected branch
 
       - id: release
         uses: rymndhng/release-on-push-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.SPECIAL_PAT }} # to allow commit on protected branch
         with:
           bump_version_scheme: minor
           use-github-release-notes: true
