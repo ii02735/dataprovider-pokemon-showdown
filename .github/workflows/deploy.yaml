@@ -18,7 +18,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         env:
           GITHUB_TOKEN: ${{ secrets.SPECIAL_PAT }}
         with:
-          bump_version_scheme: minor
+          bump_version_scheme: patch
           use_github_release_notes: true
           tag_prefix: v
 
