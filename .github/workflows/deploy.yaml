@@ -22,7 +22,8 @@ jobs: #this section contains the tasks / jobs that must be executed
           tag_prefix: v
 
       - name: Change version into package.json
-        run: 'sed -i s/"version": ".*"/"version": "${{ steps.release.outputs.version }}"/g package.json'
+        run: >
+          sed -i 's/"version": ".*"/"version": "${{ steps.release.outputs.version }}"/g' package.json
 
       - name: Bump version
         uses: stefanzweifel/git-auto-commit-action@v4
