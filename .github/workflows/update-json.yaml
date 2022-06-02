@@ -22,7 +22,7 @@ jobs: #this section contains the tasks / jobs that must be executed
       - name: Commit differences # commit if differences are tracked after updates (previous step)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: JSON files downloaded
+          commit_message: "[skip ci] JSON files updated"
           commit_user_name: GitHub Actions Bot
           commit_author: GitHub Action <actions@github.com>
           skip_dirty_check: false
