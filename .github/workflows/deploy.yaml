@@ -15,8 +15,11 @@ jobs: #this section contains the tasks / jobs that must be executed
 
       - id: release
         uses: rymndhng/release-on-push-action@master
+<<<<<<< HEAD
         env:
           GITHUB_TOKEN: ${{ secrets.SPECIAL_PAT }}
+=======
+>>>>>>> da0e9afdf8afec2b62c9a57d0a6882af5c231d79
         with:
           bump_version_scheme: minor
           use-github-release-notes: true
