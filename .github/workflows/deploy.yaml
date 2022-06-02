@@ -15,7 +15,7 @@ jobs: #this section contains the tasks / jobs that must be executed
       - id: release
         uses: rymndhng/release-on-push-action@master
         with:
-          bump_version_release: minor
+          bump_version_scheme: minor
           use-github-release-notes: true
           tag_prefix: v
 
