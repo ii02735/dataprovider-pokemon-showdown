@@ -1,8 +1,10 @@
 name: "Update databases from JSON changes"
 on:
-  paths:
-    - "json/*.json"
-    - "usages/**/*.json"
+  push:
+    branches: main
+    paths: 
+      - "json/*.json"
+      - "usages/**/*.json"
 
 jobs:
   build:
