@@ -1,13 +1,14 @@
-const { loadResource, LIBS, PROVIDER } = require("../libs/fileLoader");
+const { loadResource, LIBS, JSON } = require("../libs/fileLoader");
 const { knex } = require("./db");
 const { withoutSpaces } = loadResource(LIBS, "util");
 const bluebird = require("bluebird");
-const learns = loadResource(PROVIDER, "pokemonMove").flatMap((learn) =>
-  learn.gen.map((gen) => ({ ...learn, gen }))
-);
+const learns = loadResource(JSON, "learns.json");
 const cliProgress = require("cli-progress");
 const progressBar = new cliProgress.SingleBar(
-  { clearOnComplete: true, stopOnComplete: true },
+  {
+    clearOnComplete: true,
+    stopOnComplete: true,
+  },
   cliProgress.Presets.shades_classic
 );
 progressBar.start(learns.length, 0);
@@ -19,7 +20,10 @@ progressBar.start(learns.length, 0);
       async (object) => {
         progressBar.increment();
         let pokemonRow = await knex("pokemon")
-          .where({ name: object.pokemon, gen: object.gen })
+          .where({
+            name: object.pokemon,
+            gen: object.gen,
+          })
           .first(["id"]);
         if (!pokemonRow) {
           pokemonRow = await knex("pokemon")
@@ -32,39 +36,57 @@ progressBar.start(learns.length, 0);
             console.log(
               `Pokémon ${object.pokemon} en génération ${object.gen} introuvable`
             );
-            return { INSERTED: 0 };
+            return {
+              INSERTED: 0,
+            };
           }
         }
-
-        let moveRow = await knex("move")
-          .where({ name: object.move, gen: object.gen })
-          .first(["id"]);
-
-        if (!moveRow) {
-          moveRow = await knex("move")
-            .where({ usage_name: withoutSpaces(object.move), gen: object.gen })
+        let INSERTED = 0;
+        for (const move of object.moves) {
+          let moveRow = await knex("move")
+            .where({
+              name: move,
+              gen: object.gen,
+            })
             .first(["id"]);
+
           if (!moveRow) {
-            console.log(
-              `Move ${object.move} en génération ${object.gen} introuvable`
-            );
-            return { INSERTED: 0 };
+            moveRow = await knex("move")
+              .where({
+                usage_name: withoutSpaces(move),
+                gen: object.gen,
+              })
+              .first(["id"]);
+            if (!moveRow) {
+              console.log(
+                `Move ${move} en génération ${object.gen} introuvable`
+              );
+              continue;
+            }
           }
+
+          const samePokemonMoveRow = await knex("pokemon_move")
+            .where({
+              pokemon_id: pokemonRow.id,
+              move_id: moveRow.id,
+            })
+            .first(["id"]);
+          if (samePokemonMoveRow) continue;
+
+          await knex("pokemon_move").insert({
+            pokemon_id: pokemonRow.id,
+            move_id: moveRow.id,
+            gen: object.gen,
+          });
+          INSERTED++;
         }
-
-        const samePokemonMoveRow = await knex("pokemon_move")
-          .where({ pokemon_id: pokemonRow.id, move_id: moveRow.id })
-          .first(["id"]);
-        if (samePokemonMoveRow) return { INSERTED: 0 };
-
-        await knex("pokemon_move").insert({
-          pokemon_id: pokemonRow.id,
-          move_id: moveRow.id,
-          gen: object.gen,
-        });
-        return { INSERTED: 1 };
+        return {
+          INSERTED,
+        };
       },
-      { concurrency: 150 }
+      {
+        concurrency: 150,
+      }
     );
 
     console.log({

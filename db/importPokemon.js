@@ -1,8 +1,6 @@
-const { loadResource, PROVIDER } = require("../libs/fileLoader");
+const { loadResource, JSON: _JSON } = require("../libs/fileLoader");
 const { knex, insertOrUpdate, resultRecords } = require("./db");
-const pokemons = loadResource(PROVIDER, "pokemon").flatMap((pokemon_object) =>
-  pokemon_object.gen.map((gen) => ({ ...pokemon_object, gen }))
-);
+const pokemons = loadResource(_JSON, "pokemons.json");
 
 const originalPokemons = JSON.stringify(pokemons);
 

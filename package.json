@@ -7,7 +7,9 @@
     "test": "jest",
     "build": "cd pokemon-showdown && npm i && node build",
     "postbuild": "node dataToJson.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "generate-stats": "smogon-stats-viewer update && smogon-stats-viewer --clear upgrade 2 && smogon-stats-viewer check",
+    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown && npm run build"
   },
   "repository": {
     "type": "git",
@@ -26,7 +28,8 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "knex": "^1.0.3",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "smogon-stats-viewer": "^0.4.33"
   },
   "devDependencies": {
     "husky": "^7.0.0",

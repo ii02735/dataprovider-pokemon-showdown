@@ -1,9 +1,8 @@
-const fs = require("fs");
-const { loadResource, PROVIDER } = require("../libs/fileLoader");
+const { loadResource, JSON } = require("../libs/fileLoader");
 const { knex } = require("./db");
 let typesWeaknesses = {};
 let records = { table: "type", CREATED: 0, UPDATED: 0 };
-const objects = loadResource(PROVIDER, "types").flatMap((object) =>
+const objects = loadResource(JSON, "types.json").flatMap((object) =>
   object.gen.map((gen) => ({ ...object, gen }))
 );
 

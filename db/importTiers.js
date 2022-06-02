@@ -1,12 +1,15 @@
 const { insertOrUpdate, knex, resultRecords } = require("./db");
 const fs = require("fs");
 const path = require("path");
-const { loadResource, LIBS } = require("../libs/fileLoader");
+const { loadResource, JSON, LIBS } = require("../libs/fileLoader");
 const { folderUsage, LAST_GEN, range } = loadResource(LIBS, "util");
-const formats = JSON.parse(fs.readFileSync(folderUsage + "/formats.json"));
-const rawTiers = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "..", "json", "tiers.json"))
-);
+const formats = require(path.join(
+  __dirname,
+  "..",
+  folderUsage,
+  "formats.json"
+));
+const rawTiers = loadResource(JSON, "tiers.json");
 
 // Add tiers for specific gens
 

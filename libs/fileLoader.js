@@ -1,6 +1,6 @@
 const path = require("path");
 module.exports.PROVIDER = "PROVIDER";
-module.exports.POKEMON_SHOWDOWN_RESOURCE = "POKEMON_SHOWDOWN_RESOURCE";
+module.exports.DEX = "DEX";
 module.exports.LIBS = "LIBS";
 module.exports.JSON = "JSON";
 
@@ -10,13 +10,13 @@ module.exports.loadResource = (resourceType, ...pathArray) => {
       return require(path.join(__dirname, "..", "libs", ...pathArray));
     case this.PROVIDER:
       return require(path.join(__dirname, "..", "providers", ...pathArray));
-    case this.POKEMON_SHOWDOWN_RESOURCE:
+    case this.DEX:
       return require(path.join(
         __dirname,
         "..",
         "pokemon-showdown",
-        ".data-dist",
-        ...pathArray
+        ".sim-dist",
+        "dex.js"
       ));
     case this.JSON:
       return require(path.join(__dirname, "..", "json", ...pathArray));

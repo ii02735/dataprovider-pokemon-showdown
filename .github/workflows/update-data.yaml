@@ -1,0 +1,130 @@
+name: "Update databases from JSON changes"
+on:
+  paths:
+    - "json/*.json"
+    - "usages/**/*.json"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare ssh connection
+        run: sudo apt-get install sshpass
+
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2 # will create filters for changed files
+        id: filter-json-data
+        with:
+          filters: >
+            tags:
+              - 'json/tags.json'
+            tiers:
+              - 'json/tiers.json'
+            natures:
+              - 'json/natures.json'
+            types:
+              - 'json/types.json'
+            abilities:
+              - 'json/abilities.json'
+            items:
+              - 'json/items.json'
+            moves:
+              - 'json/moves.json'
+            pokemon:
+              - 'json/pokemons.json'
+            learns:
+              - 'json/learns.json'
+            pokemon_tiers:
+              - 'json/pokemonTier.json'
+            usages:
+              - 'usages/**/*.json'
+
+      - name: Update tags
+        if: steps.filter.outputs.tags == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importTags.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importTags.js"
+
+      - name: Update tiers
+        if: steps.filter.outputs.tiers == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importTiers.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importTiers.js"
+
+      - name: Update natures
+        if: steps.filter.outputs.natures == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importNatures.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importNatures.js"
+
+      - name: Update types
+        if: steps.filter.outputs.types == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importTypes.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importTypes.js"
+
+      - name: Update abilities
+        if: steps.filter.outputs.abilities == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importAbilities.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importAbilities.js"
+
+      - name: Update items
+        if: steps.filter.outputs.items == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importItems.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importItems.js"
+
+      - name: Update moves
+        if: steps.filter.outputs.moves == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importMoves.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importMoves.js"
+
+      - name: Update pokemons
+        if: steps.filter.outputs.pokemon == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importPokemon.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importPokemon.js"
+
+      - name: Update learns
+        if: steps.filter.outputs.learns == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importPokemonMoves.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importPokemonMoves.js"
+
+      - name: Update pokemon tiers
+        if: steps.filter.outputs.pokemon_tiers == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importPokemonTiers.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importPokemonTiers.js"
+
+      - name: Update usages
+        if: steps.filter.outputs.usages == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importUsages.js &&
+          DB_HOST=${{ secrets.TEST_DB_HOST }} db/importUsagesVGC.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importUsages.js &&
+          DB_HOST=${{ secrets.DB_HOST }} db/importUsagesVGC.js"

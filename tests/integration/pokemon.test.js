@@ -1,9 +1,6 @@
-const { loadResource, PROVIDER } = require("../../libs/fileLoader");
+const { loadResource, JSON } = require("../../libs/fileLoader");
 
-const pokemonCollection = loadResource(PROVIDER, "pokemon").flatMap(
-  (pokemon_object) =>
-    pokemon_object.gen.map((gen) => ({ ...pokemon_object, gen }))
-);
+const pokemonCollection = loadResource(JSON, "pokemons.json");
 
 test("Pokemon from 3G should have 2 abilities", () => {
   // Non exhaustive list (because it'll be too long to test for all pokemon)

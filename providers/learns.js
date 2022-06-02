@@ -1,167 +1,105 @@
-const path = require("path");
-const {
-  loadResource,
-  LIBS,
-  POKEMON_SHOWDOWN_RESOURCE,
-  PROVIDER,
-} = require("../libs/fileLoader");
-const { PokedexText } = loadResource(
-  POKEMON_SHOWDOWN_RESOURCE,
-  "text",
-  "pokedex"
-);
-const { Learnsets } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "learnsets");
-const { Learnsets: oldGenLearnsets } = loadResource(
-  POKEMON_SHOWDOWN_RESOURCE,
-  "mods",
-  "gen2",
-  "learnsets"
-);
-const { MovesText } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "text", "moves");
-const { FormatsData } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "formats-data");
-const { pokemonIsStandard, range, getPokemonKeyFromName } = loadResource(
-  LIBS,
-  "util"
-);
-const { Pokedex } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "pokedex");
-const moves = loadResource(PROVIDER, "moves");
-const { gensByPokemon } = loadResource(PROVIDER, "pokemon");
-
-const learns = [];
+const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
+const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
+const { Dex } = loadResource(DEX);
+let learns = [];
 
 /**
- * Returns all the valid gens when a pokemon can learn a specific move
- * @param {string} moveName the move's name
- * @param {*} learnsetMoveData the learnset array
- * @returns an array of numbers
+ * Unfortunately, a pokemon learnset doesn't exist for each gen.
+ * Instead, smogon gathers multiple gen for each move, so some of them
+ * cannot be learnt for a specific gen. So we must clean it first.
+ * @param {*} pokemonLearnset
+ * @param {int} gen desired gen
+ * @returns an object with the name of the moves of the correct gen
  */
-const createGenArray = (moveName, learnsetMoveData) => {
-  // the array obtained for the pokemon's move in his learnset
-  // it is a string array that will be converted to a number array (each number is the generation number)
-  const parsedArrayFromLearnsetMoveData = Array.from(
-    new Set(learnsetMoveData.map((rawGen) => parseInt(rawGen[0])))
-  ).sort();
-  // This array (parsedArrayFromLearnsetMoveData) can have gaps : [3,7,8] instead of [3,4,5,6,7,8]
-  // So we fill it by merging with the following strategy :
-  /**
-   * We take the array that might have gaps, and merging with a range of values,
-   * beginning from the first index (= the lowest gen, because it is a sorted array, when the move can be learnt by the pokemon)
-   * to the highest generation, that can be missing in parsedArrayFromLearnsetMoveData, so we take it from availableGensByMove
-   * and to avoid duplicate, we first convert the merged array into a set
-   */
-  const highestGenAvailable =
-    availableGensByMove[moveName][availableGensByMove[moveName].length - 1];
-  return Array.from(
-    new Set([
-      ...parsedArrayFromLearnsetMoveData,
-      ...range(parsedArrayFromLearnsetMoveData[0], highestGenAvailable),
-    ])
-  ).sort();
+const getEligibleMovesForGen = (pokemonLearnset, gen) => {
+  return Object.entries(pokemonLearnset)
+    .filter(([_, genArray]) => {
+      genArray = Array.from(
+        new Set(genArray.map((stringGen) => parseInt(stringGen)))
+      ).sort();
+      return genArray[0] <= gen;
+    })
+    .flatMap(([moveKey, _]) => moveKey)
+    .reduce((acc, move) => ({ ...acc, [move]: move }), {});
+};
+/**
+ * Fetch the correct learnset's asset
+ * @param {int} gen the desired gen
+ * @param {*} id the pokemon object (the id is the contained usage name)
+ * @returns
+ */
+const DexLearnset = (gen, { id }) => {
+  return gen > 2
+    ? Dex.species.getLearnset(id)
+    : Dex.mod(`gen${gen}`).species.getLearnset(id);
 };
 
-/**
- * Return an object that shows for each move, the valid generations
- * Structure : { 'move name': [gens] }
- */
-const availableGensByMove = moves.reduce((accumulator, object) => {
-  if (!/Not available in gen \d/.test(object["description"])) {
-    if (accumulator[object.name])
-      accumulator[object.name] = [
-        ...accumulator[object.name],
-        ...object["gen"],
-      ].sort();
-    else accumulator[object.name] = object["gen"];
-  }
-  return accumulator;
-}, {});
-
-Object.entries(Learnsets).forEach(([pokemonKey, { learnset }]) => {
-  if (FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey]))
-    return;
-  const pokemon = Pokedex[pokemonKey];
-  // add baseForm learnset if form hasn't learnset
-  const baseFormKey = getPokemonKeyFromName(pokemon && pokemon.baseSpecies);
-  const baseForm = baseFormKey && Pokedex[baseFormKey];
-  if (baseFormKey) {
-    const baseFormLearns = Learnsets[baseFormKey];
-    if (!baseFormLearns || !baseFormLearns.learnset) return;
-    learnset = { ...learnset, ...baseFormLearns.learnset };
-  }
-  // add prevo learnset
-  // prettier-ignore
-  const prevoKey = getPokemonKeyFromName(
-		(pokemon && pokemon.prevo) 
-		|| (baseForm && baseForm.prevo)
-	);
-  if (prevoKey) {
-    const prevoLearns = Learnsets[prevoKey];
-    if (prevoLearns && prevoLearns.learnset) {
-      learnset = { ...learnset, ...prevoLearns.learnset };
-    }
-    const prevo = Pokedex[prevoKey];
-    const prevoPrevoKey = getPokemonKeyFromName(prevo && prevo.prevo);
-    if (prevoPrevoKey) {
-      const prevoPrevoLearns = Learnsets[prevoPrevoKey];
-      if (prevoPrevoLearns && prevoPrevoLearns.learnset) {
-        learnset = { ...learnset, ...prevoPrevoLearns.learnset };
-      }
-    }
-  }
-  const pokemonName = PokedexText[pokemonKey] && PokedexText[pokemonKey].name;
-  Object.keys(learnset).forEach((move) => {
-    let learnsetData = learnset[move];
-    if (
-      oldGenLearnsets[pokemonKey] &&
-      oldGenLearnsets[pokemonKey]["learnset"][move]
-    )
-      learnsetData = learnsetData.concat(
-        oldGenLearnsets[pokemonKey]["learnset"][move]
-      );
-    if (MovesText[move]) {
-      learns.push({
-        pokemon: pokemonName || pokemonKey,
-        move: MovesText[move] ? MovesText[move].name : move,
-        gen: createGenArray(MovesText[move].name, learnsetData),
-      });
-    }
-  });
-  // Add move to unreferenced formes
-  if (pokemon && pokemon.otherFormes) {
-    pokemon.otherFormes.forEach((formeName) => {
-      const formeKey = getPokemonKeyFromName(formeName);
-      if (
-        !formeKey ||
-        !gensByPokemon[formeKey] ||
-        Learnsets[formeKey] ||
-        (FormatsData[pokemonKey] && !pokemonIsStandard(FormatsData[pokemonKey]))
-      ) {
-        return;
-      }
-      Object.keys(learnset).forEach((move) => {
-        if (MovesText[move]) {
-          let learnsetData = learnset[move];
-          if (
-            oldGenLearnsets[pokemonKey] &&
-            oldGenLearnsets[pokemonKey]["learnset"][move]
-          )
-            learnsetData = learnsetData.concat(
-              oldGenLearnsets[pokemonKey]["learnset"][move]
-            );
-          let genLearns = createGenArray(MovesText[move].name, learnsetData);
-
-          genLearns =
-            genLearns[0] < gensByPokemon[formeKey][0]
-              ? genLearns.slice(genLearns.indexOf(gensByPokemon[formeKey][0]))
-              : genLearns;
-
-          learns.push({
-            pokemon: formeName,
-            move: MovesText[move] ? MovesText[move].name : move,
-            gen: genLearns,
-          });
-        }
-      });
-    });
-  }
+const makeLearnsObject = ({ name: pokemon }, pokemonLearns, gen) => ({
+  pokemon,
+  moves: pokemonLearns.map((moveKey) => Dex.moves.get(moveKey).name),
+  gen,
 });
+
+let typesForHiddenPower = Dex.types
+  .all()
+  .filter((type) => type.name !== "Normal" && type.name !== "Fairy")
+  .map((type) => type.name);
+
+/**
+ *
+ * @param {Species} species
+ * @param {int} gen
+ */
+const genLearnsetForSpecies = (species, gen) => {
+  let result = getEligibleMovesForGen(DexLearnset(gen, species) || {}, gen);
+  let otherLearnset = {};
+  while (species.prevo) {
+    species = Dex.mod(`gen${gen}`).species.get(species.prevo);
+    otherLearnset = DexLearnset(gen, species) || {};
+    result = { ...result, ...getEligibleMovesForGen(otherLearnset, gen) };
+  }
+  return result;
+};
+
+for (let gen = 1; gen <= LAST_GEN; gen++) {
+  const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
+    .species.all()
+    .filter((pokemon) => pokemonIsStandard(pokemon));
+  for (const pokemonFromShowdown of pokemonsFromShowdown) {
+    pokemonLearns = genLearnsetForSpecies(pokemonFromShowdown, gen);
+
+    if (pokemonFromShowdown.baseSpecies !== pokemonFromShowdown.name) {
+      let baseSpeciesFromShowdown = Dex.mod(`gen${gen}`).species.get(
+        pokemonFromShowdown.baseSpecies
+      );
+      if (pokemonIsStandard(baseSpeciesFromShowdown)) {
+        pokemonLearns = {
+          ...pokemonLearns,
+          ...genLearnsetForSpecies(baseSpeciesFromShowdown, gen),
+        };
+      }
+    }
+    if (pokemonLearns) {
+      if (gen >= 2) {
+        const generatedLearns = makeLearnsObject(
+          pokemonFromShowdown,
+          Object.values(pokemonLearns),
+          gen
+        );
+        generatedLearns.moves = generatedLearns.moves.concat(
+          typesForHiddenPower.map((type) => `Hidden Power [${type}]`)
+        );
+        learns.push(generatedLearns);
+      } else
+        learns.push(
+          makeLearnsObject(
+            pokemonFromShowdown,
+            Object.values(pokemonLearns),
+            gen
+          )
+        );
+    }
+  }
+}
+
 module.exports = learns;

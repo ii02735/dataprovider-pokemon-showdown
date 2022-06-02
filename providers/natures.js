@@ -1,11 +1,7 @@
-const {
-  loadResource,
-  POKEMON_SHOWDOWN_RESOURCE,
-} = require("../libs/fileLoader");
+const { loadResource, DEX } = require("../libs/fileLoader");
+const { Dex } = loadResource(DEX);
 
-const { Natures } = loadResource(POKEMON_SHOWDOWN_RESOURCE, "natures");
-
-const natures = Object.entries(Natures).map(([key, { name, plus, minus }]) => {
+const natures = Dex.natures.all().map(({ id: key, name, plus, minus }) => {
   const nature = { name, usageName: key };
   if (plus) nature[plus] = 1;
   if (minus) nature[minus] = -1;

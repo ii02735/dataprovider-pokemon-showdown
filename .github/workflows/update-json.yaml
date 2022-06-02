@@ -1,0 +1,41 @@
+name: "Update JSON files in repository"
+
+on: # This workflow must be triggered on two conditions
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
+
+jobs: #this section contains the tasks / jobs that must be executed
+  update_json_files: # the job name
+    runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
+    steps:
+      - name: checkout on main
+        uses: actions/checkout@main # action that makes a checkout
+        with:
+          ref: ${{ github.read_ref }} # will checkout on th desired branch
+          token: ${{ secrets.SPECIAL_PAT }} # will allow other workflow triggering (through push for example)
+
+      - name: "generate JSON"
+        uses: actions/setup-node@v2
+        with:
+          node-version: "12"
+
+      - run: npm ci && npm run clone-showdown
+      - run: npm run build
+      - run: npm run generate-stats
+      - name: Commit differences # commit if differences are tracked after updates (previous step)
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "JSON files updated"
+          commit_user_name: GitHub Actions Bot
+          commit_author: GitHub Action <actions@github.com>
+          skip_dirty_check: false
+
+      - name: "Install sshpass"
+        run: sudo apt-get install sshpass
+
+      - name: "Update remote"
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no
+          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}/ii02735/dataprovider-pokemon-showdown main"

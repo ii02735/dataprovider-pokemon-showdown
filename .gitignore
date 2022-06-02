@@ -4,6 +4,9 @@ pokemon-showdown/
 node_modules/
 execution.log
 *.json
+!usages/months/**/formats/**/*.json
+!usages/months*.json
+!formats.json
 !tiers.json
 !tags.json
 !json/translations/*.json
