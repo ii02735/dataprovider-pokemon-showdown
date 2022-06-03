@@ -26,7 +26,7 @@ jobs: #this section contains the tasks / jobs that must be executed
 
       - run: npm ci && npm run clone-showdown
       - run: npm run build
-      - run: npm run generate-stats
+      - run: USAGE_PATH='usages' npm run generate-stats
       - name: Commit differences # commit if differences are tracked after updates (previous step)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
