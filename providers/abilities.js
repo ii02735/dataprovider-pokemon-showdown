@@ -17,7 +17,9 @@ let abilities = range(1, LAST_GEN).map((gen) => ({
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const abilitiesFromShowdown = Dex.mod(`gen${gen}`)
     .abilities.all()
-    .filter((ability) => isStandard(ability) && ability.name !== "No Ability");
+    .filter(
+      (ability) => isStandard(ability, gen) && ability.name !== "No Ability"
+    );
   for (const abilityFromShowdown of abilitiesFromShowdown)
     abilities.push(makeAbilityObject(abilityFromShowdown, gen));
 }

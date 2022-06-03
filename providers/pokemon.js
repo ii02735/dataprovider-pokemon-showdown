@@ -65,7 +65,7 @@ const makePokemonObject = (
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
     .species.all()
-    .filter((pokemon) => isStandard(pokemon));
+    .filter((pokemon) => isStandard(pokemon, gen));
   for (const pokemonFromShowdown of pokemonsFromShowdown)
     pokemonsCollection.push(makePokemonObject(pokemonFromShowdown, gen));
 }
