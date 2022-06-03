@@ -43,7 +43,12 @@ const folderUsage = `usages/months/${fileSystem
   .readdirSync(require("path").resolve("usages/months"))
   .pop()}`;
 
-const withoutSpaces = (s) => s.replaceAll(/['\s\-.:’%\[\]]/g, "").toLowerCase();
+const withoutSpaces = (s) =>
+  s
+    .replace(/['\s\-.:’%\[\]]/g, "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
 
 module.exports = {
   writeFile,
