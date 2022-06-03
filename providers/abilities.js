@@ -1,7 +1,6 @@
 const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
-const { LAST_GEN, range } = loadResource(LIBS, "util");
+const { LAST_GEN, isStandard, range } = loadResource(LIBS, "util");
 const { Dex } = loadResource(DEX);
-const abilitiesFromShowdown = Dex.abilities.all();
 
 const makeAbilityObject = ({ usageName, name }, gen) => ({
   usageName,
@@ -15,13 +14,14 @@ let abilities = range(1, LAST_GEN).map((gen) => ({
   gen,
 }));
 
-for (const abilityFromShowdown of abilitiesFromShowdown) {
-  if (abilityFromShowdown.gen === 0) continue; // ignore No Ability because already added
-  if (abilitiesFromShowdown.gen !== LAST_GEN) {
-    for (let gen = abilityFromShowdown.gen; gen < LAST_GEN; gen++)
-      abilities.push(makeAbilityObject(abilityFromShowdown, gen));
-  }
-  abilities.push(makeAbilityObject(abilityFromShowdown, LAST_GEN));
+for (let gen = 1; gen <= LAST_GEN; gen++) {
+  const abilitiesFromShowdown = Dex.mod(`gen${gen}`)
+    .abilities.all()
+    .filter(
+      (ability) => isStandard(ability, gen) && ability.name !== "No Ability"
+    );
+  for (const abilityFromShowdown of abilitiesFromShowdown)
+    abilities.push(makeAbilityObject(abilityFromShowdown, gen));
 }
 
 module.exports = abilities;

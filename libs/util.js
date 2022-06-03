@@ -21,12 +21,13 @@ const writeFile = (fileName, values) => fileSystem.writeFile(
     e => log(fileName, e)
 );
 
-const pokemonIsStandard = ({ isNonstandard }) =>
+const isStandard = ({ isNonstandard }, gen = null) =>
   !isNonstandard ||
-  isNonstandard === "Past" || // keep pokemons that are not import in gen8
   isNonstandard === "Gigantamax" || // keep Gmax forms
-  isNonstandard === "Unobtainable"; // keep Unobtainable real mons
-
+  isNonstandard === "Unobtainable" || // keep Unobtainable real mons
+  (gen &&
+    gen === 8 &&
+    (isNonstandard === "Past" || isNonstandard === "Future"));
 /**
  * Returns an array of sequential numbers
  * like in python with the native range statement
@@ -52,7 +53,7 @@ const withoutSpaces = (s) =>
 
 module.exports = {
   writeFile,
-  pokemonIsStandard,
+  isStandard,
   removeParenthesis,
   LAST_GEN,
   range,

@@ -4,11 +4,8 @@
  */
 
 const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
-const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
+const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
 const { Dex } = loadResource(DEX);
-const pokemonsFromShowdown = Dex.species
-  .all()
-  .filter((pokemon) => pokemonIsStandard(pokemon));
 let pokemonsCollection = [];
 
 const makePokemonObject = (
@@ -65,17 +62,12 @@ const makePokemonObject = (
   };
 };
 
-for (const pokemonFromShowdown of pokemonsFromShowdown) {
-  if (pokemonFromShowdown.gen != LAST_GEN) {
-    let oldGenPokemon = null;
-    for (let gen = pokemonFromShowdown.gen; gen < LAST_GEN; gen++) {
-      oldGenPokemon = Dex.mod(`gen${gen}`).species.get(
-        pokemonFromShowdown.name
-      );
-      pokemonsCollection.push(makePokemonObject(oldGenPokemon, gen));
-    }
-  }
-  pokemonsCollection.push(makePokemonObject(pokemonFromShowdown, LAST_GEN));
+for (let gen = 1; gen <= LAST_GEN; gen++) {
+  const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
+    .species.all()
+    .filter((pokemon) => isStandard(pokemon, gen));
+  for (const pokemonFromShowdown of pokemonsFromShowdown)
+    pokemonsCollection.push(makePokemonObject(pokemonFromShowdown, gen));
 }
 
 module.exports = pokemonsCollection;
