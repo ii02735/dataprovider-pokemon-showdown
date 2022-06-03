@@ -2,7 +2,7 @@ name: "Update databases from JSON changes"
 on:
   push:
     branches: main
-    paths: 
+    paths:
       - "json/*.json"
       - "usages/**/*.json"
 
@@ -45,7 +45,7 @@ jobs:
         if: steps.filter.outputs.tags == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importTags.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importTags.js"
 
@@ -53,7 +53,7 @@ jobs:
         if: steps.filter.outputs.tiers == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importTiers.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importTiers.js"
 
@@ -61,7 +61,7 @@ jobs:
         if: steps.filter.outputs.natures == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importNatures.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importNatures.js"
 
@@ -69,7 +69,7 @@ jobs:
         if: steps.filter.outputs.types == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importTypes.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importTypes.js"
 
@@ -77,7 +77,7 @@ jobs:
         if: steps.filter.outputs.abilities == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importAbilities.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importAbilities.js"
 
@@ -85,7 +85,7 @@ jobs:
         if: steps.filter.outputs.items == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importItems.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importItems.js"
 
@@ -93,7 +93,7 @@ jobs:
         if: steps.filter.outputs.moves == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importMoves.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importMoves.js"
 
@@ -101,7 +101,7 @@ jobs:
         if: steps.filter.outputs.pokemon == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importPokemon.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importPokemon.js"
 
@@ -109,7 +109,7 @@ jobs:
         if: steps.filter.outputs.learns == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importPokemonMoves.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importPokemonMoves.js"
 
@@ -117,7 +117,7 @@ jobs:
         if: steps.filter.outputs.pokemon_tiers == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importPokemonTiers.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importPokemonTiers.js"
 
@@ -125,7 +125,7 @@ jobs:
         if: steps.filter.outputs.usages == 'true'
         run: >
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_DIR }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importUsages.js &&
           DB_HOST=${{ secrets.TEST_DB_HOST }} db/importUsagesVGC.js &&
           DB_HOST=${{ secrets.DB_HOST }} db/importUsages.js &&
