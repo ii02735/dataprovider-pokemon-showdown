@@ -1,5 +1,5 @@
 const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
-const { LAST_GEN, pokemonIsStandard } = loadResource(LIBS, "util");
+const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
 const { Dex } = loadResource(DEX);
 let learns = [];
 
@@ -64,7 +64,7 @@ const genLearnsetForSpecies = (species, gen) => {
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
     .species.all()
-    .filter((pokemon) => pokemonIsStandard(pokemon));
+    .filter((pokemon) => isStandard(pokemon));
   for (const pokemonFromShowdown of pokemonsFromShowdown) {
     pokemonLearns = genLearnsetForSpecies(pokemonFromShowdown, gen);
 
@@ -72,7 +72,7 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
       let baseSpeciesFromShowdown = Dex.mod(`gen${gen}`).species.get(
         pokemonFromShowdown.baseSpecies
       );
-      if (pokemonIsStandard(baseSpeciesFromShowdown)) {
+      if (isStandard(baseSpeciesFromShowdown)) {
         pokemonLearns = {
           ...pokemonLearns,
           ...genLearnsetForSpecies(baseSpeciesFromShowdown, gen),
