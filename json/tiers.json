@@ -4,7 +4,8 @@
 		"shortName": "OU",
 		"playable": true,
 		"usageName": "ou",
-		"rank": 3
+		"rank": 3,
+		"sortOrder": 1
 	},
 	{
 		"name": "Under Used Border Line",
@@ -12,6 +13,7 @@
 		"usageName": "uubl",
 		"playable": false,
 		"rank": 3,
+		"sortOrder": 1,
 		"parent": "Over Used"
 	},
 	{
@@ -19,7 +21,8 @@
 		"shortName": "UU",
 		"playable": true,
 		"usageName": "uu",
-		"rank": 4
+		"rank": 4,
+		"sortOrder": 5
 	},
 	{
 		"name": "Rarely Used Border Line",
@@ -27,6 +30,7 @@
 		"usageName": "rubl",
 		"playable": false,
 		"rank": 4,
+		"sortOrder": 5,
 		"parent": "Under Used",
 		"gen": [5, 6, 7, 8]
 	},
@@ -36,6 +40,7 @@
 		"playable": true,
 		"usageName": "ru",
 		"rank": 5,
+		"sortOrder": 6,
 		"gen": [5, 6, 7, 8]
 	},
 	{
@@ -44,6 +49,7 @@
 		"usageName": "nubl",
 		"playable": false,
 		"rank": 5,
+		"sortOrder": 6,
 		"parent": "Rarely Used"
 	},
 	{
@@ -51,7 +57,8 @@
 		"shortName": "NU",
 		"playable": true,
 		"usageName": "nu",
-		"rank": 6
+		"rank": 6,
+		"sortOrder": 7
 	},
 	{
 		"name": "PU Border Line",
@@ -59,15 +66,17 @@
 		"usageName": "publ",
 		"playable": false,
 		"rank": 6,
+		"sortOrder": 7,
 		"parent": "Never Used",
 		"gen": [4, 5, 6, 7, 8]
 	},
 	{
 		"name": "PU",
-		"shortName": "PU",
 		"playable": true,
 		"usageName": "pu",
-		"rank": 7
+		"rank": 7,
+		"sortOrder": 8,
+		"gen": [4, 5, 6, 7, 8]
 	},
 	{
 		"name": "Zero Used",
@@ -75,28 +84,31 @@
 		"playable": true,
 		"usageName": "zu",
 		"rank": 8,
+		"sortOrder": 9,
 		"gen": [7, 8]
 	},
 	{
 		"name": "Not Fully Evolved",
 		"shortName": "NFE",
 		"usageName": "nfe",
-		"playable": false,
-		"rank": 99
+		"rank": 99,
+		"sortOrder": 99,
+		"playable": false
 	},
 	{
 		"name": "Little Cup",
 		"shortName": "LC",
 		"playable": true,
 		"usageName": "lc",
-		"rank": 100
+		"rank": 100,
+		"sortOrder": 100
 	},
 	{
 		"name": "Uber",
-		"shortName": "Uber",
 		"playable": true,
 		"usageName": "ubers",
-		"rank": 2
+		"rank": 2,
+		"sortOrder": 4
 	},
 	{
 		"name": "Anything Goes",
@@ -104,6 +116,7 @@
 		"usageName": "anythinggoes",
 		"playable": true,
 		"rank": 1,
+		"sortOrder": 101,
 		"gen": [4, 6, 7, 8]
 	},
 	{
@@ -115,9 +128,11 @@
 	},
 	{
 		"name": "VGC",
+		"shortName": "VGC",
 		"playable": true,
 		"usageName": "vgc",
 		"isDouble": true,
+		"sortOrder": 2,
 		"gen": "LAST GEN ONLY"
 	},
 	{
@@ -125,6 +140,7 @@
 		"shortName": "BSS",
 		"usageName": "battlestadiumsingles",
 		"playable": true,
+		"sortOrder": 3,
 		"gen": "LAST GEN ONLY"
 	},
 	{
