@@ -1,6 +1,6 @@
 {
   "name": "api-pokemon-showdown",
-  "version": "v2.4.6",
+  "version": "v2.5.1",
   "description": "",
   "main": "app.js",
   "scripts": {

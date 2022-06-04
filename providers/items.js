@@ -1,10 +1,12 @@
 const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
-const { LAST_GEN, range, pokemonIsStandard } = loadResource(LIBS, "util");
+const { LAST_GEN, range, isStandard } = loadResource(LIBS, "util");
 const { Dex } = loadResource(DEX);
-const itemsFromShowdown = Dex.items
-  .all()
-  .filter((move) => pokemonIsStandard(move));
-let itemsCollection = [];
+let itemsCollection = range(1, LAST_GEN).map((gen) => ({
+  usageName: "noitem",
+  name: "No Item",
+  description: "Pas d'objet tenu",
+  gen,
+}));
 
 const makeItemObject = (rawObject, gen) => ({
   usageName: rawObject.id,
@@ -13,24 +15,14 @@ const makeItemObject = (rawObject, gen) => ({
   gen,
 });
 
-for (const itemFromShowdown of itemsFromShowdown) {
-  if (itemFromShowdown.gen != LAST_GEN) {
-    let oldGenItem = null;
-    for (let gen = itemFromShowdown.gen; gen < LAST_GEN; gen++) {
-      oldGenItem = Dex.mod(`gen${gen}`).moves.get(itemFromShowdown.name);
-      itemsCollection.push(makeItemObject(oldGenItem, gen));
-    }
-  }
-  itemsCollection.push(makeItemObject(itemFromShowdown, LAST_GEN));
+for (let gen = 1; gen <= LAST_GEN; gen++) {
+  const itemsFromShowdown = Dex.mod(`gen${gen}`)
+    .items.all()
+    .filter((item) => isStandard(item, gen) && item.name !== "No Item");
+  for (const itemFromShowdown of itemsFromShowdown)
+    itemsCollection.push(makeItemObject(itemFromShowdown, gen));
 }
 
-const items = Object.values(itemsCollection);
-range(1, LAST_GEN).forEach((gen) =>
-  items.push({
-    usageName: "noitem",
-    name: "No Item",
-    description: "Pas d'objet tenu",
-    gen,
-  })
-);
-module.exports = items;
+// const items = Object.values(itemsCollection);
+
+module.exports = itemsCollection;

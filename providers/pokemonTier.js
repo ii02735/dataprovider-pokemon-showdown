@@ -1,12 +1,9 @@
 const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
-const { removeParenthesis, LAST_GEN, pokemonIsStandard } = loadResource(
-  LIBS,
-  "util"
-);
+const { removeParenthesis, LAST_GEN, isStandard } = loadResource(LIBS, "util");
 const { Dex } = loadResource(DEX);
 const pokemonsFromShowdown = Dex.species
   .all()
-  .filter((pokemon) => pokemonIsStandard(pokemon));
+  .filter((pokemon) => isStandard(pokemon));
 let pokemonTier = [];
 
 const makePokemonTierObject = ({ name, tier, doubleTiers }, gen) => ({
@@ -17,17 +14,12 @@ const makePokemonTierObject = ({ name, tier, doubleTiers }, gen) => ({
   gen,
 });
 
-for (const pokemonFromShowdown of pokemonsFromShowdown) {
-  if (pokemonFromShowdown.gen != LAST_GEN) {
-    for (let gen = pokemonFromShowdown.gen; gen < LAST_GEN; gen++) {
-      const oldGenPokemon = Dex.mod(`gen${gen}`).species.get(
-        pokemonFromShowdown.name
-      );
-      if (!oldGenPokemon.tier) continue;
-      pokemonTier.push(makePokemonTierObject(oldGenPokemon, gen));
-    }
-  }
-  pokemonTier.push(makePokemonTierObject(pokemonFromShowdown, LAST_GEN));
+for (let gen = 1; gen <= LAST_GEN; gen++) {
+  const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
+    .species.all()
+    .filter((pokemon) => isStandard(pokemon, gen));
+  for (const pokemonFromShowdown of pokemonsFromShowdown)
+    pokemonTier.push(makePokemonTierObject(pokemonFromShowdown, gen));
 }
 
 module.exports = pokemonTier;
