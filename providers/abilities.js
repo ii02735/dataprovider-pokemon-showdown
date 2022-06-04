@@ -2,7 +2,7 @@ const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
 const { LAST_GEN, isStandard, range } = loadResource(LIBS, "util");
 const { Dex } = loadResource(DEX);
 
-const makeAbilityObject = ({ usageName, name }, gen) => ({
+const makeAbilityObject = ({ id: usageName, name }, gen) => ({
   usageName,
   name,
   gen,
