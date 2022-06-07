@@ -43,6 +43,7 @@ Promise.all(
     replaceColumns: {
       parent: "parent_id",
       shortName: "short_name",
+      sortOrder: "sort_order",
       usageName: "usage_name",
       ladderRef: "ladder_ref",
       isDouble: "is_double",
