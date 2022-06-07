@@ -25,28 +25,5 @@ Promise.all(
     )
   )
 )
-  .then(() =>
-    Promise.all(
-      Object.entries(fileTableMapping).flatMap(([file, table]) => {
-        if (
-          fs.existsSync(
-            `./json/translations/descriptions/${file}_translations.json`
-          )
-        ) {
-          return JSON.parse(
-            fs.readFileSync(
-              `./json/translations/descriptions/${file}_translations.json`,
-              "utf-8"
-            )
-          ).map(
-            async ({ name, description, gen }) =>
-              await knex(table).update({ description }).where({ name, gen })
-          );
-        } else {
-          return [];
-        }
-      })
-    )
-  )
   .catch((err) => console.log(err))
   .finally(() => knex.destroy());
