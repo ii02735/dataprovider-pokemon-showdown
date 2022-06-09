@@ -73,10 +73,10 @@
 	{
 		"name": "PU",
 		"playable": true,
+		"shortName": "PU",
 		"usageName": "pu",
 		"rank": 7,
-		"sortOrder": 8,
-		"gen": [4, 5, 6, 7, 8]
+		"sortOrder": 8
 	},
 	{
 		"name": "Zero Used",
@@ -105,6 +105,7 @@
 	},
 	{
 		"name": "Uber",
+		"shortName": "Uber",
 		"playable": true,
 		"usageName": "ubers",
 		"rank": 2,

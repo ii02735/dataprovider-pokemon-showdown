@@ -15,13 +15,14 @@ const makePokemonObject = (
     num: pokedex,
     name,
     types,
-    baseForme,
+    baseSpecies,
     weighthg: weight,
     baseStats,
+    prevo,
   },
   gen
 ) => {
-  const { hp, atk, def, spa, spd, spe, prevo } = baseStats;
+  const { hp, atk, def, spa, spd, spe } = baseStats;
   const [type_1, type_2] = types;
   if (gen < 5) abilities["H"] = null;
   else if (gen < 3) {
@@ -38,7 +39,8 @@ const makePokemonObject = (
     } else abilities[abilityClassifier] = null;
   }
 
-  const baseForm = baseForme.length > 0 ? baseForme : null;
+  const baseForm =
+    baseSpecies !== name && baseSpecies.length > 0 ? baseSpecies : null;
 
   return {
     pokedex,
@@ -54,7 +56,7 @@ const makePokemonObject = (
     spe,
     weight,
     baseForm,
-    prevo,
+    prevo: prevo || null,
     gen,
     ability_1: abilities["0"],
     ability_2: abilities["1"],
