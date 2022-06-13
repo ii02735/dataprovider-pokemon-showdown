@@ -1,0 +1,22 @@
+[
+	{
+		"name": "smogon"
+	},
+	{
+		"name": "battle stadium singles",
+		"shortName" : "BSS"
+	},
+	{
+		"name": "VGC",
+		"shortName": "VGC"
+	},
+	{
+		"name": "lexique"
+	},
+	{
+		"name": "guide"
+	},
+	{
+		"name": "divers"
+	}
+]
