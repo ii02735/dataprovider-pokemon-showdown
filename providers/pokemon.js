@@ -1,8 +1,3 @@
-/**
- * TODO (later) : special forms (cosmetic), and
- * accept GeoDaz"s exceptions
- */
-
 const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
 const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
 const { Dex } = loadResource(DEX);
@@ -30,7 +25,7 @@ const makePokemonObject = (
     abilities["1"] = null;
   }
   // Sometimes abilities are not put in the pokemon's data with the correct gen
-  for (const abilityClassifier of ["0", "1", "H"]) {
+  for (const abilityClassifier of ["0", "1", "H", "S"]) {
     if (abilities[abilityClassifier]) {
       const DexAbility = Dex.mod(`gen${gen}`).abilities.get(
         abilities[abilityClassifier]
@@ -59,7 +54,7 @@ const makePokemonObject = (
     prevo: prevo || null,
     gen,
     ability_1: abilities["0"],
-    ability_2: abilities["1"],
+    ability_2: abilities["1"] || abilities["S"],
     ability_hidden: abilities["H"],
   };
 };
@@ -67,7 +62,11 @@ const makePokemonObject = (
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
     .species.all()
-    .filter((pokemon) => isStandard(pokemon, gen));
+    .filter(
+      (pokemon) =>
+        isStandard(pokemon, gen) &&
+        !(pokemon.forme && pokemon.forme === "Totem" && gen === 8)
+    );
   for (const pokemonFromShowdown of pokemonsFromShowdown)
     pokemonsCollection.push(makePokemonObject(pokemonFromShowdown, gen));
 }
