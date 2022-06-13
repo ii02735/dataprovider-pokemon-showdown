@@ -65,10 +65,11 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
     .filter(
       (pokemon) =>
         isStandard(pokemon, gen) &&
-        !(pokemon.forme && pokemon.forme === "Totem" && gen === 8)
+        !(pokemon.forme.includes("Totem") && gen === 8)
     );
-  for (const pokemonFromShowdown of pokemonsFromShowdown)
+  for (const pokemonFromShowdown of pokemonsFromShowdown) {
     pokemonsCollection.push(makePokemonObject(pokemonFromShowdown, gen));
+  }
 }
 
 module.exports = pokemonsCollection;
