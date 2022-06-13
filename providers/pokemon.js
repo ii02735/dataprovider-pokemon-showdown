@@ -11,6 +11,7 @@ const makePokemonObject = (
     name,
     types,
     baseSpecies,
+    changesFrom,
     weighthg: weight,
     baseStats,
     prevo,
@@ -34,8 +35,10 @@ const makePokemonObject = (
     } else abilities[abilityClassifier] = null;
   }
 
+  // Take in priority changesFrom (for not basic form)
   const baseForm =
-    baseSpecies !== name && baseSpecies.length > 0 ? baseSpecies : null;
+    changesFrom ||
+    (baseSpecies !== name && baseSpecies.length > 0 ? baseSpecies : null);
 
   return {
     pokedex,
