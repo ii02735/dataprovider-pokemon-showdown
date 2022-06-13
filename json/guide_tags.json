@@ -1,9 +1,9 @@
 [
 	{
-		"name": "smogon"
+		"name": "Smogon"
 	},
 	{
-		"name": "battle stadium singles",
+		"name": "Battle Stadium Singles",
 		"shortName" : "BSS"
 	},
 	{
@@ -11,12 +11,12 @@
 		"shortName": "VGC"
 	},
 	{
-		"name": "lexique"
+		"name": "Lexique"
 	},
 	{
-		"name": "guide"
+		"name": "Guide"
 	},
 	{
-		"name": "divers"
+		"name": "Divers"
 	}
 ]
