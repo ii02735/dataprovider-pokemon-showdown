@@ -40,6 +40,8 @@ jobs:
               - 'json/pokemonTier.json'
             usages:
               - 'usages/**/*.json'
+            guide_tags:
+             - 'json/guide_tags.json'
 
       - name: Update tags
         if: steps.filter-json-data.outputs.tags == 'true'
