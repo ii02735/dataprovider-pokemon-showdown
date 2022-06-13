@@ -9,6 +9,7 @@ execution.log
 !formats.json
 !tiers.json
 !tags.json
+!guide_tags.json
 !json/translations/*.json
 !json/translations/descriptions/*.json
 !package*.json
