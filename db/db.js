@@ -1,10 +1,27 @@
 require("dotenv").config();
-
+/**
+ *
+ * @param {string} knex Knex instance
+ * @param {string} tableName table that must be updated
+ * @param {{}} objectArray the array of objects that must be passed to the table
+ * @param {{ identifier: ?string, hasGen: boolean,
+ *           replaceColumns: ?object, relations: ?object,
+ *           ignoreColumns: string[],
+ *           noOverrideColumns: string[]  }} options
+ * Options parameters :
+ * - identifier : column name that will have the identifier role (check row's existance)
+ * - hasGen : data do have gen ? (special processing)
+ * - replaceColumns : columns name that must be replaced by other precised
+ * - relations : column mapping across tables
+ * - noOverideColumns : columns that mustn't be updated
+ * @returns
+ */
 module.exports.insertOrUpdate = (
   knex,
   tableName,
   objectArray,
   {
+    identifier = null,
     hasGen = false,
     replaceColumns = null,
     relations = null,
@@ -44,10 +61,12 @@ module.exports.insertOrUpdate = (
     }
 
     try {
+      const identifierRow = identifier
+        ? { [identifier]: entry[identifier] }
+        : { name: entry.name };
+      console.log({ ...identifierRow, gen: entry.gen });
       const row = await knex(tableName)
-        .where(
-          hasGen ? { name: entry.name, gen: entry.gen } : { name: entry.name }
-        )
+        .where(hasGen ? { ...identifierRow, gen: entry.gen } : identifierRow)
         .first(["id"]);
       if (row && row.id) {
         if (noOverrideColumns.length > 0) {

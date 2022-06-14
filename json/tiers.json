@@ -146,6 +146,7 @@
 	},
 	{
 		"name": "1v1",
+		"shortName": "1v1",
 		"playable": true,
 		"maxPokemon": 3,
 		"usageName": "1v1",
@@ -162,6 +163,7 @@
 	},
 	{
 		"name": "Untiered",
+		"shortName": "Untiered",
 		"playable": false
 	}
 ]
