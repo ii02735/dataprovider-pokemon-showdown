@@ -18,10 +18,6 @@ jobs:
         id: filter-json-data
         with:
           filters: >
-            tags:
-              - 'json/tags.json'
-            tiers:
-              - 'json/tiers.json'
             natures:
               - 'json/natures.json'
             types:
@@ -40,29 +36,6 @@ jobs:
               - 'json/pokemonTier.json'
             usages:
               - 'usages/**/*.json'
-            guide_tags:
-             - 'json/guide_tags.json'
-
-      - name: Update tags
-        if: steps.filter-json-data.outputs.tags == 'true'
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          DB_HOST=${{ secrets.DB_HOST }} node14 db/importTags.js"
-
-      - name: Update guide tags
-        if: steps.filter-json-data.outputs.guide_tags == 'true'
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          DB_HOST=${{ secrets.DB_HOST }} node14 db/importGuideTags.js"
-
-      - name: Update tiers
-        if: steps.filter-json-data.outputs.tiers == 'true'
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          DB_HOST=${{ secrets.DB_HOST }} node14 db/importTiers.js"
 
       - name: Update natures
         if: steps.filter-json-data.outputs.natures == 'true'
@@ -109,7 +82,7 @@ jobs:
       #- name: Update learns
       #  if: steps.filter-json-data.outputs.learns == 'true'
       #  run: >
-      #    sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+      #    sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no
       #    "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
       #    DB_HOST=${{ secrets.TEST_DB_HOST }} node14 db/importPokemonMoves.js &&
       #    DB_HOST=${{ secrets.DB_HOST }} node14 db/importPokemonMoves.js"
