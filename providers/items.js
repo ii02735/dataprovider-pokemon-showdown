@@ -18,7 +18,12 @@ const makeItemObject = (rawObject, gen) => ({
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const itemsFromShowdown = Dex.mod(`gen${gen}`)
     .items.all()
-    .filter((item) => isStandard(item, gen) && item.name !== "No Item");
+    .filter(
+      (item) =>
+        isStandard(item, gen) &&
+        item.name !== "No Item" &&
+        !/TR\d+/.test(item.name)
+    );
   for (const itemFromShowdown of itemsFromShowdown)
     itemsCollection.push(makeItemObject(itemFromShowdown, gen));
 }
