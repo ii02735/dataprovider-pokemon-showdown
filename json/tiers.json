@@ -1,6 +1,6 @@
 [
 	{
-		"name": "Over Used",
+		"name": "OverUsed",
 		"shortName": "OU",
 		"playable": true,
 		"usageName": "ou",
@@ -8,7 +8,7 @@
 		"sortOrder": 1
 	},
 	{
-		"name": "Under Used Border Line",
+		"name": "UnderUsed BorderLine",
 		"shortName": "UUBL",
 		"usageName": "uubl",
 		"playable": false,
@@ -17,7 +17,7 @@
 		"parent": "Over Used"
 	},
 	{
-		"name": "Under Used",
+		"name": "UnderUsed",
 		"shortName": "UU",
 		"playable": true,
 		"usageName": "uu",
@@ -25,7 +25,7 @@
 		"sortOrder": 5
 	},
 	{
-		"name": "Rarely Used Border Line",
+		"name": "RarelyUsed BorderLine",
 		"shortName": "RUBL",
 		"usageName": "rubl",
 		"playable": false,
@@ -35,7 +35,7 @@
 		"gen": [5, 6, 7, 8]
 	},
 	{
-		"name": "Rarely Used",
+		"name": "RarelyUsed",
 		"shortName": "RU",
 		"playable": true,
 		"usageName": "ru",
@@ -44,7 +44,7 @@
 		"gen": [5, 6, 7, 8]
 	},
 	{
-		"name": "Never Used Border Line",
+		"name": "NeverUsed BorderLine",
 		"shortName": "NUBL",
 		"usageName": "nubl",
 		"playable": false,
@@ -53,7 +53,7 @@
 		"parent": "Rarely Used"
 	},
 	{
-		"name": "Never Used",
+		"name": "NeverUsed",
 		"shortName": "NU",
 		"playable": true,
 		"usageName": "nu",
@@ -61,7 +61,7 @@
 		"sortOrder": 7
 	},
 	{
-		"name": "PU Border Line",
+		"name": "PU BorderLine",
 		"shortName": "PUBL",
 		"usageName": "publ",
 		"playable": false,
@@ -79,7 +79,7 @@
 		"sortOrder": 8
 	},
 	{
-		"name": "Zero Used",
+		"name": "ZeroUsed",
 		"shortName": "ZU",
 		"playable": true,
 		"usageName": "zu",
@@ -146,6 +146,7 @@
 	},
 	{
 		"name": "1v1",
+		"shortName": "1v1",
 		"playable": true,
 		"maxPokemon": 3,
 		"usageName": "1v1",
@@ -162,6 +163,7 @@
 	},
 	{
 		"name": "Untiered",
+		"shortName": "Untiered",
 		"playable": false
 	}
 ]
