@@ -21,7 +21,9 @@ Promise.all(
       )
     ).map(
       async ([english, french]) =>
-        await knex(table).update({ nom: french }).where({ name: english })
+        await knex(table)
+          .update({ nom: french })
+          .where({ name: english.replace(/[\[\]]/g, "") })
     )
   )
 )
