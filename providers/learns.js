@@ -90,6 +90,13 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
           typesForHiddenPower.map((type) => `Hidden Power [${type}]`)
         );
         learns.push(generatedLearns);
+        if (pokemonFromShowdown.cosmeticFormes)
+          pokemonFromShowdown.cosmeticFormes.forEach((cosmeticFormName) => {
+            generatedLearns.pokemon = Dex.mod(`gen${gen}`).species.get(
+              cosmeticFormName
+            );
+            learns.push(generatedLearns);
+          });
       } else
         learns.push(
           makeLearnsObject(
