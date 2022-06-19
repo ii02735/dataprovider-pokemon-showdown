@@ -10,6 +10,9 @@ execution.log
 !tiers.json
 !tags.json
 !guide_tags.json
+!actuality_tags.json
+!tournament_tags.json
+!video_tags.json
 !json/translations/*.json
 !json/translations/descriptions/*.json
 !package*.json
