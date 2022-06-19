@@ -56,34 +56,6 @@ jobs:
           "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
           DB_HOST=${{ secrets.DB_HOST }} node14 db/importTags.js"
 
-      - name: Update guide tags
-        if: steps.filter-json-data.outputs.guide_tags == 'true'
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          DB_HOST=${{ secrets.DB_HOST }} node14 db/importGuideTags.js"
-
-      - name: Update actuality tags
-        if: steps.filter-json-data.outputs.actuality_tags == 'true'
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          DB_HOST=${{ secrets.DB_HOST }} node14 db/importActualityTags.js"
-
-      - name: Update tournament tags
-        if: steps.filter-json-data.outputs.tournament_tags == 'true'
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          DB_HOST=${{ secrets.DB_HOST }} node14 db/importTournamentTags.js"
-
-      - name: Update video tags
-        if: steps.filter-json-data.outputs.video_tags == 'true'
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          DB_HOST=${{ secrets.DB_HOST }} node14 db/importVideoTags.js"
-
       - name: Update tiers
         if: steps.filter-json-data.outputs.tiers == 'true'
         run: >
