@@ -1,7 +1,8 @@
-const { loadResource } = require("./fileLoader");
+require("dotenv").config();
+
 const fileSystem = require("fs");
 
-const LAST_GEN = 8;
+const LAST_GEN = process.env.LAST_GEN;
 
 const log = (name, e) => {
   if (e) {

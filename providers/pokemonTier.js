@@ -18,8 +18,18 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
   const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
     .species.all()
     .filter((pokemon) => isStandard(pokemon, gen));
-  for (const pokemonFromShowdown of pokemonsFromShowdown)
+  for (const pokemonFromShowdown of pokemonsFromShowdown) {
     pokemonTier.push(makePokemonTierObject(pokemonFromShowdown, gen));
+    if (pokemonFromShowdown.cosmeticFormes)
+      pokemonFromShowdown.cosmeticFormes.forEach((cosmeticFormName) => {
+        pokemonTier.push(
+          makePokemonTierObject(
+            Dex.mod(`gen${gen}`).species.get(cosmeticFormName),
+            gen
+          )
+        );
+      });
+  }
 }
 
 module.exports = pokemonTier;
