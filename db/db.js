@@ -64,7 +64,7 @@ module.exports.insertOrUpdate = (
       const identifierRow = identifier
         ? { [identifier]: entry[identifier] }
         : { name: entry.name };
-      console.log({ ...identifierRow, gen: entry.gen });
+
       const row = await knex(tableName)
         .where(hasGen ? { ...identifierRow, gen: entry.gen } : identifierRow)
         .first(["id"]);

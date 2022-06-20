@@ -1,7 +1,8 @@
 name: "Update databases from JSON changes"
 on:
   push:
-    branches: main
+    branches:
+      - main
     paths:
       - "json/*.json"
       - "usages/**/*.json"
@@ -36,6 +37,28 @@ jobs:
               - 'json/pokemonTier.json'
             usages:
               - 'usages/**/*.json'
+            guide_tags:
+             - 'json/guide_tags.json'
+            actuality_tags:
+             - 'json/actuality_tags.json'
+            tournament_tags:
+             - 'json/tournament_tags.json'
+            video_tags:
+             - 'json/video_tags.json'
+
+      - name: Update tags
+        if: steps.filter-json-data.outputs.tags == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          DB_HOST=${{ secrets.DB_HOST }} node14 db/importTags.js"
+
+      - name: Update tiers
+        if: steps.filter-json-data.outputs.tiers == 'true'
+        run: >
+          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          DB_HOST=${{ secrets.DB_HOST }} node14 db/importTiers.js"
 
       - name: Update natures
         if: steps.filter-json-data.outputs.natures == 'true'
