@@ -1,6 +1,5 @@
 const { insertOrUpdate, knex, resultRecords } = require("./db");
 const { loadResource, JSON } = require("../libs/fileLoader");
-const path = require("path");
 const tags = loadResource(JSON, "tags.json");
 const guideTags = loadResource(JSON, "guide_tags.json");
 const actualityTags = loadResource(JSON, "actuality_tags.json");
@@ -14,40 +13,41 @@ Promise.all(
   })
 )
   .then((results) => console.log(resultRecords("tag", results)))
-  .finally(() => knex.destroy());
-
-// Guide
-Promise.all(
-  insertOrUpdate(knex, "guide_tag", guideTags, {
-    replaceColumns: { shortName: "short_name" },
-  })
-)
+  .then(() =>
+    // Guide
+    Promise.all(
+      insertOrUpdate(knex, "guide_tag", guideTags, {
+        replaceColumns: { shortName: "short_name" },
+      })
+    )
+  )
   .then((results) => console.log(resultRecords("guide_tag", results)))
-  .finally(() => knex.destroy());
-
-// Actuality
-Promise.all(
-  insertOrUpdate(knex, "actuality_tag", actualityTags, {
-    replaceColumns: { shortName: "short_name" },
-  })
-)
+  .then(() =>
+    // Actuality
+    Promise.all(
+      insertOrUpdate(knex, "actuality_tag", actualityTags, {
+        replaceColumns: { shortName: "short_name" },
+      })
+    )
+  )
   .then((results) => console.log(resultRecords("actuality_tag", results)))
-  .finally(() => knex.destroy());
-
-// Tournament
-Promise.all(
-  insertOrUpdate(knex, "tournament_tag", tournamentTags, {
-    replaceColumns: { shortName: "short_name" },
-  })
-)
+  .then(() =>
+    // Tournament
+    Promise.all(
+      insertOrUpdate(knex, "tournament_tag", tournamentTags, {
+        replaceColumns: { shortName: "short_name" },
+      })
+    )
+  )
   .then((results) => console.log(resultRecords("tournament_tag", results)))
-  .finally(() => knex.destroy());
-
-// Video
-Promise.all(
-  insertOrUpdate(knex, "video_tag", videoTags, {
-    replaceColumns: { shortName: "short_name" },
-  })
-)
+  .then(() =>
+    // Video
+    Promise.all(
+      insertOrUpdate(knex, "video_tag", videoTags, {
+        replaceColumns: { shortName: "short_name" },
+      })
+    )
+  )
   .then((results) => console.log(resultRecords("video_tag", results)))
+  .catch((err) => console.log(err))
   .finally(() => knex.destroy());
