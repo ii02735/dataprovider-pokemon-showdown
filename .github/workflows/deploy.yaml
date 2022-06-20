@@ -48,5 +48,4 @@ jobs: #this section contains the tasks / jobs that must be executed
           sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
            CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} node14 db/importTags.js &&
-           CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} node14 db/importTiers.js &&
-           CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} node14 db/importGuideTags.js"
+           CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} node14 db/importTiers.js"
