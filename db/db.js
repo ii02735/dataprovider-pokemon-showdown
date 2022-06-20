@@ -99,14 +99,7 @@ module.exports.resultRecords = (table, results) =>
 
 module.exports.knex = require("knex")({
   client: "mysql",
-  connection: {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    charset: "utf8mb4",
-  },
+  connection: process.env.CONNECTION_STRING,
   log: {
     warn() {
       // do nothing...it will hide warning messages
