@@ -6,6 +6,8 @@ on:
 
 jobs:
   job-running-tests:
+    env:
+      LAST_GEN: 8
     runs-on: ubuntu-latest
     container: node:12
 
