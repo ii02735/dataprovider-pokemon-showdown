@@ -1,5 +1,8 @@
 const { loadResource, LIBS } = require("../libs/fileLoader");
-const { LAST_GEN, folderUsage, range } = loadResource(LIBS, "util");
+const { LAST_GEN, folderUsage, range, withoutSpaces } = loadResource(
+  LIBS,
+  "util"
+);
 const { knex } = require("./db");
 
 // Choose latest data folder
@@ -86,7 +89,7 @@ const fs = require("fs");
             for (const entityData of usageData[property]) {
               const entityRow = await knex(tableName)
                 .where({
-                  name: entityData.name,
+                  usage_name: withoutSpaces(entityData.name),
                   gen,
                 })
                 .first();
@@ -104,7 +107,7 @@ const fs = require("fs");
           for (const entityData of usageData["moves"]) {
             const entityRow = await knex("move")
               .where({
-                name: entityData.name,
+                usage_name: withoutSpaces(entityData.name),
                 gen,
               })
               .first();
@@ -165,7 +168,7 @@ const fs = require("fs");
             for (const entityData of usageData[property]) {
               const entityRow = await knex("pokemon")
                 .where({
-                  name: entityData.name,
+                  usage_name: withoutSpaces(entityData.name),
                   gen,
                 })
                 .first();
