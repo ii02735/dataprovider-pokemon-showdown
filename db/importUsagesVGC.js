@@ -1,5 +1,5 @@
 const { loadResource, LIBS } = require("../libs/fileLoader");
-const { LAST_GEN, folderUsage } = loadResource(LIBS, "util");
+const { LAST_GEN, folderUsage, withoutSpaces } = loadResource(LIBS, "util");
 const { knex } = require("./db");
 
 const gen = LAST_GEN;
@@ -65,7 +65,7 @@ const fs = require("fs");
       ]) {
         for (const entityData of usageData[property]) {
           const entityRow = await knex(tableName)
-            .where({ name: entityData.name, gen })
+            .where({ usage_name: withoutSpaces(entityData.name), gen })
             .first();
           if (!entityRow) continue;
           await knex(`usage_${tableName}`).insert({
@@ -96,7 +96,7 @@ const fs = require("fs");
       ]) {
         for (const entityData of usageData[property]) {
           const entityRow = await knex("pokemon")
-            .where({ name: entityData.name, gen })
+            .where({ usage_name: withoutSpaces(entityData.name), gen })
             .first();
 
           if (!entityRow) continue;
