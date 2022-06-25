@@ -8,6 +8,8 @@ on: # This workflow must be triggered on two conditions
 jobs: #this section contains the tasks / jobs that must be executed
   update_json_files: # the job name
     runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
+    env:
+      LAST_GEN: 8
     steps:
       - name: set timezone
         uses: szenius/set-timezone@v1.0
