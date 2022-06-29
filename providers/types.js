@@ -1,6 +1,6 @@
 const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
 const { Dex } = loadResource(DEX);
-const { range, LAST_GEN } = loadResource(LIBS, "util");
+const { range, LAST_GEN, isStandard } = loadResource(LIBS, "util");
 /**
  * Smogon's damageTaken property with its different values
  */
@@ -16,80 +16,37 @@ const WEAKNESS = {
   [IMMUNE]: 0,
 }; // translate weakness ratio
 
-let types = Dex.types.all().flatMap((type) => {
-  // Fairy type only exists since 6th gen
-  if (type.id === "fairy") {
-    return {
-      name: type.id,
-      damageTaken: type.damageTaken,
-      gen: range(6, LAST_GEN),
-    };
-  }
-  // Steel and dark types exist since 2nd gen
-  if (type.id === "steel" || type.id === "dark") {
-    let copyDamageTaken = { ...type.damageTaken };
-    if (type.id === "steel") copyDamageTaken.Dark = WEAK; // Dark type is weak against steel type from 2 to 5th gen
-    delete copyDamageTaken.Fairy;
-    return [
-      {
-        name: type.id,
-        damageTaken: copyDamageTaken, // Fairy type doesn't exist between second and 5th gen
-        gen: range(2, 5),
-      },
-      {
-        name: type.id,
-        damageTaken: type.damageTaken,
-        gen: range(6, LAST_GEN),
-      },
-    ];
-  }
+let types = [];
 
-  // Return others types that have common rules (unlike steel, dark and fairy)
-  return [
-    {
-      name: type.id,
-      damageTaken: Object.keys(type.damageTaken).reduce((acc, typeName) => {
-        let copyDamageTaken = { ...type.damageTaken };
-        delete copyDamageTaken.Fairy; // Fairy type doesn't exist in first gen
-        delete copyDamageTaken.Steel; // Steel type doesn't exist in first gen
-        delete copyDamageTaken.Dark; // Dark type doesn't exist in first gen
-        if (typeName !== "Fairy" && typeName !== "Steel" && typeName !== "Dark")
-          acc[typeName] = copyDamageTaken[typeName];
-        return acc;
-      }, {}),
-      gen: [1],
-    },
-    {
-      name: type.id,
-      damageTaken: Object.keys(type.damageTaken).reduce((acc, typeName) => {
-        let copyDamageTaken = { ...type.damageTaken };
-        delete copyDamageTaken.Fairy; // Fairy type doesn't exist between second and 5th gen
-        if (typeName !== "Fairy") acc[typeName] = copyDamageTaken[typeName];
-        return acc;
-      }, {}),
-      gen: range(2, 5),
-    },
-    {
-      name: type.id,
-      damageTaken: type.damageTaken,
-      gen: range(6, LAST_GEN),
-    },
-  ];
-});
+for (let gen = 1; gen <= LAST_GEN; gen++) {
+  Dex.mod(`gen${gen}`)
+    .types.all()
+    .filter((type) => isStandard(type))
+    .forEach((type) => {
+      type.weaknesses = Object.entries(type.damageTaken)
+        .filter(([typeAttacker, _]) =>
+          isStandard(Dex.mod(`gen${gen}`).types.get(typeAttacker))
+        )
+        .map(([typeAttacker, value]) => ({
+          name: typeAttacker,
+          ratio: WEAKNESS[value],
+        }));
 
-for (type of types) {
-  type["weaknesses"] = Object.entries(type.damageTaken).map(
-    ([typeName, smogonWeakness]) => {
-      return {
-        name: typeName,
-        ratio: WEAKNESS[smogonWeakness],
-      };
-    }
-  );
-
-  delete type.damageTaken;
+      [
+        "exists",
+        "id",
+        "effectType",
+        "gen",
+        "isNonstandard",
+        "HPivs",
+        "HPdvs",
+        "damageTaken",
+      ].forEach((attributeToRemove) => delete type[attributeToRemove]);
+      type.gen = gen;
+      types.push(type);
+    });
 }
 
-types.push({ name: "???", weaknesses: [], gen: [1, 2, 3, 4] });
+[1, 2, 3, 4].forEach((gen) => types.push({ name: "???", weaknesses: [], gen }));
 
 module.exports = types;
