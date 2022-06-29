@@ -64,7 +64,7 @@ const genLearnsetForSpecies = (species, gen) => {
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const pokemonsFromShowdown = Dex.mod(`gen${gen}`)
     .species.all()
-    .filter((pokemon) => isStandard(pokemon, gen));
+    .filter((pokemon) => isStandard(pokemon, gen, pokemon.num > 0));
   for (const pokemonFromShowdown of pokemonsFromShowdown) {
     pokemonLearns = genLearnsetForSpecies(pokemonFromShowdown, gen);
 
@@ -72,7 +72,13 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
       let baseSpeciesFromShowdown = Dex.mod(`gen${gen}`).species.get(
         pokemonFromShowdown.baseSpecies
       );
-      if (isStandard(baseSpeciesFromShowdown)) {
+      if (
+        isStandard(
+          baseSpeciesFromShowdown,
+          null,
+          baseSpeciesFromShowdown.num > 0
+        )
+      ) {
         pokemonLearns = {
           ...pokemonLearns,
           ...genLearnsetForSpecies(baseSpeciesFromShowdown, gen),

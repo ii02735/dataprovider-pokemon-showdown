@@ -22,8 +22,8 @@ const writeFile = (fileName, values) => fileSystem.writeFile(
     e => log(fileName, e)
 );
 
-const isStandard = ({ num, isNonstandard }, gen = null) =>
-  num > 0 &&
+const isStandard = ({ isNonstandard }, gen = null, otherCondition = true) =>
+  otherCondition &&
   (!isNonstandard ||
     isNonstandard === "Gigantamax" || // keep Gmax forms
     isNonstandard === "Unobtainable" || // keep Unobtainable real mons
