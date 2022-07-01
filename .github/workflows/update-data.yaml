@@ -60,76 +60,76 @@ jobs:
         if: steps.filter-json-data.outputs.tags == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTags.js"
 
       - name: Update tiers
         if: steps.filter-json-data.outputs.tiers == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTiers.js"
 
       - name: Update natures
         if: steps.filter-json-data.outputs.natures == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importNatures.js"
 
       - name: Update types
         if: steps.filter-json-data.outputs.types == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTypes.js"
 
       - name: Update abilities
         if: steps.filter-json-data.outputs.abilities == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importAbilities.js"
 
       - name: Update items
         if: steps.filter-json-data.outputs.items == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importItems.js"
 
       - name: Update moves
         if: steps.filter-json-data.outputs.moves == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importMoves.js"
 
       - name: Update pokemons
         if: steps.filter-json-data.outputs.pokemon == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemon.js"
 
       - name: Update learns
         if: steps.filter-json-data.outputs.learns == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonMoves.js"
 
       - name: Update pokemon tiers
         if: steps.filter-json-data.outputs.pokemon_tiers == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonTiers.js"
 
       - name: Update usages
         if: steps.filter-json-data.outputs.usages == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importUsages.js &&
            nq -c node db/importUsagesVGC.js"

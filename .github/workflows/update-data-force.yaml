@@ -24,66 +24,66 @@ jobs:
       - name: Update tags
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTags.js"
 
       - name: Update tiers
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTiers.js"
 
       - name: Update natures
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importNatures.js"
 
       - name: Update types
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTypes.js"
 
       - name: Update abilities
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importAbilities.js"
 
       - name: Update items
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importItems.js"
 
       - name: Update moves
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importMoves.js"
 
       - name: Update pokemons
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemon.js"
 
       - name: Update learns
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonMoves.js"
 
       - name: Update pokemon tiers
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonTiers.js"
 
       - name: Update usages
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
+          "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importUsages.js &&
            nq -c node db/importUsagesVGC.js"
