@@ -17,6 +17,8 @@ jobs: #this section contains the tasks / jobs that must be executed
 
       - id: release
         uses: rymndhng/release-on-push-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           bump_version_scheme: patch
           use_github_release_notes: true
