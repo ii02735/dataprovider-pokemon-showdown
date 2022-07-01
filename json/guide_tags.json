@@ -12,5 +12,29 @@
 	},
 	{
 		"name": "Lexique"
+	},
+	{
+		"name": "Débutant"
+	},
+	{
+		"name": "Intermédiaire"
+	},
+	{
+		"name": "Avancé"
+	},
+	{
+		"name": "Teambuilding"
+	},
+	{
+		"name": "Combat"
+	},
+	{
+		"name": "Communauté"
+	},
+	{
+		"name": "Cartouche"
+	},
+	{
+		"name": "Analyse"
 	}
 ]
