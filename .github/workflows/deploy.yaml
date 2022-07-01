@@ -3,6 +3,9 @@ name: "Deploy"
 on: # This workflow must be triggered on one condition only
   workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
 
+env:
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
 jobs: #this section contains the tasks / jobs that must be executed
   update_server:
     runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
@@ -11,12 +14,9 @@ jobs: #this section contains the tasks / jobs that must be executed
         uses: actions/checkout@main # action that make a checkout on the main branch
         with:
           ref: ${{ github.read_ref }}
-          token: ${{ secrets.SPECIAL_PAT }} # to allow commit on protected branch
 
       - id: release
         uses: rymndhng/release-on-push-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.SPECIAL_PAT }}
         with:
           bump_version_scheme: patch
           use_github_release_notes: true
@@ -34,18 +34,18 @@ jobs: #this section contains the tasks / jobs that must be executed
           commit_author: GitHub Action <actions@github.com>
           skip_dirty_check: false
 
-      - name: "Install sshpass"
-        run: sudo apt-get install sshpass
+      - name: Setup SSH connection
+        run: >
+          echo "${{ secrets.PRIVATE_KEY }}" > ./private_key && chmod 600 ./private_key &&
+          echo '#!/bin/sh' >> ./passphrase_script.sh &&
+          echo "echo ${{ secrets.PASSPHRASE }}" >> ./passphrase_script.sh &&
+          chmod +x ./passphrase_script.sh
+
+      - run: ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+      - run: DISPLAY=1 SSH_ASKPASS="./passphrase_script.sh" ssh-add ./private_key < /dev/null
 
       - name: "Update remote"
         run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-          git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main"
-
-      - name: "Update database from manually changed JSON"
-        run: >
-          sshpass -p "${{ secrets.PASSWORD }}" ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -o StrictHostKeyChecking=no
-          "cd ${{ secrets.REMOTE_PATH }}/dataprovider &&
-           CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} node14 db/importTags.js &&
-           CONNECTION_STRING=${{ secrets.CONNECTION_STRING }} node14 db/importTiers.js"
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
+          "cd ${{ secrets.REMOTE_PATH }}/ && 
+           git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main"
