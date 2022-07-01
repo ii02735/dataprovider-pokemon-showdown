@@ -124,7 +124,7 @@ jobs:
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importPokemonTiers.js"
+           nq -c node db/importPokemonTier.js"
 
       - name: Update usages
         if: steps.filter-json-data.outputs.usages == 'true'
