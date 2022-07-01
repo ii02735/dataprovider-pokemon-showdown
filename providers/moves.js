@@ -19,7 +19,7 @@ const makeMoveObject = (rawObject, gen) => ({
 for (let gen = 1; gen <= LAST_GEN; gen++) {
   const movesFromShowdown = Dex.mod(`gen${gen}`)
     .moves.all()
-    .filter((item) => isStandard(item, gen));
+    .filter((move) => isStandard(move, gen, move.num > 0));
   for (const moveFromShowdown of movesFromShowdown) {
     if (/Hidden Power (\w+)/.test(moveFromShowdown.name)) {
       moveFromShowdown.name = `Hidden Power [${moveFromShowdown.type}]`;

@@ -20,7 +20,7 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
     .items.all()
     .filter(
       (item) =>
-        isStandard(item, gen) &&
+        isStandard(item, gen, item.num > 0) &&
         item.name !== "No Item" &&
         !/TR\d+/.test(item.name)
     );

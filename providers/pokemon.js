@@ -67,7 +67,7 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
     .species.all()
     .filter(
       (pokemon) =>
-        isStandard(pokemon, gen) &&
+        isStandard(pokemon, gen, pokemon.num > 0) &&
         !(pokemon.forme && /.*Totem/.test(pokemon.forme) && gen === 8)
     );
   for (const pokemonFromShowdown of pokemonsFromShowdown) {
