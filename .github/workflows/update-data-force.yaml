@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
      entity:
-        description: 'Set entity to update'     
+        description: "Choose entity's data to update"     
         required: true
         default: 'all'
 
