@@ -53,6 +53,10 @@ jobs:
              - 'json/actuality_tags.json'
             tournament_tags:
              - 'json/tournament_tags.json'
+            tags:
+             - 'json/tags.json'
+            tiers:
+             - 'json/tiers.json'
             video_tags:
              - 'json/video_tags.json'
 
