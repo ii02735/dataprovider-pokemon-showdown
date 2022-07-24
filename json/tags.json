@@ -1,67 +1,97 @@
 [
 	{
-		"name": "hyper offense",
-		"shortName": "HO"
+		"name": "youtube",
+		"sortOrder": 0,
+		"isModo": true
 	},
 	{
-		"name": "stall"
+		"name": "sample",
+		"sortOrder": 0,
+		"isModo": true
+	},
+	{
+		"name": "gimmick",
+		"sortOrder": 1
+	},
+	{
+		"name": "hyper offense",
+		"shortName": "HO",
+		"sortOrder": 2
+	},
+	{
+		"name": "stall",
+		"sortOrder": 2
 	},
 	{
 		"name": "bulky offense",
-		"shortName": "BO"
+		"shortName": "BO",
+		"sortOrder": 2
 	},
 	{
 		"name": "balanced",
-		"shortName": "BL"
+		"shortName": "BL",
+		"sortOrder": 2
 	},
 	{
 		"name": "distorsion",
-		"shortName": "disto"
+		"shortName": "disto",
+		"sortOrder": 3
 	},
 	{
-		"name": "sticky"
+		"name": "sticky",
+		"sortOrder": 3
 	},
 	{
-		"name": "stack hazards"
+		"name": "stack hazards",
+		"sortOrder": 5
 	},
 	{
-		"name": "screens"
+		"name": "screens",
+		"sortOrder": 5
 	},
 	{
-		"name": "rain"
+		"name": "rain",
+		"sortOrder": 4
 	},
 	{
-		"name": "sun"
+		"name": "sun",
+		"sortOrder": 4
 	},
 	{
-		"name": "sand"
+		"name": "sand",
+		"sortOrder": 4
 	},
 	{
-		"name": "hail"
+		"name": "hail",
+		"sortOrder": 4
 	},
 	{
-		"name": "grass spam"
+		"name": "grass spam",
+		"sortOrder": 4
 	},
 	{
-		"name": "psy spam"
+		"name": "psy spam",
+		"sortOrder": 4
 	},
 	{
 		"name": "electrik spam",
-		"shortName": "elec spam"
+		"shortName": "elec spam",
+		"sortOrder": 4
 	},
 	{
-		"name": "vent arrière"
+		"name": "tailwind",
+		"sortOrder": 3
 	},
 	{
-		"name": "trap"
+		"name": "trap",
+		"sortOrder": 5
 	},
 	{
-		"name": "gravité"
+		"name": "gravity",
+		"sortOrder": 5
 	},
 	{
-		"name": "dragmag"
-	},
-	{
-		"name": "gimmick"
+		"name": "dragmag",
+		"sortOrder": 4
 	}
 ]
