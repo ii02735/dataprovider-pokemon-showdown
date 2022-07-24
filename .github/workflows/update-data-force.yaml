@@ -1,6 +1,11 @@
 name: "Update database"
-on:
+on: 
   workflow_dispatch:
+    inputs:
+     entity:
+        description: 'Set entity to update'     
+        required: true
+        default: 'all'
 
 env:
   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -22,66 +27,77 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Update tags
+        if: "${{ github.event.inputs.entity == 'tags' || github.event.inputs.entity == 'all' }}"
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTags.js"
 
       - name: Update tiers
+        if: "${{ github.event.inputs.entity == 'tiers' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTiers.js"
 
       - name: Update natures
+        if: "${{ github.event.inputs.entity == 'natures' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importNatures.js"
 
       - name: Update types
+        if: "${{ github.event.inputs.entity == 'types' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTypes.js"
 
       - name: Update abilities
+        if: "${{ github.event.inputs.entity == 'abilities' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importAbilities.js"
 
       - name: Update items
+        if: "${{ github.event.inputs.entity == 'items' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importItems.js"
 
       - name: Update moves
+        if: "${{ github.event.inputs.entity == 'moves' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importMoves.js"
 
       - name: Update pokemons
+        if: "${{ github.event.inputs.entity == 'pokemons' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemon.js"
 
       - name: Update learns
+        if: "${{ github.event.inputs.entity == 'learns' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonMoves.js"
 
       - name: Update pokemon tiers
+        if: "${{ github.event.inputs.entity == 'pokemon tiers' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonTier.js"
 
       - name: Update usages
+        if: "${{ github.event.inputs.entity == 'usages' || github.event.inputs.entity == 'all' }}"      
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
