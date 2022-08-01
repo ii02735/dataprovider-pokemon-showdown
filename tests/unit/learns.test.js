@@ -1,4 +1,12 @@
-const { isRegional } = require("../../providers/learns");
+const path = require("path");
+const { loadResource, PROVIDER } = require(path.join(
+  __dirname,
+  "..",
+  "..",
+  "libs",
+  "fileLoader"
+));
+const { isRegional } = loadResource(PROVIDER, "learns");
 
 test("Should return true when regional form encountered", () => {
   // Regional form case
