@@ -5,7 +5,7 @@ let learns = [];
 
 /**
  * Unfortunately, a pokemon learnset doesn't exist for each gen.
- * Instead, smogon gathers multiple gen for each move, so some of them
+ * Instead, smogon gathers multiple gen for each move, however some of them
  * cannot be learnt for a specific gen. So we must clean it first.
  * @param {*} pokemonLearnset
  * @param {int} gen desired gen
@@ -22,6 +22,15 @@ const getEligibleMovesForGen = (pokemonLearnset, gen) => {
     .flatMap(([moveKey, _]) => moveKey)
     .reduce((acc, move) => ({ ...acc, [move]: move }), {});
 };
+
+const isRegional = (species) => {
+  const regions = ["Alola", "Hisui", "Galar"];
+  return (
+    !!regions.find((region) => species.forme.includes(region)) &&
+    species.forme !== ""
+  );
+};
+
 /**
  * Fetch the correct learnset's asset
  * @param {int} gen the desired gen
@@ -68,7 +77,14 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
   for (const pokemonFromShowdown of pokemonsFromShowdown) {
     pokemonLearns = genLearnsetForSpecies(pokemonFromShowdown, gen);
 
-    if (pokemonFromShowdown.baseSpecies !== pokemonFromShowdown.name) {
+    /**Inherit base species learnset to forms
+     * Regional forms are not considered
+     * (alolan ninetales cannot learn flare blitz, but regular ninetales can)
+     **/
+    if (
+      pokemonFromShowdown.baseSpecies !== pokemonFromShowdown.name &&
+      !isRegional(pokemonFromShowdown)
+    ) {
       let baseSpeciesFromShowdown = Dex.mod(`gen${gen}`).species.get(
         pokemonFromShowdown.baseSpecies
       );
@@ -92,10 +108,12 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
           Object.values(pokemonLearns),
           gen
         );
+        // Apply modifications for Hidden Power (provide type name in brackets)
         generatedLearns.moves = generatedLearns.moves.concat(
           typesForHiddenPower.map((type) => `Hidden Power [${type}]`)
         );
         learns.push(generatedLearns);
+        // Add learns for cosmetic forms
         if (pokemonFromShowdown.cosmeticFormes)
           pokemonFromShowdown.cosmeticFormes.forEach((cosmeticFormName) => {
             generatedLearns.pokemon = Dex.mod(`gen${gen}`).species.get(
@@ -116,3 +134,7 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
 }
 
 module.exports = learns;
+
+// Exported for TDD
+
+module.exports.isRegional = isRegional;
