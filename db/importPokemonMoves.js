@@ -42,6 +42,7 @@ progressBar.start(learns.length, 0);
           }
         }
         let INSERTED = 0;
+        let moveIds = [];
         for (const move of object.moves) {
           let moveRow = await knex("move")
             .where({
@@ -65,6 +66,8 @@ progressBar.start(learns.length, 0);
             }
           }
 
+          moveIds.push(moveRow.id);
+
           const samePokemonMoveRow = await knex("pokemon_move")
             .where({
               pokemon_id: pokemonRow.id,
@@ -80,8 +83,19 @@ progressBar.start(learns.length, 0);
           });
           INSERTED++;
         }
+
+        // Delete invalid moves
+
+        const deletedRows = await knex("pokemon_move")
+          .whereNotIn("move_id", moveIds)
+          .andWhere({
+            pokemon_id: pokemonRow.id,
+            gen: object.gen,
+          })
+          .delete(["id"]);
         return {
           INSERTED,
+          DELETED: deletedRows.length,
         };
       },
       {
@@ -92,6 +106,7 @@ progressBar.start(learns.length, 0);
     console.log({
       table: "pokemon_move",
       INSERTED: results.reduce((sum, { INSERTED }) => sum + INSERTED, 0),
+      DELETED: results.reduce((sum, { DELETED }) => sum + DELETED, 0),
     });
   } catch (err) {
     console.log(err);
