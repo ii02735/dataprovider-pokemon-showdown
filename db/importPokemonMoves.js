@@ -68,20 +68,18 @@ progressBar.start(learns.length, 0);
 
           moveIds.push(moveRow.id);
 
-          const samePokemonMoveRow = await knex("pokemon_move")
-            .where({
+          try {
+            await knex("pokemon_move").insert({
               pokemon_id: pokemonRow.id,
               move_id: moveRow.id,
-            })
-            .first(["id"]);
-          if (samePokemonMoveRow) continue;
-
-          await knex("pokemon_move").insert({
-            pokemon_id: pokemonRow.id,
-            move_id: moveRow.id,
-            gen: object.gen,
-          });
-          INSERTED++;
+              gen: object.gen,
+            });
+            INSERTED++;
+          } catch (e) {
+            // Already inserted learn
+            if (e.code === "ER_DUP_ENTRY") continue;
+            else throw new Error(e);
+          }
         }
 
         // Delete invalid moves
@@ -95,7 +93,7 @@ progressBar.start(learns.length, 0);
           .delete(["id"]);
         return {
           INSERTED,
-          DELETED: deletedRows.length,
+          DELETED: deletedRows || 0,
         };
       },
       {
