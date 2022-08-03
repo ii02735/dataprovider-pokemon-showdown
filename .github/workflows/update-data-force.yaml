@@ -23,6 +23,11 @@ jobs:
 
       - run: ssh-agent -a $SSH_AUTH_SOCK > /dev/null
       - run: DISPLAY=1 SSH_ASKPASS="./passphrase_script.sh" ssh-add ./private_key < /dev/null
+      - name: "Update remote"
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
+          "cd ${{ secrets.REMOTE_PATH }}/ && 
+           git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main"
 
       - uses: actions/checkout@v2
 
