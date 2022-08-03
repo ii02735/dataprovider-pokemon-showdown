@@ -118,7 +118,7 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
           pokemonFromShowdown.cosmeticFormes.forEach((cosmeticFormName) => {
             generatedLearns.pokemon = Dex.mod(`gen${gen}`).species.get(
               cosmeticFormName
-            );
+            ).name;
             learns.push(generatedLearns);
           });
       } else
