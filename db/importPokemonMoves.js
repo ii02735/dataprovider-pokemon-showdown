@@ -83,10 +83,13 @@ progressBar.start(learns.length, 0);
         }
 
         // Delete invalid moves
-        await knex("pokemon_move").whereNotIn("move_id", moveIds).andWhere({
-          pokemon_id: pokemonRow.id,
-          gen: object.gen,
-        });
+        await knex("pokemon_move")
+          .whereNotIn("move_id", moveIds)
+          .andWhere({
+            pokemon_id: pokemonRow.id,
+            gen: object.gen,
+          })
+          .delete();
         return {
           INSERTED,
         };
