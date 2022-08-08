@@ -39,16 +39,21 @@ jobs: #this section contains the tasks / jobs that must be executed
           skip_dirty_check: false
 
       - name: Setup SSH connection
+        if: steps.auto-commit-action.outputs.changes_detected == 'true'
         run: >
           echo "${{ secrets.PRIVATE_KEY }}" > ./private_key && chmod 600 ./private_key &&
           echo '#!/bin/sh' >> ./passphrase_script.sh &&
           echo "echo ${{ secrets.PASSPHRASE }}" >> ./passphrase_script.sh &&
           chmod +x ./passphrase_script.sh
 
-      - run: ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-      - run: DISPLAY=1 SSH_ASKPASS="./passphrase_script.sh" ssh-add ./private_key < /dev/null
+      - if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        run: ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+
+      - if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        run: DISPLAY=1 SSH_ASKPASS="./passphrase_script.sh" ssh-add ./private_key < /dev/null
 
       - name: "Update remote"
+        if: steps.auto-commit-action.outputs.changes_detected == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }}/ && 
