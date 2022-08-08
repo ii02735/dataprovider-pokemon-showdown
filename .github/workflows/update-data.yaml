@@ -1,11 +1,8 @@
 name: "Update database from JSON changes"
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "json/*.json"
-      - "usages/**/*.json"
+  workflow_run:
+    workflows: ["Update JSON files in repository"]
+    types: [completed]
 
 env:
   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
