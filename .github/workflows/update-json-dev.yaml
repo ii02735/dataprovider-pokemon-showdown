@@ -33,40 +33,43 @@ jobs: #this section contains the tasks / jobs that must be executed
       - name: Update pokemons' usages
         run: USAGE_PATH='usages' npm run generate-stats
 
+      - name: Store last hash commit
+        run: echo "old_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+
       - name: Commit differences # commit if differences are tracked after updates (previous step)
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "JSON files updated"
-          commit_user_name: GitHub Actions Bot
-          commit_author: GitHub Action <actions@github.com>
-          skip_dirty_check: false
-          
-      - name: echo condition about changes
-        run: echo ${{ steps.auto-commit-action.outputs.changes_detected }}
-        
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "JSON files updated"
+          echo "new_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+
+      - name: Show GITHUB_ENV for testing
+        run: echo $GITHUB_ENV
+
       - name: Setup SSH connection
-        if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        if: env.old_hash != env.new_hash
         run: >
           echo "${{ secrets.PRIVATE_KEY }}" > ./private_key && chmod 600 ./private_key &&
           echo '#!/bin/sh' >> ./passphrase_script.sh &&
           echo "echo ${{ secrets.PASSPHRASE }}" >> ./passphrase_script.sh &&
           chmod +x ./passphrase_script.sh
 
-      - if: steps.auto-commit-action.outputs.changes_detected == 'true'
+      - if: env.old_hash != env.new_hash
         run: ssh-agent -a $SSH_AUTH_SOCK > /dev/null
 
-      - if: steps.auto-commit-action.outputs.changes_detected == 'true'
+      - if: env.old_hash != env.new_hash
         run: DISPLAY=1 SSH_ASKPASS="./passphrase_script.sh" ssh-add ./private_key < /dev/null
 
       - name: "Update remote"
-        if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        if: env.old_hash != env.new_hash
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }}/ && 
            git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git develop"
 
       - uses: dorny/paths-filter@v2 # will create filters for changed files
-        if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        if: env.old_hash != env.new_hash
         id: filter-json-data
         with:
           filters: >
@@ -102,77 +105,77 @@ jobs: #this section contains the tasks / jobs that must be executed
              - 'json/video_tags.json'
 
       - name: Update tags
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.tags == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.tags == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTags.js"
 
       - name: Update tiers
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.tiers == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.tiers == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTiers.js"
 
       - name: Update natures
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.natures == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.natures == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importNatures.js"
 
       - name: Update types
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.types == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.types == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTypes.js"
 
       - name: Update abilities
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.abilities == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.abilities == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importAbilities.js"
 
       - name: Update items
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.items == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.items == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importItems.js"
 
       - name: Update moves
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.moves == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.moves == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importMoves.js"
 
       - name: Update pokemons
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.pokemon == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.pokemon == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemon.js"
 
       - name: Update learns
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.learns == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.learns == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonMoves.js"
 
       - name: Update pokemon tiers
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.pokemon_tiers == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.pokemon_tiers == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importPokemonTier.js"
 
       - name: Update usages
-        if: steps.auto-commit-action.outputs.changes_detected == 'true' && steps.filter-json-data.outputs.usages == 'true'
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.usages == 'true'
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
