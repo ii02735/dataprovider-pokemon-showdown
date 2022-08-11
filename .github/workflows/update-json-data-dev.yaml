@@ -64,116 +64,91 @@ jobs: #this section contains the tasks / jobs that must be executed
           "cd ${{ secrets.REMOTE_PATH }}/ && 
            git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git develop"
 
-      - uses: dorny/paths-filter@v2 # will create filters for changed files
-        if: env.old_hash != env.new_hash
-        id: filter-json-data
-        with:
-          filters: >
-            natures:
-              - 'json/natures.json'
-            types:
-              - 'json/types.json'
-            abilities:
-              - 'json/abilities.json'
-            items:
-              - 'json/items.json'
-            moves:
-              - 'json/moves.json'
-            pokemon:
-              - 'json/pokemons.json'
-            learns:
-              - 'json/learns.json'
-            pokemon_tiers:
-              - 'json/pokemonTier.json'
-            usages:
-              - 'usages/**/*.json'
-            guide_tags:
-             - 'json/guide_tags.json'
-            actuality_tags:
-             - 'json/actuality_tags.json'
-            tournament_tags:
-             - 'json/tournament_tags.json'
-            tags:
-             - 'json/tags.json'
-            tiers:
-             - 'json/tiers.json'
-            video_tags:
-             - 'json/video_tags.json'
-
       - name: Update tags
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.tags == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "tags.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importTags.js"
+           nq -c node db/importTags.js") || echo "No changes for tags.json"
 
       - name: Update tiers
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.tiers == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "tiers.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importTiers.js"
+           nq -c node db/importTiers.js") || echo "No changes for tiers.json"
 
       - name: Update natures
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.natures == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "natures.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importNatures.js"
+           nq -c node db/importNatures.js") || echo "No changes for natures.json"
 
       - name: Update types
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.types == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "types.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importTypes.js"
+           nq -c node db/importTypes.js") || echo "No changes for types.json"
 
       - name: Update abilities
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.abilities == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "abilities.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importAbilities.js"
+           nq -c node db/importAbilities.js") || echo "No changes for abilities.json"
 
       - name: Update items
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.items == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "items.json" --quiet && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importItems.js"
+           nq -c node db/importItems.js") || echo "No changes for items.json"
 
       - name: Update moves
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.moves == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "moves.json" && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importMoves.js"
+           nq -c node db/importMoves.js") || echo "No changes for moves.json"
 
       - name: Update pokemons
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.pokemon == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "pokemons.json" --quiet && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importPokemon.js"
+           nq -c node db/importPokemon.js") || echo "No changes for pokemons.json"
 
       - name: Update learns
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.learns == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
+          git diff HEAD HEAD^ --name-only | grep "learns.json" --quiet && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importPokemonMoves.js"
+           nq -c node db/importPokemonMoves.js") || echo "No changes for learns.json"
 
       - name: Update pokemon tiers
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.pokemon_tiers == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "pokemonTier.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importPokemonTier.js"
+           nq -c node db/importPokemonTier.js") || echo "No changes for pokemons.json"
 
       - name: Update usages
-        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.usages == 'true'
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "usages" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importUsages.js &&
-           nq -c node db/importUsagesVGC.js"
+           nq -c node db/importUsagesVGC.js") || echo "No changes for usages"
