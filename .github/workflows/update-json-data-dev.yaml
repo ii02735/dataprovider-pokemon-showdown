@@ -76,7 +76,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         if: env.old_hash != env.new_hash
         run: >
           git diff HEAD HEAD^ --name-only | grep "tiers.json" --quiet &&
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c node db/importTiers.js") || echo "No changes for tiers.json"
 
