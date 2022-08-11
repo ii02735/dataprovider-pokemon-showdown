@@ -1,0 +1,179 @@
+name: "Update JSON files and database (develop)"
+
+on: # This workflow must be triggered on two conditions
+  workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
+
+env:
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
+jobs: #this section contains the tasks / jobs that must be executed
+  update_json_files: # the job name
+    runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
+    environment: development
+    env:
+      LAST_GEN: 8
+    steps:
+      - name: set timezone
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Europe/Paris"
+      - name: checkout on main
+        uses: actions/checkout@main # action that makes a checkout
+        with:
+          ref: ${{ github.read_ref }} # will checkout on th desired branch
+
+      - name: "NodeJS setup"
+        uses: actions/setup-node@v2
+        with:
+          node-version: "12"
+
+      - name: Update pokemon-showdown data
+        run: npm ci && npm run clone-showdown
+
+      - name: Update pokemons' usages
+        run: USAGE_PATH='usages' npm run generate-stats
+
+      - name: Store last hash commit
+        run: echo "old_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+
+      - name: Commit differences # commit if differences are tracked after updates (previous step)
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git diff --quiet && git diff --staged --quiet || git commit -am "JSON files updated" && git push https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git develop
+          echo "new_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+
+      - name: Setup SSH connection
+        if: env.old_hash != env.new_hash
+        run: >
+          echo "${{ secrets.PRIVATE_KEY }}" > ./private_key && chmod 600 ./private_key &&
+          echo '#!/bin/sh' >> ./passphrase_script.sh &&
+          echo "echo ${{ secrets.PASSPHRASE }}" >> ./passphrase_script.sh &&
+          chmod +x ./passphrase_script.sh
+
+      - if: env.old_hash != env.new_hash
+        run: ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+
+      - if: env.old_hash != env.new_hash
+        run: DISPLAY=1 SSH_ASKPASS="./passphrase_script.sh" ssh-add ./private_key < /dev/null
+
+      - name: "Update remote"
+        if: env.old_hash != env.new_hash
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
+          "cd ${{ secrets.REMOTE_PATH }}/ && 
+           git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git develop"
+
+      - uses: dorny/paths-filter@v2 # will create filters for changed files
+        if: env.old_hash != env.new_hash
+        id: filter-json-data
+        with:
+          filters: >
+            natures:
+              - 'json/natures.json'
+            types:
+              - 'json/types.json'
+            abilities:
+              - 'json/abilities.json'
+            items:
+              - 'json/items.json'
+            moves:
+              - 'json/moves.json'
+            pokemon:
+              - 'json/pokemons.json'
+            learns:
+              - 'json/learns.json'
+            pokemon_tiers:
+              - 'json/pokemonTier.json'
+            usages:
+              - 'usages/**/*.json'
+            guide_tags:
+             - 'json/guide_tags.json'
+            actuality_tags:
+             - 'json/actuality_tags.json'
+            tournament_tags:
+             - 'json/tournament_tags.json'
+            tags:
+             - 'json/tags.json'
+            tiers:
+             - 'json/tiers.json'
+            video_tags:
+             - 'json/video_tags.json'
+
+      - name: Update tags
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.tags == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importTags.js"
+
+      - name: Update tiers
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.tiers == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importTiers.js"
+
+      - name: Update natures
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.natures == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importNatures.js"
+
+      - name: Update types
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.types == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importTypes.js"
+
+      - name: Update abilities
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.abilities == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importAbilities.js"
+
+      - name: Update items
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.items == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importItems.js"
+
+      - name: Update moves
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.moves == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importMoves.js"
+
+      - name: Update pokemons
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.pokemon == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importPokemon.js"
+
+      - name: Update learns
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.learns == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importPokemonMoves.js"
+
+      - name: Update pokemon tiers
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.pokemon_tiers == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importPokemonTier.js"
+
+      - name: Update usages
+        if: env.old_hash != env.new_hash && steps.filter-json-data.outputs.usages == 'true'
+        run: >
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          "cd ${{ secrets.REMOTE_PATH }} &&
+           nq -c node db/importUsages.js &&
+           nq -c node db/importUsagesVGC.js"
