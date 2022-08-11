@@ -1,4 +1,4 @@
-name: "Update JSON files in repository (develop)"
+name: "Update JSON files and database (develop)"
 
 on: # This workflow must be triggered on two conditions
   workflow_dispatch: # when we ask it manually (through the Actions UI or the GitHub API)
