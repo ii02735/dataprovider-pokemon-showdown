@@ -43,9 +43,6 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff --quiet && git diff --staged --quiet || git commit -am "JSON files updated"
           echo "new_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
 
-      - name: Show GITHUB_ENV for testing
-        run: echo $GITHUB_ENV
-
       - name: Setup SSH connection
         if: env.old_hash != env.new_hash
         run: >
