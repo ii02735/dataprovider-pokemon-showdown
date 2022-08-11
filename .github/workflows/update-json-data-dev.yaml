@@ -40,7 +40,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git diff --quiet && git diff --staged --quiet || git commit -am "JSON files updated" && git push https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main
+          git diff --quiet && git diff --staged --quiet || git commit -am "JSON files updated" && git push https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git develop
           echo "new_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
 
       - name: Setup SSH connection
