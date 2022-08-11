@@ -40,8 +40,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add .
-          git commit -m "JSON files updated"
+          git diff --quiet && git diff --staged --quiet || git commit -am "JSON files updated"
           echo "new_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
 
       - name: Show GITHUB_ENV for testing
