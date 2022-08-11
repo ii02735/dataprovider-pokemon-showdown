@@ -9,6 +9,7 @@ env:
 jobs: #this section contains the tasks / jobs that must be executed
   update_server:
     runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
+    environment: production
     steps:
       - name: checkout on main
         uses: actions/checkout@main # action that make a checkout on the main branch
