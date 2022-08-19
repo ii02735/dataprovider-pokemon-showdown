@@ -42,7 +42,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git diff --quiet && git diff --staged --quiet || git commit -am "JSON files updated" && git push https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git develop
+          git diff --quiet && git diff --staged --quiet || git commit -am "JSON files updated" && git push https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main
           echo "new_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
 
       - name: Setup SSH connection
@@ -64,7 +64,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }}/ && 
-           git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git develop"
+           git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main"
 
       - name: Update tags
         if: env.old_hash != env.new_hash
