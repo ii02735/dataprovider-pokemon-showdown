@@ -22,7 +22,7 @@ Promise.all(
 )
   .then(async () => {
     console.log(records);
-    records = { table: "weakness", CREATED: 0 };
+    records = { table: "weakness", CREATED: 0, UPDATED: 0 };
     for (const [id, weaknesses] of Object.entries(typesWeaknesses)) {
       const type = await knex("type").where({ id }).first();
       for (const weakness of weaknesses) {
@@ -40,15 +40,20 @@ Promise.all(
             gen: type.gen,
           })
           .first();
-        if (existantWeakness) continue;
-
-        await knex("weakness").insert({
-          type_defender_id: type.id,
-          type_attacker_id: typeAttacker.id,
-          gen: type.gen,
-          ratio: weakness.ratio,
-        });
-        records.CREATED++;
+        if (!!existantWeakness) {
+          await knex("weakness")
+            .update({ ratio: weakness.ratio })
+            .where({ id: existantWeakness.id });
+          records.UPDATED++;
+        } else {
+          await knex("weakness").insert({
+            type_defender_id: type.id,
+            type_attacker_id: typeAttacker.id,
+            gen: type.gen,
+            ratio: weakness.ratio,
+          });
+          records.CREATED++;
+        }
       }
     }
   })
