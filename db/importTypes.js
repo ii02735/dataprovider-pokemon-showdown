@@ -22,7 +22,7 @@ Promise.all(
 )
   .then(async () => {
     console.log(records);
-    records = { table: "weakness", CREATED: 0 };
+    records = { table: "weakness", CREATED: 0, UPDATED: 0 };
     for (const [id, weaknesses] of Object.entries(typesWeaknesses)) {
       const type = await knex("type").where({ id }).first();
       for (const weakness of weaknesses) {
