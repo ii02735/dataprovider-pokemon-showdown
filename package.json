@@ -6,11 +6,11 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "build": "cd pokemon-showdown && npm i && node build",
+    "build": "cd src/pokemon-showdown && npm i && node build",
     "postbuild": "node dataToJson.js",
     "prepare": "husky install",
     "generate-stats": "smogon-stats-viewer update && smogon-stats-viewer --clear upgrade 2 && smogon-stats-viewer check",
-    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown && npm run build"
+    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown src/pokemon-showdown && npm run build"
   },
   "repository": {
     "type": "git",
