@@ -5,9 +5,9 @@ export const LAST_GEN = process.env.LAST_GEN;
 
 const log = (name, e) => {
   if (e) {
-    console.error(`Erreur lors de la création du  fichier ${name}.json :`, e);
+    console.error(`Something has gone wrong when creating ${name} :`, e);
   } else {
-    console.info(`Création du fichier ${name}.json réussi`);
+    console.info(`${name} file created successfully`);
   }
 };
 

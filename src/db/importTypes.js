@@ -1,20 +1,19 @@
 import { DataEntityImporter } from "./index.js";
 
 export class ImportTypes extends DataEntityImporter {
-  constructor(knexClient, arrayOfObjects, typeWeaknessesMapping) {
+  constructor(knexClient, arrayOfObjects) {
     super(knexClient, arrayOfObjects);
-    this.typeWeaknessesMapping = typeWeaknessesMapping;
     this.typeWeaknessesMapping = new Map();
   }
 
   async processImport() {
     let results = await Promise.all(
-      this.arrayOfObjects.map(this.iterateDataTypeInsertion)
+      this.arrayOfObjects.map(this.iterateDataTypeInsertion.bind(this))
     );
     console.log(this.getRecordResults("type", results));
     results = await Promise.all(
       Array.from(this.typeWeaknessesMapping).map(
-        this.iterateDataWeaknessInsertion
+        this.iterateDataWeaknessInsertion.bind(this)
       )
     );
     console.log(this.getRecordResults("weaknesses", results));
@@ -26,7 +25,9 @@ export class ImportTypes extends DataEntityImporter {
       UPDATED: 0,
       tableName: "type",
     };
-    const typeRow = await this.knexClient.where({ name, gen }).first(["id"]);
+    const typeRow = await this.knexClient("type")
+      .where({ name, gen })
+      .first(["id"]);
     let typeId;
     if (!!typeRow) {
       typeId = typeRow["id"];

@@ -3,13 +3,17 @@ import { LAST_GEN, range } from "../libs/util.js";
 export default class ImportUsages extends DataUsageImporter {
   constructor(knexClient, folderUsagePath) {
     super(knexClient, folderUsagePath);
-    this.usageDataTableMapping = {
+    this.usageEntityTableMapping = {
       abilities: "ability",
       items: "item",
       moves: "move",
+    };
+
+    this.pokemonTeamRelatedTableMapping = {
       teammates: "team_mate",
       counters: "pokemon_check",
     };
+
     this.percentageProperty = {
       teammates: "usage",
       counters: "eff",
@@ -34,6 +38,9 @@ export default class ImportUsages extends DataUsageImporter {
       // Clear usages
       console.log(`Clearing usages in gen ${gen}...`);
       for (const tier of playableTiers) {
+        console.log(
+          `Loading usages for ${tier.usageName}/${tier.ladderRef} in gen ${gen}`
+        );
         const rowTierUsages = await this.knexClient("tier_usage").where({
           tier_id: tier.id,
         });
@@ -51,18 +58,17 @@ export default class ImportUsages extends DataUsageImporter {
             tier.ladderRef
           );
           if (!pokedata) continue;
-          this.pokedataMap.set(gen + tier.usageName + tier.ladderRef, pokedata);
+          this.pokedataMap[gen + tier.usageName + tier.ladderRef] = pokedata;
           let rank = 1;
           for (const [pokemonUsageName, usageData] of Object.entries(
             pokedata
           )) {
             const pokemonRow = await this.knexClient("pokemon")
-              .select(["id", "name"])
               .where({
                 usageName: pokemonUsageName,
                 gen,
               })
-              .first([]);
+              .first();
             if (!pokemonRow) continue;
             if (usageData.usage < 1) continue;
             const insertedTierRow = await this.knexClient("tier_usage").insert(
@@ -81,9 +87,9 @@ export default class ImportUsages extends DataUsageImporter {
             };
 
             this.insertedTierUsageIdMapping[pokemonByTierId] = pokemonTierData;
-            await this.importEntityData("abilities", pokemonTierData, pokedata);
-            await this.importEntityData("items", pokemonTierData, pokedata);
-            await this.importEntityData("moves", pokemonTierData, pokedata);
+            await this.importUsageData("abilities", pokemonTierData, pokedata);
+            await this.importUsageData("items", pokemonTierData, pokedata);
+            await this.importUsageData("moves", pokemonTierData, pokedata);
           }
         }
       }
@@ -94,48 +100,67 @@ export default class ImportUsages extends DataUsageImporter {
       for (const tier of playableTiers) {
         if (!(gen + tier.usageName + tier.ladderRef in this.pokedataMap))
           continue;
-        const pokedata = this.pokedataMap.get(
-          gen + tier.usageName + tier.ladderRef
-        );
+        const pokedata =
+          this.pokedataMap[gen + tier.usageName + tier.ladderRef];
         for (const [pokemonUsageName] of Object.entries(pokedata)) {
           const pokemonRow = await this.knexClient("pokemon")
             .where({
               usageName: pokemonUsageName,
               gen,
             })
-            .first([]);
+            .first();
           if (!pokemonRow) continue;
           const key = pokemonRow.usageName + tier.id;
           // If tier_usage_id couldn't be found, it means that it has been ignored
           // because its usage is less than 1%
           if (!(key in this.insertedTierUsageIdMapping)) continue;
           const pokemonTierData = this.insertedTierUsageIdMapping[key];
-          await this.importEntityData("teammates", pokemonTierData, pokedata);
-          await this.importEntityData("counters", pokemonTierData, pokedata);
+          await this.importUsageData("teammates", pokemonTierData, pokedata);
+          await this.importUsageData("counters", pokemonTierData, pokedata);
         }
       }
     }
   }
 
-  async importEntityData(property, pokemonTierData, pokedata) {
-    const tableName = this.usageDataTableMapping[property];
+  async importUsageData(property, pokemonTierData, pokedata) {
+    const tableName =
+      this.usageEntityTableMapping[property] ||
+      this.pokemonTeamRelatedTableMapping[property];
+    const tableUsageName =
+      this.pokemonTeamRelatedTableMapping[property] || `usage_${tableName}`;
     const { tierUsageId, pokemon } = pokemonTierData;
     const usageName = pokemon.usageName;
-    const entityRow = await this.knexClient(tableName)
-      .where({
-        usageName,
-      })
-      .first();
 
-    if (!entityRow) return;
+    for (const usageEntityObject of pokedata[usageName][property]) {
+      // The item or the move named "Other" or "Nothing" doesn't exist
+      if (
+        usageEntityObject.name === "Other" ||
+        usageEntityObject.name === "Nothing"
+      )
+        continue;
 
-    await this.knexClient(`usage_${tableName}`).insert({
-      tierUsageId,
-      [`${tableName}_id`]: entityRow.id,
-      percent:
-        property in this.percentageProperty
-          ? pokedata[usageName][property][this.percentageProperty[property]]
-          : pokedata[pokemon.usageName][property].usage,
-    });
+      /**
+       * If we're not working with a table related to teammates or counters,
+       * it means that we're looking for an entity's usage (abilities, items, moves).
+       * Ergo, we must retrieve data from the table, related to this entity.
+       * Else, there is no need, and we keep the pokemon object.
+       */
+      let entityRow = !(property in this.pokemonTeamRelatedTableMapping)
+        ? await this.knexClient(tableName)
+            .where({ name: usageEntityObject.name })
+            .first()
+        : pokemon;
+
+      await this.knexClient(tableUsageName).insert({
+        tierUsageId,
+        [property in this.pokemonTeamRelatedTableMapping
+          ? "pokemon_id"
+          : `${tableName}_id`]: entityRow.id,
+        percent:
+          property in this.percentageProperty
+            ? usageEntityObject[this.percentageProperty[property]]
+            : usageEntityObject.usage,
+      });
+    }
   }
 }

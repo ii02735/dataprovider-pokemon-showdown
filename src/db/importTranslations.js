@@ -2,7 +2,7 @@ import { DataEntityImporter } from "./index.js";
 
 export class ImportTranslations extends DataEntityImporter {
   constructor(knexClient, arrayOfObjects, filePrefix) {
-    super(knexClient, arrayOfObjects);
+    super(knexClient, Object.entries(arrayOfObjects));
     this.filePrefix = filePrefix;
     this.filePrefixTableMapping = {
       abilities: "ability",
@@ -16,10 +16,10 @@ export class ImportTranslations extends DataEntityImporter {
   async processImport() {
     await Promise.all(
       this.arrayOfObjects.map(
-        async (translation) =>
+        async ([english, french]) =>
           await this.knexClient(this.filePrefixTableMapping[this.filePrefix])
-            .update({ nom: translation.french })
-            .where({ name: translation.english.replace(/[\[\]]/g, "") })
+            .update({ nom: french })
+            .where({ name: english.replace(/[\[\]]/g, "") })
       )
     );
     console.log({

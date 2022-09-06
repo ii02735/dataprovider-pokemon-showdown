@@ -18,7 +18,7 @@ export default class ImportPokemonMoves extends DataEntityImporter {
     this.progressBar.start(this.arrayOfObjects.length, 0);
     let results = await bluebird.map(
       this.arrayOfObjects,
-      await this.iterateDataInsertion,
+      await this.iterateDataInsertion.bind(this),
       { concurrency: 150 }
     );
     console.log(this.getRecordResults("pokemon_move", results));

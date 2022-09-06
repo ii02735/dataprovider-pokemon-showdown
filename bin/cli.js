@@ -8,10 +8,10 @@ yargs(hideBin(process.argv))
     command: "import",
     describe: "Import data",
     builder: {
-      script: {
+      entity: {
         demandOption: true,
         type: "string",
-        describe: "Name of the importer to execute",
+        describe: "Name of the entity",
         choices: [
           "abilities",
           "items",
@@ -22,13 +22,15 @@ yargs(hideBin(process.argv))
           "pokemonTier",
           "tags",
           "tiers",
+          "translations",
           "types",
           "usages",
+          "vgc_usages",
         ],
       },
     },
     handler(argv) {
-      importData(argv.script)
+      importData(argv.entity)
         .then()
         .catch((err) => console.error(err));
     },
@@ -36,7 +38,7 @@ yargs(hideBin(process.argv))
   .command({
     command: "dataToJson",
     describe: "Generate JSON files from providers",
-    handler(argv) {
+    handler() {
       dataToJson();
     },
   })

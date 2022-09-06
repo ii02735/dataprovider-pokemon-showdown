@@ -4,7 +4,7 @@ import { removeParenthesis } from "../libs/util.js";
 export default class ImportPokemonTier extends DataEntityImporter {
   async processImport() {
     const results = await Promise.all(
-      this.arrayOfObjects.map(this.iterateDataInsertion)
+      this.arrayOfObjects.map(this.iterateDataInsertion.bind(this))
     );
     console.log(this.getRecordResults("pokemon", results));
   }
@@ -17,13 +17,13 @@ export default class ImportPokemonTier extends DataEntityImporter {
     );
     if (!rowPokemon) {
       console.log(
-        `Pokémon ${pokemonTier.pokemon} introuvable en génération ${pokemonTier.gen}`
+        `Pokemon ${pokemonTier.pokemon} cannot be found in gen ${pokemonTier.gen}`
       );
       return;
     }
 
     const rowTier =
-      "shortName" in pokemonTier && pokemonTier.tier != "Illegal"
+      "shortName" in pokemonTier && pokemonTier.tier !== "Illegal"
         ? await this.knexClient("tier")
             .where({
               short_name: removeParenthesis(pokemonTier.tier),

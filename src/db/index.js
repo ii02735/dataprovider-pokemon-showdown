@@ -48,11 +48,11 @@ export class DataEntityImporter extends DataImporter {
     tableName,
     {
       identifier = null,
-      columnsToBeReplaced = null,
-      columnsToBeIgnored = null,
+      columnsToBeReplaced = [],
+      columnsToBeIgnored = [],
       noOverrideColumns = [],
       relations = null,
-    } = null
+    }
   ) {
     return this.arrayOfObjects.map(async (entry) => {
       if (columnsToBeIgnored.length > 0) {
@@ -95,15 +95,14 @@ export class DataEntityImporter extends DataImporter {
         .where({ ...identifierRow, ...("gen" in entry && { gen: entry.gen }) })
         .first(["id"]);
 
-      if (!!row && !!row["id"]) {
+      if (!!row && "id" in row) {
         if (noOverrideColumns.length > 0)
           for (const column of noOverrideColumns)
             if (entry[column]) delete entry[column];
 
         await this.knexClient(tableName).update(entry).where("id", row["id"]);
-        return { tableName, INSERTED: 0, UPDATED: 0 };
+        return { tableName, INSERTED: 0, UPDATED: 1 };
       }
-
       await this.knexClient(tableName).insert(entry);
       return { tableName, INSERTED: 1, UPDATED: 0 };
     });

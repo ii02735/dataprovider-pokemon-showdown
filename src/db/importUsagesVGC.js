@@ -11,7 +11,7 @@ export default class ImportUsagesVGC extends ImportUsages {
       })
       .whereNotNull("usage_name")
       .whereNotNull("ladder_ref")
-      .first([]);
+      .first();
     if (!VGCRow) throw new Error(`The VGC tier for ${gen} cannot be found`);
     // Clear usages
     console.log(`Clearing old VGC usages...`);
@@ -33,6 +33,7 @@ export default class ImportUsagesVGC extends ImportUsages {
     if (!pokedata)
       throw new Error("Data regarding VGC usage couldn't be retrieved");
 
+    console.log(`Loading usages for VGC...`);
     let rank = 1;
     for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
       const pokemonRow = await this.knexClient("pokemon")
@@ -55,16 +56,18 @@ export default class ImportUsagesVGC extends ImportUsages {
         },
         "id"
       );
-
       // No need to create specific key, because there is only one tier : the VGC
       const key = pokemonRow.id.toString();
       this.insertedTierUsageIdMapping[key] = insertedTierRow[0];
-      const pokemonTierData = insertedTierRow[0];
-      await this.importEntityData("abilities", pokemonTierData, pokedata);
-      await this.importEntityData("items", pokemonTierData, pokedata);
-      await this.importEntityData("moves", pokemonTierData, pokedata);
-      await this.importEntityData("teammates", pokemonTierData, pokedata);
-      await this.importEntityData("counters", pokemonTierData, pokedata);
+      const pokemonTierData = {
+        tierUsageId: insertedTierRow[0],
+        pokemon: pokemonRow,
+      };
+      await this.importUsageData("abilities", pokemonTierData, pokedata);
+      await this.importUsageData("items", pokemonTierData, pokedata);
+      await this.importUsageData("moves", pokemonTierData, pokedata);
+      await this.importUsageData("teammates", pokemonTierData, pokedata);
+      await this.importUsageData("counters", pokemonTierData, pokedata);
     }
   }
 }
