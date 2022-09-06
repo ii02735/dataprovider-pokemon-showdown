@@ -11,29 +11,32 @@ import ImportUsages from "../src/db/importUsages.js";
 import ImportUsagesVGC from "../src/db/importUsagesVGC.js";
 import knex from "knex";
 import "dotenv/config";
-import knexStringCase from "knex-stringcase";
+import { knexSnakeCaseMappers } from "objection";
 import fs from "fs";
 import path from "path";
 import ImportTags from "../src/db/importTags.js";
 import { fileURLToPath } from "url";
+import { ImportTypes } from "../src/db/importTypes.js";
 
 /**
  * @param {string} argument
  * @return {Promise<void>}
  */
 export default async function (argument) {
-  const folderUsagePath = "../src/usages";
-  const knexClient = knex(
-    knexStringCase({
-      client: "mysql",
-      connection: process.env.CONNECTION_STRING,
-      log: {
-        warn() {
-          // do nothing...it'll hide warning messages
-        },
+  const folderUsagePath = `../src/usages/months/${fs
+    .readdirSync(path.resolve("./src/usages/months"))
+    .pop()}`;
+
+  const knexClient = knex({
+    client: "mysql",
+    connection: process.env.CONNECTION_STRING,
+    log: {
+      warn() {
+        // do nothing...it'll hide warning messages
       },
-    })
-  );
+    },
+    ...knexSnakeCaseMappers(),
+  });
 
   // Mimic __dirname variable, because it doesn't work for ESM modules
   const __filename = fileURLToPath(import.meta.url);
@@ -56,7 +59,11 @@ export default async function (argument) {
       knexClient,
       loadData("../json/pokemonTier.json")
     ),
-    tiers: new ImportTiers(knexClient, loadData("../json/tiers.json")),
+    tiers: new ImportTiers(
+      knexClient,
+      loadData("../json/tiers.json"),
+      loadData(folderUsagePath + "/formats.json")
+    ),
     translations: [
       "abilities",
       "items",
@@ -67,41 +74,47 @@ export default async function (argument) {
     ].map(
       (entity) =>
         new ImportTranslations(
-          loadData(`../json/translations/${entity}_translations.json`, entity)
+          knexClient,
+          loadData(`../json/translations/${entity}_translations.json`),
+          entity
         )
     ),
-    usages: [
-      new ImportUsages(knexClient, folderUsagePath),
-      new ImportUsagesVGC(knexClient, folderUsagePath),
-    ],
+    types: new ImportTypes(knexClient, loadData(`../json/types.json`)),
+    usages: new ImportUsages(
+      knexClient,
+      path.resolve(__dirname, folderUsagePath)
+    ),
+    vgc_usages: new ImportUsagesVGC(
+      knexClient,
+      path.resolve(__dirname, folderUsagePath)
+    ),
   };
 
-  if (argument === "tags") {
-    for (const tagName of [
-      "tag",
-      "guide_tag",
-      "actuality_tag",
-      "tournament_tag",
-      "video_name",
-    ])
-      await new ImportTags(
-        knexClient,
-        loadData(`../json/${tagName}s.json`),
-        tagName
-      );
-  } else {
-    if (!(argument in scripts))
-      throw new Error(`Unknown script value : ${argument}`);
+  try {
+    if (argument === "tags") {
+      for (const tagName of [
+        "tag",
+        "guide_tag",
+        "actuality_tag",
+        "tournament_tag",
+        "video_tag",
+      ]) {
+        console.log(`Adding / updating ${tagName} tags`);
+        await new ImportTags(
+          knexClient,
+          loadData(`../json/${tagName}s.json`),
+          tagName
+        );
+      }
+    } else {
+      if (!(argument in scripts))
+        throw new Error(`Unknown script value : ${argument}`);
 
-    const callScript = async (key) => {
-      if (Array.isArray(scripts[key])) {
-        for (const importInstance of scripts[key])
-          await importInstance.processImport();
-      } else await scripts[key].processImport();
-    };
-
-    await callScript(argument);
+      await scripts[argument].processImport();
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await knexClient.destroy();
   }
-
-  await knexClient.destroy();
 }

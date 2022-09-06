@@ -31,7 +31,8 @@
     "knex": "^1.0.3",
     "knex-stringcase": "^1.4.6",
     "mysql": "^2.18.1",
-    "smogon-stats-viewer": "^0.4.33",
+    "objection": "^3.0.1",
+    "smogon-stats-viewer": "^0.4.35",
     "yargs": "^17.5.1"
   },
   "devDependencies": {
