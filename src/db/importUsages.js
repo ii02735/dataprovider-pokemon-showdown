@@ -151,6 +151,10 @@ export default class ImportUsages extends DataUsageImporter {
             .first()
         : pokemon;
 
+      // Case met for item usages : TR are not imported anymore
+      // Ergo, we shouldn't try to fetch TRs' usages
+      if (!entityRow) continue;
+
       await this.knexClient(tableUsageName).insert({
         tierUsageId,
         [property in this.pokemonTeamRelatedTableMapping
