@@ -1,15 +1,16 @@
 {
   "name": "api-pokemon-showdown",
-  "version": "v2.7.10",
+  "version": "v2.7.13",
   "description": "",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
-    "build": "cd pokemon-showdown && npm i && node build",
-    "postbuild": "node dataToJson.js",
+    "build": "cd src/pokemon-showdown && npm i && node build",
+    "postbuild": "node bin/cli.js dataToJson",
     "prepare": "husky install",
     "generate-stats": "smogon-stats-viewer update && smogon-stats-viewer --clear upgrade 2 && smogon-stats-viewer check",
-    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown && npm run build"
+    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown src/pokemon-showdown && npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,8 +29,11 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "knex": "^1.0.3",
+    "knex-stringcase": "^1.4.6",
     "mysql": "^2.18.1",
-    "smogon-stats-viewer": "^0.4.33"
+    "objection": "^3.0.1",
+    "smogon-stats-viewer": "^0.4.36",
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "husky": "^7.0.0",
