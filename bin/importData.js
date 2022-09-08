@@ -23,8 +23,8 @@ import { ImportTypes } from "../src/db/importTypes.js";
  * @return {Promise<void>}
  */
 export default async function (argument) {
-  const folderUsagePath = `../src/usages/months/${fs
-    .readdirSync(path.resolve("./src/usages/months"))
+  const folderUsagePath = `../json/usages/months/${fs
+    .readdirSync(path.resolve("./json/usages/months"))
     .pop()}`;
 
   const knexClient = knex({
