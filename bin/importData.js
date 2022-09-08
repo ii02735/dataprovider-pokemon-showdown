@@ -110,7 +110,11 @@ export default async function (argument) {
       if (!(argument in scripts))
         throw new Error(`Unknown script value : ${argument}`);
 
-      await scripts[argument].processImport();
+      if (Array.isArray(scripts[argument])) {
+        for (const script of scripts[argument]) await script.processImport();
+      } else {
+        await scripts[argument].processImport();
+      }
     }
   } catch (e) {
     console.error(e);
