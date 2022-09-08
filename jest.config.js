@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   modulePathIgnorePatterns: [
     "<rootDir>/pokemon-showdown",
     "<rootDir>/Smogon-Stats-Viewer/pokemon-showdown",

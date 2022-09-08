@@ -2,6 +2,5 @@
 json/*.json
 json/translations/*.json
 json/translations/descriptions/*.json
-usages/**/*.json
-pokemon-showdown
-Smogon-Stats-Viewer
+json/usages/**/*.json
+src/pokemon-showdown

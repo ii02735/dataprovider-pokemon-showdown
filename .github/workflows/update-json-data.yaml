@@ -7,6 +7,8 @@ on: # This workflow must be triggered on two conditions
 
 env:
   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+  POKEMON_SHOWDOWN_REPO: src/pokemon-showdown
+  USAGE_PATH: src/usages
 
 jobs: #this section contains the tasks / jobs that must be executed
   update_json_files: # the job name
@@ -33,7 +35,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         run: npm ci && npm run clone-showdown
 
       - name: Update pokemons' usages
-        run: USAGE_PATH='usages' npm run generate-stats
+        run: npm run generate-stats
 
       - name: Store last hash commit
         run: echo "old_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
@@ -72,7 +74,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "tags.json" --quiet &&
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importTags.js") || echo "No changes for tags.json"
+           nq -c ./bin/cli.js --entity=tags") || echo "No changes for tags.json"
 
       - name: Update tiers
         if: env.old_hash != env.new_hash
@@ -80,7 +82,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "tiers.json" --quiet &&
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importTiers.js") || echo "No changes for tiers.json"
+           nq -c ./bin/cli.js --entity=tiers") || echo "No changes for tiers.json"
 
       - name: Update natures
         if: env.old_hash != env.new_hash
@@ -88,7 +90,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "natures.json" --quiet &&
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importNatures.js") || echo "No changes for natures.json"
+           nq -c ./bin/cli.js --entity=natures) || echo "No changes for natures.json"
 
       - name: Update types
         if: env.old_hash != env.new_hash
@@ -96,7 +98,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "types.json" --quiet &&
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importTypes.js") || echo "No changes for types.json"
+           nq -c ./bin/cli.js --entity=types") || echo "No changes for types.json"
 
       - name: Update abilities
         if: env.old_hash != env.new_hash
@@ -104,7 +106,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "abilities.json" --quiet &&
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importAbilities.js") || echo "No changes for abilities.json"
+           nq -c ./bin/cli.js --entity=abilities") || echo "No changes for abilities.json"
 
       - name: Update items
         if: env.old_hash != env.new_hash
@@ -112,7 +114,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "items.json" --quiet && 
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importItems.js") || echo "No changes for items.json"
+           nq -c ./bin/cli.js --entity=items") || echo "No changes for items.json"
 
       - name: Update moves
         if: env.old_hash != env.new_hash
@@ -120,7 +122,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "moves.json" && 
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importMoves.js") || echo "No changes for moves.json"
+           nq -c ./bin/cli.js --entity=moves") || echo "No changes for moves.json"
 
       - name: Update pokemons
         if: env.old_hash != env.new_hash
@@ -128,7 +130,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "pokemons.json" --quiet && 
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importPokemon.js") || echo "No changes for pokemons.json"
+           nq -c ./bin/cli.js --entity=pokemon") || echo "No changes for pokemons.json"
 
       - name: Update learns
         if: env.old_hash != env.new_hash
@@ -136,7 +138,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "learns.json" --quiet && 
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importPokemonMoves.js") || echo "No changes for learns.json"
+           nq -c ./bin/cli.js --entity=learns") || echo "No changes for learns.json"
 
       - name: Update pokemon tiers
         if: env.old_hash != env.new_hash
@@ -144,7 +146,7 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "pokemonTier.json" --quiet &&
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importPokemonTier.js") || echo "No changes for pokemons.json"
+           nq -c ./bin/cli.js --entity=pokemonTier") || echo "No changes for pokemons.json"
 
       - name: Update usages
         if: env.old_hash != env.new_hash
@@ -152,5 +154,5 @@ jobs: #this section contains the tasks / jobs that must be executed
           git diff HEAD HEAD^ --name-only | grep "usages" --quiet &&
           (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c node db/importUsages.js &&
-           nq -c node db/importUsagesVGC.js") || echo "No changes for usages"
+           nq -c ./bin/cli.js --entity=usages &&
+           nq -c ./bin/cli.js --entity=vgc_usages") || echo "No changes for usages"
