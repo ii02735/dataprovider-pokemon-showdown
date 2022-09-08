@@ -2,5 +2,5 @@
 json/*.json
 json/translations/*.json
 json/translations/descriptions/*.json
-src/usages/**/*.json
+json/usages/**/*.json
 src/pokemon-showdown
