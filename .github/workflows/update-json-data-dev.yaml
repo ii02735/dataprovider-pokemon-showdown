@@ -60,87 +60,97 @@ jobs: #this section contains the tasks / jobs that must be executed
         run: DISPLAY=1 SSH_ASKPASS="./passphrase_script.sh" ssh-add ./private_key < /dev/null
 
       - name: "Update remote"
+        if: env.old_hash != env.new_hash
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }}/ && 
            git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main"
 
-      - uses: actions/checkout@v2
-
       - name: Update tags
-        if: "${{ github.event.inputs.entity == 'tags' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "tags.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=tags"
+           nq -c ./bin/cli.js --entity=tags") || echo "No changes for tags.json"
 
       - name: Update tiers
-        if: "${{ github.event.inputs.entity == 'tiers' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "tiers.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=tiers"
+           nq -c ./bin/cli.js --entity=tiers") || echo "No changes for tiers.json"
 
       - name: Update natures
-        if: "${{ github.event.inputs.entity == 'natures' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "natures.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=natures"
+           nq -c ./bin/cli.js --entity=natures) || echo "No changes for natures.json"
 
       - name: Update types
-        if: "${{ github.event.inputs.entity == 'types' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "types.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=types"
+           nq -c ./bin/cli.js --entity=types") || echo "No changes for types.json"
 
       - name: Update abilities
-        if: "${{ github.event.inputs.entity == 'abilities' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "abilities.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=abilities"
+           nq -c ./bin/cli.js --entity=abilities") || echo "No changes for abilities.json"
 
       - name: Update items
-        if: "${{ github.event.inputs.entity == 'items' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "items.json" --quiet && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=items"
+           nq -c ./bin/cli.js --entity=items") || echo "No changes for items.json"
 
       - name: Update moves
-        if: "${{ github.event.inputs.entity == 'moves' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "moves.json" && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=moves"
+           nq -c ./bin/cli.js --entity=moves") || echo "No changes for moves.json"
 
-      - name: Update pokemon
-        if: "${{ github.event.inputs.entity == 'pokemon' || github.event.inputs.entity == 'all' }}"
+      - name: Update pokemons
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "pokemons.json" --quiet && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=pokemon"
+           nq -c ./bin/cli.js --entity=pokemon") || echo "No changes for pokemons.json"
 
       - name: Update learns
-        if: "${{ github.event.inputs.entity == 'learns' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
+          git diff HEAD HEAD^ --name-only | grep "learns.json" --quiet && 
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=learns"
+           nq -c ./bin/cli.js --entity=learns") || echo "No changes for learns.json"
 
       - name: Update pokemon tiers
-        if: "${{ github.event.inputs.entity == 'pokemon tiers' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "pokemonTier.json" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
-           nq -c ./bin/cli.js --entity=pokemonTier"
+           nq -c ./bin/cli.js --entity=pokemonTier") || echo "No changes for pokemons.json
 
       - name: Update usages
-        if: "${{ github.event.inputs.entity == 'usages' || github.event.inputs.entity == 'all' }}"
+        if: env.old_hash != env.new_hash
         run: >
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+          git diff HEAD HEAD^ --name-only | grep "usages" --quiet &&
+          (ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
           "cd ${{ secrets.REMOTE_PATH }} &&
            nq -c ./bin/cli.js --entity=usages &&
-           nq -c ./bin/cli.js --entity=vgc_usages"
+           nq -c ./bin/cli.js --entity=vgc_usages") || echo "No changes for usages"
