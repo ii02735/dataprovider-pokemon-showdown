@@ -1,14 +1,9 @@
-const path = require("path");
-const { loadResource, PROVIDER } = require(path.join(
-  __dirname,
-  "..",
-  "..",
-  "libs",
-  "fileLoader"
-));
-const { isRegional } = loadResource(PROVIDER, "learns");
+import LearnProvider from "../../src/providers/learns.js";
+import ModdedDex from "./__mocks__/ModdedDex.js";
 
 test("Should return true when regional form encountered", () => {
+  const learnProvider = new LearnProvider(ModdedDex);
+
   // Regional form case
 
   let species = {
@@ -17,7 +12,7 @@ test("Should return true when regional form encountered", () => {
     baseSpecies: "Ninetales",
   };
 
-  expect(isRegional(species)).toBe(true);
+  expect(learnProvider.isRegional(species)).toBe(true);
 
   // Regular form case
 
@@ -26,7 +21,7 @@ test("Should return true when regional form encountered", () => {
     forme: "",
   };
 
-  expect(isRegional(species)).toBe(false);
+  expect(learnProvider.isRegional(species)).toBe(false);
 
   // Non-regional case
 
@@ -35,14 +30,14 @@ test("Should return true when regional form encountered", () => {
     forme: "Mega",
   };
 
-  expect(isRegional(species)).toBe(false);
+  expect(learnProvider.isRegional(species)).toBe(false);
 
   species = {
     name: "Venusaur-Gmax",
     forme: "Gmax",
   };
 
-  expect(isRegional(species)).toBe(false);
+  expect(learnProvider.isRegional(species)).toBe(false);
 
   species = {
     name: "",
@@ -53,12 +48,12 @@ test("Should return true when regional form encountered", () => {
     forme: "Hisui",
   };
 
-  expect(isRegional(species)).toBe(true);
+  expect(learnProvider.isRegional(species)).toBe(true);
 
   species = {
     name: "Weezing-Galar",
     forme: "Galar",
   };
 
-  expect(isRegional(species)).toBe(true);
+  expect(learnProvider.isRegional(species)).toBe(true);
 });

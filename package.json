@@ -5,7 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest",
     "build": "cd src/pokemon-showdown && npm i && node build",
     "postbuild": "node bin/cli.js dataToJson",
     "prepare": "husky install",

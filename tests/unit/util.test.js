@@ -1,4 +1,4 @@
-const { withoutSpaces } = require("../../libs/util");
+import { withoutSpaces } from "../../src/libs/util.js";
 
 test("The withoutSpaces function should return the correct usageName", () => {
   const testSample = [
