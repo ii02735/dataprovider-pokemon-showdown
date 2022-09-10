@@ -32,28 +32,34 @@ export default class PokemonProvider extends Provider {
     }
   }
 
+  fixAbilities(gen, rawObject) {
+    if (gen >= 3) {
+      for (const abilityClassifier of ["0", "1", "H", "S"]) {
+        if (rawObject.abilities[abilityClassifier]) {
+          const abilityFromShowdown = this.dex
+            .mod(`gen${gen}`)
+            .abilities.get(rawObject.abilities[abilityClassifier]);
+          rawObject[abilityClassifier] = abilityFromShowdown.exists
+            ? abilityFromShowdown.name
+            : null;
+        } else rawObject.abilities[abilityClassifier] = null;
+      }
+    }
+  }
+
   makeObject(rawObject, gen) {
     const [type_1, type_2] = rawObject.types;
-
     // Remove hidden ability before 5th gen
     if (gen < 5) rawObject.abilities["H"] = null;
     // Remove all abilities before 3th gen
-    else if (gen < 3) {
+    if (gen < 3) {
       rawObject.abilities["0"] = null;
       rawObject.abilities["1"] = null;
     }
 
     // Sometimes abilities are not put in the pokemon's data with the correct gen
-    for (const abilityClassifier of ["0", "1", "H", "S"]) {
-      if (rawObject.abilities[abilityClassifier]) {
-        const abilityFromShowdown = this.dex
-          .mod(`gen${gen}`)
-          .abilities.get(rawObject.abilities[abilityClassifier]);
-        rawObject[abilityClassifier] = abilityFromShowdown.exists
-          ? abilityFromShowdown.name
-          : null;
-      } else rawObject.abilities[abilityClassifier] = null;
-    }
+
+    this.fixAbilities(gen, rawObject);
 
     // Take in priority changesFrom (for not basic form)
     const baseForm =

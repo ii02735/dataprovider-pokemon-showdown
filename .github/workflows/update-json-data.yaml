@@ -8,7 +8,7 @@ on: # This workflow must be triggered on two conditions
 env:
   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
   POKEMON_SHOWDOWN_REPO: src/pokemon-showdown
-  USAGE_PATH: src/usages
+  USAGE_PATH: json/usages
 
 jobs: #this section contains the tasks / jobs that must be executed
   update_json_files: # the job name
