@@ -83,7 +83,8 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
      **/
     if (
       pokemonFromShowdown.baseSpecies !== pokemonFromShowdown.name &&
-      !isRegional(pokemonFromShowdown)
+      !isRegional(pokemonFromShowdown) &&
+      pokemonFromShowdown.baseSpecies !== "Lycanroc"
     ) {
       let baseSpeciesFromShowdown = Dex.mod(`gen${gen}`).species.get(
         pokemonFromShowdown.baseSpecies
