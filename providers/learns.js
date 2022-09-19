@@ -22,10 +22,18 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
   const pokemonsForGen = pokemons.filter(({ gen: _gen }) => _gen === gen);
 
   for (const pokemonForGen of pokemonsForGen) {
-    const moves = findMovesForPokemon(pokemonForGen.name, gen);
+    const moves = findMovesForPokemon(pokemonForGen.name, gen).map(
+      (moveName) => {
+        const matches = moveName.match(/(Hidden Power)\s(\w+)/);
+
+        if (!!matches) {
+          return `${matches[1]} \[${matches[2]}\]`;
+        }
+        return moveName;
+      }
+    );
 
     if (moves.length === 0) continue;
-
     learns.push({
       pokemon: pokemonForGen.name,
       moves,
