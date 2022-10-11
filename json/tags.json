@@ -93,5 +93,9 @@
 	{
 		"name": "dragmag",
 		"sortOrder": 4
+	},
+	{
+		"name": "para spam",
+		"sortOrder": 5
 	}
 ]

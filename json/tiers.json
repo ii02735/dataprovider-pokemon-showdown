@@ -93,7 +93,7 @@
 		"usageName": "nfe",
 		"rank": 99,
 		"sortOrder": 99,
-		"playable": false
+		"playable": true
 	},
 	{
 		"name": "Little Cup",
