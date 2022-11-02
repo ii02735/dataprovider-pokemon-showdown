@@ -15,11 +15,6 @@ test("Pokemon from 3G should have 2 abilities", () => {
 });
 
 test("There must not be any totem form in 8G", () => {
-  console.log(
-    pokemonCollection.filter(
-      ({ name, gen }) => name.includes("-Totem") && gen === 8
-    )
-  );
   expect(
     pokemonCollection.filter(
       ({ name, gen }) => name.includes("-Totem") && gen === 8

@@ -1,6 +1,7 @@
 .idea/
 .vscode/
 pokemon-showdown/
+pokemon-showdown-client/
 node_modules/
 execution.log
 *.json
