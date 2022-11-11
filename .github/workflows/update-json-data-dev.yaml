@@ -11,7 +11,7 @@ jobs: #this section contains the tasks / jobs that must be executed
     runs-on: "ubuntu-latest" # this job must run on a Ubuntu container
     environment: development
     env:
-      LAST_GEN: 8
+      LAST_GEN: 9
     steps:
       - name: set timezone
         uses: szenius/set-timezone@v1.0
