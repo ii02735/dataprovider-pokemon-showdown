@@ -118,6 +118,21 @@ const fs = require("fs");
               percent: entityData.usage,
             });
           }
+
+          // Importing spreads
+
+          for (const entityData of usageData["spreads"]) {
+            const entityRow = await knex("nature")
+              .where({ name: entityData["nature"] })
+              .first();
+            if (!entityRow) continue;
+            await knex("usage_spread").insert({
+              tier_usage_id: insertedTierUsageId[pokemonUsageName + tier_id],
+              nature_id: entityRow.id,
+              evs: entityData.evs,
+              percent: entityData.usage,
+            });
+          }
         }
       }
       // Checks and teammates must be inserted after

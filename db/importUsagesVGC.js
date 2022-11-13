@@ -75,6 +75,19 @@ const fs = require("fs");
           });
         }
       }
+
+      for (const entityData of usageData["spreads"]) {
+        const entityRow = await knex("nature")
+          .where({ name: entityData["nature"] })
+          .first();
+        if (!entityRow) continue;
+        await knex("usage_spread").insert({
+          tier_usage_id: insertedTierUsageId[pokemonRow.id],
+          nature_id: entityRow.id,
+          evs: entityData.evs,
+          percent: entityData.usage,
+        });
+      }
     }
     // Checks and teammates must be inserted after
     // Because these tables ask tier_usage.id.
