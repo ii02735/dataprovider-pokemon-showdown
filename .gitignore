@@ -5,6 +5,7 @@ pokemon-showdown-client/
 node_modules/
 execution.log
 *.json
+tests/*.sqlite3
 !usages/months/**/formats/**/*.json
 !usages/months*.json
 !formats.json

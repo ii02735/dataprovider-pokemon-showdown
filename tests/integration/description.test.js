@@ -11,7 +11,7 @@ describe("Testing description override after import", () => {
       connection: {
         filename: path.join(
           __dirname,
-          "../resources/sql/business_data_with_description/data.db"
+          "./resources/sql/business_data_with_description/data.db"
         ),
       },
       useNullAsDefault: true,
@@ -158,7 +158,7 @@ describe("Testing description after translation", () => {
       connection: {
         filename: path.join(
           __dirname,
-          "../resources/sql/business_data_with_description/data.db"
+          "./resources/sql/business_data_with_description/data.db"
         ),
       },
       useNullAsDefault: true,
