@@ -7,7 +7,7 @@ on:
 jobs:
   job-running-tests:
     env:
-      LAST_GEN: 8
+      LAST_GEN: 9
     runs-on: ubuntu-latest
     container: node:16
 
