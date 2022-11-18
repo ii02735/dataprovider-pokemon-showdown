@@ -29,9 +29,12 @@ const results = { table: "pokemon", UPDATED: 0 };
             }
           }
           let rowTier =
-            short_name && short_name != "Illegal"
+            short_name && short_name != "Illegal" && short_name != "Unreleased"
               ? await knex("tier")
-                  .where({ short_name: removeParenthesis(short_name), gen })
+                  .where({
+                    short_name: removeParenthesis(short_name),
+                    gen,
+                  })
                   .first(["id"])
               : await knex("tier")
                   .where({ name: "Untiered", gen })
