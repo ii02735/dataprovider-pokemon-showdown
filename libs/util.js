@@ -28,7 +28,7 @@ const isStandard = ({ isNonstandard }, gen = null, otherCondition = true) =>
     isNonstandard === "Gigantamax" || // keep Gmax forms
     isNonstandard === "Unobtainable" || // keep Unobtainable real mons
     (gen &&
-      gen === LAST_GEN &&
+      gen == LAST_GEN &&
       (isNonstandard === "Past" || isNonstandard === "Future")));
 /**
  * Returns an array of sequential numbers
