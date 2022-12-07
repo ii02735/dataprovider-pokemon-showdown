@@ -129,9 +129,9 @@
 		"teraBan": true
 	},
 	{
-		"name": "VGC",
-		"shortName": "VGC",
-		"usageName": "vgc",
+		"name": "VGC série 1",
+		"shortName": "VGCs1",
+		"usageName": "vgcserie1",
 		"playable": true,
 		"official": true,
 		"isDouble": true,
@@ -139,8 +139,8 @@
 		"gen": [9]
 	},
 	{
-		"name": "Battle Stadium Singles",
-		"shortName": "BSS",
+		"name": "BSS série 1",
+		"shortName": "BSSs1",
 		"usageName": "battlestadiumsingles",
 		"official": true,
 		"playable": true,
