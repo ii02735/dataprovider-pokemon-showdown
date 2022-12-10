@@ -5,7 +5,6 @@ const items = loadResource(JSON, "items.json");
 Promise.all(
   insertOrUpdate(knex, "item", items, {
     hasGen: true,
-    replaceColumns: { usageName: "usage_name" },
     noOverrideColumns: ["description"],
   })
 )

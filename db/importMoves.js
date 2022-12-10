@@ -6,12 +6,11 @@ Promise.all(
   insertOrUpdate(knex, "move", moves, {
     hasGen: true,
     replaceColumns: {
-      type: "type_id",
-      usageName: "usage_name",
+      type: "typeId",
     },
     ignoreColumns: ["shortDescription"],
     relations: {
-      type_id: { table: "type", refColumn: "name" },
+      typeId: { table: "type", refColumn: "name" },
     },
     noOverrideColumns: ["description"],
   })

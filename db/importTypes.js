@@ -47,8 +47,8 @@ Promise.all(
           records.UPDATED++;
         } else {
           await knex("weakness").insert({
-            type_defender_id: type.id,
-            type_attacker_id: typeAttacker.id,
+            typeDefenderId: type.id,
+            typeAttackerId: typeAttacker.id,
             gen: type.gen,
             ratio: weakness.ratio,
           });
