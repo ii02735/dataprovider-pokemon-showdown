@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "knex": "^1.0.3",
     "mysql": "^2.18.1",
+    "objection": "^3.0.1",
     "smogon-stats-viewer": "^0.4.33"
   },
   "devDependencies": {
