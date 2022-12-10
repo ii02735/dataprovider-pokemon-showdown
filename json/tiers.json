@@ -125,24 +125,46 @@
 		"shortName": "Mono",
 		"usageName": "monotype",
 		"playable": true,
-		"gen": [5, 6, 7, 8, 9]
+		"gen": [5, 6, 7, 8, 9],
+		"teraBan": true
 	},
 	{
-		"name": "VGC",
-		"shortName": "VGC",
+		"name": "VGC série 1",
+		"shortName": "VGCs1",
+		"usageName": "vgcserie1",
 		"playable": true,
-		"usageName": "vgc",
+		"official": true,
 		"isDouble": true,
+		"sortOrder": 1,
+		"gen": [9]
+	},
+	{
+		"name": "BSS série 1",
+		"shortName": "BSSs1",
+		"usageName": "battlestadiumsingles",
+		"official": true,
+		"playable": true,
 		"sortOrder": 2,
-		"gen": "LAST GEN ONLY"
+		"gen": [9]
+	},
+	{
+		"name": "VGC serie 12",
+		"shortName": "VGC",
+		"usageName": "vgc2022",
+		"playable": true,
+		"official": true,
+		"isDouble": true,
+		"sortOrder": 100,
+		"gen": [8]
 	},
 	{
 		"name": "Battle Stadium Singles",
 		"shortName": "BSS",
 		"usageName": "battlestadiumsingles",
+		"official": true,
 		"playable": true,
-		"sortOrder": 3,
-		"gen": "LAST GEN ONLY"
+		"sortOrder": 101,
+		"gen": [8]
 	},
 	{
 		"name": "1v1",
@@ -157,7 +179,6 @@
 		"shortName": "DOU",
 		"playable": true,
 		"usageName": "doublesou",
-		"ladderRef": 1695,
 		"isDouble": true,
 		"gen": [5, 6, 7, 8, 9]
 	},
