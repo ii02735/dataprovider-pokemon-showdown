@@ -1,3 +1,4 @@
+const { knexSnakeCaseMappers } = require("objection");
 require("dotenv").config();
 /**
  *
@@ -105,4 +106,5 @@ module.exports.knex = require("knex")({
       // do nothing...it will hide warning messages
     },
   },
+  ...knexSnakeCaseMappers(),
 });

@@ -47,7 +47,7 @@ const results = { table: "pokemon", UPDATED: 0 };
           }
 
           await knex("pokemon")
-            .update({ tier_id: rowTier.id, technically })
+            .update({ tierId: rowTier.id, technically })
             .where({
               [usage_name ? "usage_name" : "name"]: name,
               gen,

@@ -28,7 +28,7 @@ progressBar.start(learns.length, 0);
         if (!pokemonRow) {
           pokemonRow = await knex("pokemon")
             .where({
-              usage_name: withoutSpaces(object.pokemon),
+              usageName: withoutSpaces(object.pokemon),
               gen: object.gen,
             })
             .first(["id"]);
@@ -54,7 +54,7 @@ progressBar.start(learns.length, 0);
           if (!moveRow) {
             moveRow = await knex("move")
               .where({
-                usage_name: withoutSpaces(move),
+                usageName: withoutSpaces(move),
                 gen: object.gen,
               })
               .first(["id"]);
@@ -69,9 +69,9 @@ progressBar.start(learns.length, 0);
           moveIds.push(moveRow.id);
 
           try {
-            await knex("pokemon_move").insert({
-              pokemon_id: pokemonRow.id,
-              move_id: moveRow.id,
+            await knex("pokemonMove").insert({
+              pokemonId: pokemonRow.id,
+              moveId: moveRow.id,
               gen: object.gen,
             });
             INSERTED++;
@@ -83,10 +83,10 @@ progressBar.start(learns.length, 0);
         }
 
         // Delete invalid moves
-        await knex("pokemon_move")
-          .whereNotIn("move_id", moveIds)
+        await knex("pokemonMove")
+          .whereNotIn("moveId", moveIds)
           .andWhere({
-            pokemon_id: pokemonRow.id,
+            pokemonId: pokemonRow.id,
             gen: object.gen,
           })
           .delete();
@@ -100,7 +100,7 @@ progressBar.start(learns.length, 0);
     );
 
     console.log({
-      table: "pokemon_move",
+      table: "pokemonMove",
       INSERTED: results.reduce((sum, { INSERTED }) => sum + INSERTED, 0),
     });
   } catch (err) {
