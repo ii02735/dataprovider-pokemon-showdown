@@ -9,24 +9,24 @@ const fs = require("fs");
 (async () => {
   try {
     const VGCRow = await knex("tier")
-      .where({ usage_name: "vgc", gen })
-      .first(["id", "ladder_ref"]);
+      .where({ usageName: "vgc", gen })
+      .first(["id", "ladderRef"]);
     if (!VGCRow) {
       console.log(`The VGC tier for gen ${gen} cannot be found`);
       return;
     }
-    const tier_id = VGCRow.id;
+    const tierId = VGCRow.id;
     // Clear usages
     console.log(`Clearing old VGC usages...`);
-    const rowTierUsages = await knex("tier_usage").where({
-      tier_id: VGCRow.id,
+    const rowTierUsages = await knex("tierUsage").where({
+      tierId: VGCRow.id,
     });
     if (!rowTierUsages) {
       console.log("No VGC tier_usages found");
       return;
     }
     for (const rowTierUsage of rowTierUsages)
-      await knex("tier_usage").where({ id: rowTierUsage.id }).del();
+      await knex("tierUsage").where({ id: rowTierUsage.id }).del();
 
     // Map between pokemon.id and new inserted tier_usage.id
     let insertedTierUsageId = {};
@@ -44,14 +44,14 @@ const fs = require("fs");
     for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
       const pokemonRow = await knex("pokemon")
         .select(["id"])
-        .where({ usage_name: pokemonUsageName, gen })
+        .where({ usageName: pokemonUsageName, gen })
         .first();
       if (!pokemonRow) continue;
       if (usageData.usage < 1) continue;
-      const insertedTierRow = await knex("tier_usage").insert(
+      const insertedTierRow = await knex("tierUsage").insert(
         {
-          tier_id,
-          pokemon_id: pokemonRow.id,
+          tierId,
+          pokemonId: pokemonRow.id,
           percent: usageData.usage,
           rank: rank++,
         },
@@ -65,11 +65,11 @@ const fs = require("fs");
       ]) {
         for (const entityData of usageData[property]) {
           const entityRow = await knex(tableName)
-            .where({ usage_name: withoutSpaces(entityData.name), gen })
+            .where({ usageName: withoutSpaces(entityData.name), gen })
             .first();
           if (!entityRow) continue;
           await knex(`usage_${tableName}`).insert({
-            tier_usage_id: insertedTierUsageId[pokemonRow.id],
+            tierUsageId: insertedTierUsageId[pokemonRow.id],
             [`${tableName}_id`]: entityRow.id,
             percent: entityData.usage,
           });
@@ -81,8 +81,8 @@ const fs = require("fs");
           .where({ name: entityData["nature"] })
           .first();
         if (!entityRow) continue;
-        await knex("usage_spread").insert({
-          tier_usage_id: insertedTierUsageId[pokemonRow.id],
+        await knex("usageSpread").insert({
+          tierUsageId: insertedTierUsageId[pokemonRow.id],
           nature_id: entityRow.id,
           evs: entityData.evs,
           percent: entityData.usage,
@@ -96,26 +96,26 @@ const fs = require("fs");
     const percentProperty = { teammates: "usage", counters: "eff" };
     for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
       const pokemonRow = await knex("pokemon")
-        .where({ usage_name: pokemonUsageName, gen })
+        .where({ usageName: pokemonUsageName, gen })
         .first(["id"]);
 
-      const tier_usage_id = insertedTierUsageId[pokemonRow.id];
-      // If tier_usage_id couldn't be found, it means that it has been ignored
+      const tierUsageId = insertedTierUsageId[pokemonRow.id];
+      // If tierUsageId couldn't be found, it means that it has been ignored
       // because its usage is less than 1%
-      if (!tier_usage_id) continue;
+      if (!tierUsageId) continue;
       for (const [property, tableName] of [
-        ["teammates", "team_mate"],
-        ["counters", "pokemon_check"],
+        ["teammates", "teamMate"],
+        ["counters", "pokemonCheck"],
       ]) {
         for (const entityData of usageData[property]) {
           const entityRow = await knex("pokemon")
-            .where({ usage_name: withoutSpaces(entityData.name), gen })
+            .where({ usageName: withoutSpaces(entityData.name), gen })
             .first();
 
           if (!entityRow) continue;
           await knex(tableName).insert({
-            tier_usage_id,
-            pokemon_id: entityRow.id,
+            tierUsageId,
+            pokemonId: entityRow.id,
             percent: entityData[percentProperty[property]],
           });
         }

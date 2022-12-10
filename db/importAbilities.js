@@ -6,7 +6,6 @@ Promise.all(
   insertOrUpdate(knex, "ability", abilities, {
     hasGen: true,
     ignoreColumns: ["shortDescription"],
-    replaceColumns: { usageName: "usage_name" },
     noOverrideColumns: ["description"],
   })
 )
