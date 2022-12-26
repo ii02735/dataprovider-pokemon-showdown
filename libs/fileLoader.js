@@ -15,7 +15,8 @@ module.exports.loadResource = (resourceType, ...pathArray) => {
         __dirname,
         "..",
         "pokemon-showdown",
-        ".sim-dist",
+        "dist",
+        "sim",
         "dex.js"
       ));
     case this.JSON:

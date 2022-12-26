@@ -35,6 +35,6 @@ echo "\nmodule.exports.toID = toID" >> js/battle-dex.js
 sed -i "1s/^/const { toID } = require('.\/battle-dex')\n/" js/battle-dex-search.js
 sed -i "2s/^/const { BattleTeambuilderTable } = require('..\/data\/teambuilder-tables')\n/" js/battle-dex-search.js
 sed -i "3s/^/const { BattleMovedex } = require('..\/data\/moves')\n/" js/battle-dex-search.js
-sed -i "4s/^/const { Dex } = require('..\/..\/pokemon-showdown\/.sim-dist\/dex.js')\n/" js/battle-dex-search.js
+sed -i "4s/^/const { Dex } = require('..\/..\/pokemon-showdown\/dist\/sim\/dex.js')\n/" js/battle-dex-search.js
 
 echo "\nmodule.exports = DexSearch" >> js/battle-dex-search.js
