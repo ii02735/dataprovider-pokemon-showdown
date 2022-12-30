@@ -14,6 +14,7 @@ jobs: #this section contains the tasks / jobs that must be executed
     environment: production
     env:
       LAST_GEN: 9
+      POKEMON_SHOWDOWN_REPO: "pokemon-showdown"
     steps:
       - name: set timezone
         uses: szenius/set-timezone@v1.0
