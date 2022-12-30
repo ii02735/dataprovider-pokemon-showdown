@@ -30,7 +30,7 @@
     "knex": "^1.0.3",
     "mysql": "^2.18.1",
     "objection": "^3.0.1",
-    "smogon-stats-viewer": "^0.4.33"
+    "smogon-stats-viewer": "^0.4.37"
   },
   "devDependencies": {
     "@vscode/sqlite3": "^5.0.8",
