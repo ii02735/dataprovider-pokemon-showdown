@@ -50,5 +50,5 @@ jobs: #this section contains the tasks / jobs that must be executed
       - name: "Update remote"
         run: >
           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no
-          "cd ${{ secrets.REMOTE_PATH }}/ && 
-           git pull https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main"
+          "cd ${{ secrets.REMOTE_PATH }}/ && git fetch 
+           && git reset --hard origin/main"
