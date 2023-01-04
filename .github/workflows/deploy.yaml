@@ -53,3 +53,33 @@ jobs: #this section contains the tasks / jobs that must be executed
           "cd ${{ secrets.REMOTE_PATH }}/ && 
            git fetch &&
            git reset --hard origin/main"
+           
+  update_db:
+    needs: [update_server]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      
+      - name: checkout on main
+        uses: actions/checkout@main
+        with:
+          ref: ${{ github.read_ref }}
+      
+      - name: update tags
+        run: >
+           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+           "cd ${{ secrets.REMOTE_PATH }} &&
+            nq -c node db/importTags.js"
+            
+      - name: update tiers
+        run: >
+           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+           "cd ${{ secrets.REMOTE_PATH }} &&
+            nq -c node db/importTiers.js"
+               
+      - name: update pokemonTiers
+        run: >
+           ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} -o StrictHostKeyChecking=no 
+           "cd ${{ secrets.REMOTE_PATH }} &&
+            nq -c node db/importPokemonTier.js"
+
