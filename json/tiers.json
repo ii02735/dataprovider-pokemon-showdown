@@ -138,9 +138,28 @@
 		"gen": [9]
 	},
 	{
+		"name": "VGC série 2",
+		"shortName": "VGCs2",
+		"usageName": "vgc2023series2",
+		"playable": true,
+		"official": true,
+		"isDouble": true,
+		"sortOrder": 1,
+		"gen": [9]
+	},
+	{
 		"name": "BSS série 1",
 		"shortName": "BSSs1",
 		"usageName": "battlestadiumsinglesseries1",
+		"official": true,
+		"playable": true,
+		"sortOrder": 2,
+		"gen": [9]
+	},
+	{
+		"name": "BSS série 2",
+		"shortName": "BSSs2",
+		"usageName": "battlestadiumsinglesseries2",
 		"official": true,
 		"playable": true,
 		"sortOrder": 2,
