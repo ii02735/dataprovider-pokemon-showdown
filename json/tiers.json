@@ -143,6 +143,7 @@
 		"usageName": "vgc2023series2",
 		"playable": true,
 		"official": true,
+		"main": true,
 		"isDouble": true,
 		"sortOrder": 1,
 		"gen": [9]
@@ -161,6 +162,7 @@
 		"shortName": "BSSs2",
 		"usageName": "battlestadiumsinglesseries2",
 		"official": true,
+		"main": true,
 		"playable": true,
 		"sortOrder": 2,
 		"gen": [9]
@@ -171,6 +173,7 @@
 		"usageName": "vgc2022",
 		"playable": true,
 		"official": true,
+		"main": true,
 		"isDouble": true,
 		"sortOrder": 100,
 		"gen": [8]
@@ -180,6 +183,7 @@
 		"shortName": "BSS",
 		"usageName": "battlestadiumsingles",
 		"official": true,
+		"main": true,
 		"playable": true,
 		"sortOrder": 101,
 		"gen": [8]
