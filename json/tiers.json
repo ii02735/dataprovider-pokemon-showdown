@@ -14,7 +14,7 @@
 		"playable": false,
 		"rank": 3,
 		"sortOrder": 1,
-		"parent": "Over Used"
+		"parent": "OverUsed"
 	},
 	{
 		"name": "UnderUsed",
@@ -31,7 +31,7 @@
 		"playable": false,
 		"rank": 4,
 		"sortOrder": 5,
-		"parent": "Under Used",
+		"parent": "UnderUsed",
 		"gen": [5, 6, 7, 8, 9]
 	},
 	{
@@ -50,7 +50,7 @@
 		"playable": false,
 		"rank": 5,
 		"sortOrder": 6,
-		"parent": "Rarely Used"
+		"parent": "RarelyUsed"
 	},
 	{
 		"name": "NeverUsed",
@@ -67,7 +67,7 @@
 		"playable": false,
 		"rank": 6,
 		"sortOrder": 7,
-		"parent": "Never Used"
+		"parent": "NeverUsed"
 	},
 	{
 		"name": "PU",
@@ -134,7 +134,7 @@
 		"playable": true,
 		"official": true,
 		"isDouble": true,
-		"sortOrder": 1,
+		"sortOrder": 3,
 		"gen": [9]
 	},
 	{
@@ -154,7 +154,7 @@
 		"usageName": "battlestadiumsinglesseries1",
 		"official": true,
 		"playable": true,
-		"sortOrder": 2,
+		"sortOrder": 4,
 		"gen": [9]
 	},
 	{
