@@ -128,18 +128,18 @@
 		"teraBan": true
 	},
 	{
-		"name": "VGC série 1",
+		"name": "VGC 2023 s1",
 		"shortName": "VGCs1",
 		"usageName": "vgc2023series1",
-		"playable": true,
+		"playable": false,
 		"official": true,
 		"isDouble": true,
 		"sortOrder": 3,
 		"gen": [9]
 	},
 	{
-		"name": "VGC série 2",
-		"shortName": "VGCs2",
+		"name": "VGC 2023 s2",
+		"shortName": "VGC",
 		"usageName": "vgc2023series2",
 		"playable": true,
 		"official": true,
@@ -149,17 +149,17 @@
 		"gen": [9]
 	},
 	{
-		"name": "BSS série 1",
+		"name": "BSS 2023 s1",
 		"shortName": "BSSs1",
 		"usageName": "battlestadiumsinglesseries1",
 		"official": true,
-		"playable": true,
+		"playable": false,
 		"sortOrder": 4,
 		"gen": [9]
 	},
 	{
-		"name": "BSS série 2",
-		"shortName": "BSSs2",
+		"name": "BSS 2023 s2",
+		"shortName": "BSS",
 		"usageName": "battlestadiumsinglesseries2",
 		"official": true,
 		"main": true,
@@ -168,7 +168,7 @@
 		"gen": [9]
 	},
 	{
-		"name": "VGC série 12",
+		"name": "VGC 2022 s12",
 		"shortName": "VGC",
 		"usageName": "vgc2022",
 		"playable": true,
@@ -179,7 +179,7 @@
 		"gen": [8]
 	},
 	{
-		"name": "Battle Stadium Singles",
+		"name": "BSS 2022 s12",
 		"shortName": "BSS",
 		"usageName": "battlestadiumsingles",
 		"official": true,
