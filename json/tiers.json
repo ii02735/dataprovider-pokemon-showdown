@@ -140,7 +140,7 @@
 	},
 	{
 		"name": "VGC 2023 s2",
-		"shortName": "VGC",
+		"shortName": "VGCs2",
 		"usageName": "vgc2023series2",
 		"playable": false,
 		"official": true,
@@ -171,7 +171,7 @@
 	},
 	{
 		"name": "BSS 2023 s2",
-		"shortName": "BSS",
+		"shortName": "BSSs2",
 		"usageName": "battlestadiumsinglesseries2",
 		"official": true,
 		"main": false,
