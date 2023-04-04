@@ -150,7 +150,7 @@
 		"gen": [9]
 	},
 	{
-		"name": "VGC 2023 s3",
+		"name": "VGC 2023 RC",
 		"shortName": "VGC",
 		"usageName": "vgc2023regulationc",
 		"playable": true,
@@ -180,7 +180,7 @@
 		"gen": [9]
 	},
 	{
-		"name": "BSS 2023 s3",
+		"name": "BSS 2023 RC",
 		"shortName": "BSS",
 		"usageName": "battlestadiumsinglesregulationc",
 		"official": true,
