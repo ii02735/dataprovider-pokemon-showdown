@@ -152,7 +152,7 @@
 	{
 		"name": "VGC 2023 s3",
 		"shortName": "VGC",
-		"usageName": "vgc2023series3",
+		"usageName": "vgc2023regulationc",
 		"playable": true,
 		"official": true,
 		"main": true,
@@ -182,7 +182,7 @@
 	{
 		"name": "BSS 2023 s3",
 		"shortName": "BSS",
-		"usageName": "battlestadiumsinglesseries3",
+		"usageName": "battlestadiumsinglesregulationc",
 		"official": true,
 		"main": true,
 		"playable": true,
