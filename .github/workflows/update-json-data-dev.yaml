@@ -23,9 +23,9 @@ jobs: #this section contains the tasks / jobs that must be executed
           ref: ${{ github.read_ref }} # will checkout on th desired branch
 
       - name: "NodeJS setup"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: Update pokemon-showdown data
         run: npm ci && npm run clone-showdown
