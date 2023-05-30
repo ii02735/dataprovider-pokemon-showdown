@@ -14,12 +14,9 @@ const fs = require("fs");
       let playableTiers = [];
 
       const tiersRows = await knex("tier")
-        .where({
-          gen,
-        })
-        .whereNot({
-          usageName: "vgc",
-        })
+        .where({ gen })
+        .whereNotLike({ usageName: "vgc%" })
+        .whereNotLike({ usageName: "bss%" })
         .whereNotNull("usageName")
         .whereNotNull("ladderRef");
 
@@ -39,9 +36,7 @@ const fs = require("fs");
         if (!rowTierUsages) continue;
         for (const rowTierUsage of rowTierUsages)
           await knex("tierUsage")
-            .where({
-              id: rowTierUsage.id,
-            })
+            .where({ id: rowTierUsage.id })
             .del();
       }
       // Map between pokemon.id and new inserted tierUsage.id

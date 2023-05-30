@@ -9,7 +9,8 @@ const fs = require("fs");
 (async () => {
   try {
     const VGCRow = await knex("tier")
-      .where({ usageName: "vgc", gen })
+      .whereLike({ usageName: "vgc%", gen })
+      .orWhereLike({ usageName: "bss%", gen })
       .first(["id", "ladderRef"]);
     if (!VGCRow) {
       console.log(`The VGC tier for gen ${gen} cannot be found`);
