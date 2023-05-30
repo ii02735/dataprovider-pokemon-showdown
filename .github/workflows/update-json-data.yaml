@@ -17,7 +17,7 @@ jobs: #this section contains the tasks / jobs that must be executed
       POKEMON_SHOWDOWN_REPO: "pokemon-showdown"
     steps:
       - name: set timezone
-        uses: szenius/set-timezone@v1.0
+        uses: szenius/set-timezone@v1.2
         with:
           timezoneLinux: "Europe/Paris"
       - name: checkout on main
