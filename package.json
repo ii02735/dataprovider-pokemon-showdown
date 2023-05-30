@@ -9,7 +9,7 @@
     "postbuild": "node dataToJson.js",
     "prepare": "husky install",
     "generate-stats": "smogon-stats-viewer update && smogon-stats-viewer --clear upgrade 2 && smogon-stats-viewer check",
-    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown && rm -rf pokemon-showdown-client && git clone https://github.com/zarel/pokemon-showdown-client && npm run build"
+    "clone-showdown": "rm -rf pokemon-showdown && git clone https://github.com/smogon/pokemon-showdown@master && rm -rf pokemon-showdown-client && git clone https://github.com/zarel/pokemon-showdown-client@master && npm run build"
   },
   "repository": {
     "type": "git",
