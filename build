@@ -16,7 +16,7 @@ rm -f js/battle-dex-search.js
 rm -f js/battle-dex.js
 
 # Lock to @babel/preset-env@7.20.2 is temp, it's a problem with pokemon-showdown-client
-npm i && npm i @babel/preset-env@7.20.2 && node build
+npm i && node build
 
 # Executing additionnal build to create assets for DexSearch
 
