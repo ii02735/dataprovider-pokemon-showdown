@@ -12,8 +12,10 @@ function addLeftZero(num, nz) {
   return str;
 }
 
-function getMonthId(y, m) {
-  return addLeftZero(y, 4) + "-" + addLeftZero(m, 2);
+function getMonthId(y, m, extra) {
+  return (
+    addLeftZero(y, 4) + "-" + addLeftZero(m, 2) + (extra ? "-" + extra : "")
+  );
 }
 
 exports.parseList = function (str) {
@@ -38,11 +40,13 @@ exports.parseMonthsList = function (str) {
     let spl = file.replace("/", "").split("-");
     let year = parseInt(spl[0]);
     let month = parseInt(spl[1]);
-    if (!isNaN(year) && !isNaN(year)) {
-      months.push({ y: year, m: month, id: getMonthId(year, month) });
+    let extra = spl[2] || null;
+    if (!isNaN(year)) {
+      const data = { y: year, m: month, id: getMonthId(year, month, extra) };
+      months.push(data);
     }
   }
-  return { months: months };
+  return { months };
 };
 
 exports.parseFormatsList = function (str) {

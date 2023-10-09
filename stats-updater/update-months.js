@@ -34,7 +34,8 @@ exports.check = function () {
   const path = [__dirname, "..", "usages"];
   let files = FileSystem.readdirSync(Path.resolve(...path, "months"));
   for (let file of files) {
-    if (/[0-9][0-9][0-9][0-9]-[0-9][0-9]/.test(file)) {
+    console.log(file);
+    if (/[0-9][0-9][0-9][0-9]-[0-9][0-9].*/.test(file)) {
       months.list.push(file);
     }
   }
@@ -43,6 +44,7 @@ exports.check = function () {
 
 exports.checkAndUpdate = function () {
   let months = exports.check();
+  console.log(months);
   const path = [__dirname, "..", "usages"];
   FileSystem.writeFileSync(
     Path.resolve(...path, "months.json"),
