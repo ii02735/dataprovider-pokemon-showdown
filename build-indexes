@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 "use strict";
 
+/**
+ * Do not delete this file.
+ * Its purpose is to replace the one in
+ * pokemon-showdown-client/js/build-tools/build-indexes
+ * (when it is cloned using the build script).
+ */
+
 const fs = require("fs");
 const path = require("path");
 const child_process = require("child_process");
