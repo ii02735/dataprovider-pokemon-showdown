@@ -1,6 +1,6 @@
-const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
+const { loadResource, LIBS } = require("../libs/fileLoader");
 const { removeParenthesis, LAST_GEN, isStandard } = loadResource(LIBS, "util");
-const { Dex } = loadResource(DEX);
+const { Dex } = require("pokemon-showdown");
 let pokemonTier = [];
 
 const makePokemonTierObject = ({ name, tier, doubleTiers }, gen) => ({

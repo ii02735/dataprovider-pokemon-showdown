@@ -1,6 +1,5 @@
-const { DEX, loadResource } = require("../libs/fileLoader");
 const { LAST_GEN, isStandard } = require("../libs/util");
-const { Dex } = loadResource(DEX);
+const { Dex } = require("pokemon-showdown");
 let movesCollection = [];
 
 const makeMoveObject = (rawObject, gen) => ({

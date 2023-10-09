@@ -14,7 +14,6 @@ jobs: #this section contains the tasks / jobs that must be executed
     environment: production
     env:
       LAST_GEN: 9
-      POKEMON_SHOWDOWN_REPO: "pokemon-showdown"
     steps:
       - name: set timezone
         uses: szenius/set-timezone@v1.2
@@ -31,10 +30,10 @@ jobs: #this section contains the tasks / jobs that must be executed
           node-version: "16"
 
       - name: Update pokemon-showdown data
-        run: npm ci && npm run clone-showdown
+        run: npm ci
 
       - name: Update pokemons' usages
-        run: USAGE_PATH='usages' npm run generate-stats
+        run: npm run generate-stats
 
       - name: Store last hash commit
         run: echo "old_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
