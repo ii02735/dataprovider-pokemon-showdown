@@ -1,6 +1,6 @@
-const { loadResource, DEX, PROVIDER } = require("../libs/fileLoader");
+const { loadResource, PROVIDER } = require("../libs/fileLoader");
 const { LAST_GEN } = require("../libs/util");
-const { Dex } = loadResource(DEX);
+const { Dex } = require("pokemon-showdown");
 /**
  * Will be used to determine the moves belonging to each pokemon
  */

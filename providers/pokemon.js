@@ -1,6 +1,6 @@
-const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
+const { loadResource, LIBS } = require("../libs/fileLoader");
 const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
-const { Dex } = loadResource(DEX);
+const { Dex } = require("pokemon-showdown");
 let pokemonsCollection = [];
 
 const makePokemonObject = (
