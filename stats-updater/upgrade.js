@@ -57,6 +57,7 @@ exports.start = function (num, doClear) {
     upgradeList.push(months_all[j].id);
     j--;
   }
+  console.log(upgradeList);
   for (let i = 0; i < months.length; i++) {
     if (upgradeList.indexOf(months[i]) === -1) {
       clearList.push(months[i]);

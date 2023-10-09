@@ -7,7 +7,6 @@ echo "Preparing and building pokemon-showdown-client"
 
 cp build-indexes pokemon-showdown-client/build-tools/build-indexes
 cd pokemon-showdown-client
-npm run build
 
 # 0. Remove former generated files (if present)
 
