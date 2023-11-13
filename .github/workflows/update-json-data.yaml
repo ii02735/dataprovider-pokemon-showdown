@@ -28,9 +28,12 @@ jobs: #this section contains the tasks / jobs that must be executed
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-
+          
       - name: Update pokemon-showdown data
         run: npm ci
+        
+      - name: NPM run build (for JSON update)
+        run: npm run build
 
       - name: Update pokemons' usages
         run: npm run generate-stats
