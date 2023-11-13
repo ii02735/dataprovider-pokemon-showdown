@@ -87,6 +87,15 @@
 		"gen": [3, 4, 5, 6, 7, 8, 9]
 	},
 	{
+		"name": "ZeroUsed BorderLine",
+		"shortName": "ZUBL",
+		"usageName": "zubl",
+		"playable": true,
+		"rank": 7,
+		"sortOrder": 8,
+		"parent": "PU"
+	},
+	{
 		"name": "Not Fully Evolved",
 		"shortName": "NFE",
 		"usageName": "nfe",
