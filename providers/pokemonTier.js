@@ -6,7 +6,7 @@ let pokemonTier = [];
 const makePokemonTierObject = ({ name, tier, doubleTiers }, gen) => ({
   pokemon: name,
   technically: tier.startsWith("("),
-  tier: removeParenthesis(tier),
+  tier: removeParenthesis(tier.replace("ZUBL", "ZU")),
   doubleTiers,
   gen,
 });
