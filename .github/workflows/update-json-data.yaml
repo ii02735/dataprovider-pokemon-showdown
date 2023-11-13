@@ -29,6 +29,9 @@ jobs: #this section contains the tasks / jobs that must be executed
         with:
           node-version: "16"
 
+      - name: Update pokemon-showdown NPM made dependency
+        run: npm update pokemon-showdown
+
       - name: Update pokemon-showdown data
         run: npm ci
 
@@ -42,7 +45,7 @@ jobs: #this section contains the tasks / jobs that must be executed
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add json usages
+          git add json usages package-lock.json
           git diff --staged --quiet || git commit -am "JSON files updated" && git push https://ii02735:${{ secrets.GITHUB_TOKEN }}@github.com/ii02735/dataprovider-pokemon-showdown.git main
           echo "new_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
 
