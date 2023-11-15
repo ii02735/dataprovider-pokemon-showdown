@@ -144,7 +144,7 @@
 		"official": true,
 		"main": false,
 		"isDouble": true,
-		"sortOrder": 7,
+		"sortOrder": 9,
 		"gen": [9]
 	},
 	{
@@ -155,7 +155,7 @@
 		"official": true,
 		"main": false,
 		"isDouble": true,
-		"sortOrder": 5,
+		"sortOrder": 7,
 		"gen": [9]
 	},
 	{
@@ -166,13 +166,24 @@
 		"official": true,
 		"main": false,
 		"isDouble": true,
-		"sortOrder": 3,
+		"sortOrder": 5,
 		"gen": [9]
 	},
 	{
 		"name": "VGC 2023 RD",
-		"shortName": "VGC",
+		"shortName": "VGCrd",
 		"usageName": "vgc2023regulationd",
+		"playable": false,
+		"official": true,
+		"main": true,
+		"isDouble": true,
+		"sortOrder": 3,
+		"gen": [9]
+	},
+	{
+		"name": "VGC 2023 RE",
+		"shortName": "VGC",
+		"usageName": "vgc2023regulatione",
 		"playable": true,
 		"official": true,
 		"main": true,
@@ -186,7 +197,7 @@
 		"usageName": "battlestadiumsinglesseries1",
 		"official": true,
 		"playable": false,
-		"sortOrder": 8,
+		"sortOrder": 10,
 		"gen": [9]
 	},
 	{
@@ -196,7 +207,7 @@
 		"official": true,
 		"main": false,
 		"playable": false,
-		"sortOrder": 6,
+		"sortOrder": 8,
 		"gen": [9]
 	},
 	{
@@ -206,13 +217,23 @@
 		"official": true,
 		"main": false,
 		"playable": false,
-		"sortOrder": 4,
+		"sortOrder": 6,
 		"gen": [9]
 	},
 	{
 		"name": "BSS 2023 RD",
-		"shortName": "BSS",
+		"shortName": "BSSrd",
 		"usageName": "battlestadiumsinglesregulationd",
+		"official": true,
+		"main": true,
+		"playable": false,
+		"sortOrder": 4,
+		"gen": [9]
+	},
+	{
+		"name": "BSS 2023 RE",
+		"shortName": "BSS",
+		"usageName": "battlestadiumsinglesregulatione",
 		"official": true,
 		"main": true,
 		"playable": true,
