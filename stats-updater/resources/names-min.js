@@ -24,7 +24,7 @@
     "[Gen 9] Battle Stadium Singles Regulation D",
   gen9battlestadiumsinglesregulatione:
     "[Gen 9] Battle Stadium Singles Regulation E",
-  gen9trickmagic: "[Gen 9] Trick Magic",
+  gen9dragonkingcup: "[Gen 9] Dragon King Cup",
   gen9customgame: "[Gen 9] Custom Game",
   gen9randomdoublesbattle: "[Gen 9] Random Doubles Battle",
   gen9doublesou: "[Gen 9] Doubles OU",
