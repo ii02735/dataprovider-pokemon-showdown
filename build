@@ -3,15 +3,9 @@
 # for pokemon-showdown-client (used for learns provider)
 echo "Preparing and building pokemon-showdown-client"
 
-[ ! -L pokemon-showdown-client/data/pokemon-showdown ] && (echo "creating symlink..." && ln -s "$PWD/node_modules/pokemon-showdown" "$PWD/pokemon-showdown-client/data/pokemon-showdown") || echo "symlink already exists"
+[ ! -L pokemon-showdown-client/caches/pokemon-showdown ] && (echo "creating symlink..." && ln -s "$PWD/node_modules/pokemon-showdown" "$PWD/pokemon-showdown-client/caches/pokemon-showdown") || echo "symlink already exists"
 
-cp build-indexes pokemon-showdown-client/build-tools/build-indexes
 cd pokemon-showdown-client
-
-# 0. Remove former generated files (if present)
-
-rm -f js/battle-dex-search.js
-rm -f js/battle-dex.js
 
 # Lock to @babel/preset-env@7.20.2 is temp, it's a problem with pokemon-showdown-client
 npm i && node build
@@ -24,14 +18,14 @@ node build-tools/build-indexes
 # 1. Add Dex parameter to DexSearch for injection later
 # 2. Add module.exports to battle-dex-search.js to allow module usage (intially not set for web client usage)
 
-echo "\n" >> js/battle-dex.js
-echo "module.exports.toID = toID;" >> js/battle-dex.js
+echo "\n" >> play.pokemonshowdown.com/js/battle-dex.js
+echo "module.exports.toID = toID;" >> play.pokemonshowdown.com/js/battle-dex.js
 
-# Injecting assets in order for js/battle-dex-search.js to work as a regular node.js module (and not like JS code from a web client)
-sed -i "1s/^/const { toID } = require('.\/battle-dex');\n/" js/battle-dex-search.js
-sed -i "2s/^/const { BattleTeambuilderTable } = require('..\/data\/teambuilder-tables');\n/" js/battle-dex-search.js
-sed -i "3s/^/const { BattleMovedex } = require('..\/data\/moves');\n/" js/battle-dex-search.js
-sed -i "4s/^/const { Dex } = require('pokemon-showdown');\n/" js/battle-dex-search.js
+# Injecting assets in order for play.pokemonshowdown.com/js/battle-dex-search.js to work as a regular node.js module (and not like JS code from a web client)
+sed -i "1s/^/const { toID } = require('.\/battle-dex');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
+sed -i "2s/^/const { BattleTeambuilderTable } = require('..\/data\/teambuilder-tables');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
+sed -i "3s/^/const { BattleMovedex } = require('..\/data\/moves');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
+sed -i "4s/^/const { Dex } = require('pokemon-showdown');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
 
-echo "\n" >> js/battle-dex-search.js
-echo "module.exports = DexSearch;" >> js/battle-dex-search.js
+echo "\n" >> play.pokemonshowdown.com/js/battle-dex-search.js
+echo "module.exports = DexSearch;" >> play.pokemonshowdown.com/js/battle-dex-search.js
