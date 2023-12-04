@@ -36,7 +36,7 @@
   gen9nfe: "[Gen 9] NFE",
   gen9freeforall: "[Gen 9] Free-For-All",
   gen9lcuu: "[Gen 9] LC UU",
-  gen9monothreatsteel: "[Gen 9] Monothreat Steel",
+  gen9monothreatelectric: "[Gen 9] Monothreat Electric",
   gen9monotypecap: "[Gen 9] Monotype CAP",
   gen9monotypelc: "[Gen 9] Monotype LC",
   gen3hoenngaiden: "[Gen 3] Hoenn Gaiden",
