@@ -39,7 +39,7 @@
   gen9zu: "[Gen 9] ZU",
   gen9freeforall: "[Gen 9] Free-For-All",
   gen9lcuu: "[Gen 9] LC UU",
-  gen9monothreatfire: "[Gen 9] Monothreat Fire",
+  gen9monothreatdark: "[Gen 9] Monothreat Dark",
   gen9monotypecap: "[Gen 9] Monotype CAP",
   gen9monotypelc: "[Gen 9] Monotype LC",
   gen9vaporemons: "[Gen 9] VaporeMons",
@@ -117,9 +117,6 @@
   gen9dlc1nationaldex: "[Gen 9 DLC 1] National Dex",
   gen9dlc1nationaldexmonotype: "[Gen 9 DLC 1] National Dex Monotype",
   gen9dlc1nationaldexdoubles: "[Gen 9 DLC 1] National Dex Doubles",
-  gen9dlc1monothreatfire: "[Gen 9 DLC 1] Monothreat Fire",
-  gen9dlc1monotypecap: "[Gen 9 DLC 1] Monotype CAP",
-  gen9dlc1monotypelc: "[Gen 9 DLC 1] Monotype LC",
   gen9dlc1paldeadexdraft: "[Gen 9 DLC 1] Paldea Dex Draft",
   gen9dlc1terapreviewpaldeadexdraft:
     "[Gen 9 DLC 1] Tera Preview Paldea Dex Draft",
