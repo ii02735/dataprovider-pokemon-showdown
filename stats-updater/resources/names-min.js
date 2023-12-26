@@ -38,7 +38,7 @@
   gen9zu: "[Gen 9] ZU",
   gen9freeforall: "[Gen 9] Free-For-All",
   gen9lcuu: "[Gen 9] LC UU",
-  gen9monothreatdark: "[Gen 9] Monothreat Dark",
+  gen9monothreatgrass: "[Gen 9] Monothreat Grass",
   gen9monotypecap: "[Gen 9] Monotype CAP",
   gen9monotypelc: "[Gen 9] Monotype LC",
   gen9vaporemons: "[Gen 9] VaporeMons",
