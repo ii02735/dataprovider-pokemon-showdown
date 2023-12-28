@@ -29,6 +29,7 @@
   gen9vgc2023regulatione: "[Gen 9] VGC 2023 Regulation E",
   gen9vgc2024regf: "[Gen 9] VGC 2024 Reg F",
   gen9vgc2024regfbo3: "[Gen 9] VGC 2024 Reg F (Bo3)",
+  gen9blueberryprologue: "[Gen 9] Blueberry Prologue",
   gen9doublescustomgame: "[Gen 9] Doubles Custom Game",
   gen91v1: "[Gen 9] 1v1",
   gen92v2doubles: "[Gen 9] 2v2 Doubles",
