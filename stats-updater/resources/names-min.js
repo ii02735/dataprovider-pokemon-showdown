@@ -13,10 +13,6 @@
   gen9lc: "[Gen 9] LC",
   gen9monotype: "[Gen 9] Monotype",
   gen9cap: "[Gen 9] CAP",
-  gen9battlestadiumsinglesregulationd:
-    "[Gen 9] Battle Stadium Singles Regulation D",
-  gen9battlestadiumsinglesregulatione:
-    "[Gen 9] Battle Stadium Singles Regulation E",
   gen9bssregf: "[Gen 9] BSS Reg F",
   gen9dragonkingcup: "[Gen 9] Dragon King Cup",
   gen9customgame: "[Gen 9] Custom Game",
@@ -25,8 +21,7 @@
   gen9doublesubers: "[Gen 9] Doubles Ubers",
   gen9doublesuu: "[Gen 9] Doubles UU",
   gen9doubleslc: "[Gen 9] Doubles LC",
-  gen9vgc2023regulationd: "[Gen 9] VGC 2023 Regulation D",
-  gen9vgc2023regulatione: "[Gen 9] VGC 2023 Regulation E",
+  gen9vgc2023regd: "[Gen 9] VGC 2023 Reg D",
   gen9vgc2024regf: "[Gen 9] VGC 2024 Reg F",
   gen9vgc2024regfbo3: "[Gen 9] VGC 2024 Reg F (Bo3)",
   gen9blueberryprologue: "[Gen 9] Blueberry Prologue",
