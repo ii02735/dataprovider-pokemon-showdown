@@ -35,7 +35,7 @@
   gen9freeforall: "[Gen 9] Free-For-All",
   gen3lc: "[Gen 3] LC",
   gen9lcuu: "[Gen 9] LC UU",
-  gen9monothreatfighting: "[Gen 9] Monothreat Fighting",
+  gen9monothreatnormal: "[Gen 9] Monothreat Normal",
   gen9monotypecap: "[Gen 9] Monotype CAP",
   gen9monotypelc: "[Gen 9] Monotype LC",
   gen9vaporemons: "[Gen 9] VaporeMons",
