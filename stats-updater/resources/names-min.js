@@ -14,7 +14,6 @@
   gen9monotype: "[Gen 9] Monotype",
   gen9cap: "[Gen 9] CAP",
   gen9bssregf: "[Gen 9] BSS Reg F",
-  gen9dragonkingcup: "[Gen 9] Dragon King Cup",
   gen9customgame: "[Gen 9] Custom Game",
   gen9randomdoublesbattle: "[Gen 9] Random Doubles Battle",
   gen9doublesou: "[Gen 9] Doubles OU",
