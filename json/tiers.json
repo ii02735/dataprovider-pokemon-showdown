@@ -194,7 +194,7 @@
 	{
 		"name": "VGC 2024 RF",
 		"shortName": "VGC",
-		"usageName": "vgc2023regulationf",
+		"usageName": "vgc2023regf",
 		"playable": true,
 		"official": true,
 		"main": true,
@@ -254,7 +254,7 @@
 	{
 		"name": "BSS 2024 RF",
 		"shortName": "BSS",
-		"usageName": "battlestadiumsinglesregulationf",
+		"usageName": "battlestadiumsinglesregf",
 		"official": true,
 		"main": true,
 		"playable": true,
