@@ -1,14 +1,15 @@
 #!/bin/sh
 
+# This repository cannot be written as an NPM dependency like pokemon-showdown, because it has directories not tracked by git (hence, as a NPM dependency, it won't have it)
+
+git clone https://github.com/smogon/pokemon-showdown-client node_modules/pokemon-showdown-client
+cd node_modules/pokemon-showdown-client && npm i
+
 # for pokemon-showdown-client (used for learns provider)
-echo "Preparing and building pokemon-showdown-client"
+echo "creating symlink..." && ln -s "$PWD/node_modules/pokemon-showdown" "$PWD/node_modules/pokemon-showdown-client/caches/pokemon-showdown"
+cd $PWD/node_modules/pokemon-showdown-client
 
-[ ! -L pokemon-showdown-client/caches/pokemon-showdown ] && (echo "creating symlink..." && ln -s "$PWD/node_modules/pokemon-showdown" "$PWD/pokemon-showdown-client/caches/pokemon-showdown") || echo "symlink already exists"
-
-cd pokemon-showdown-client
-
-# Lock to @babel/preset-env@7.20.2 is temp, it's a problem with pokemon-showdown-client
-npm i && node build
+node build
 
 # Executing additionnal build to create assets for DexSearch
 

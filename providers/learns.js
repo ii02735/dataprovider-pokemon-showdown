@@ -4,7 +4,7 @@ const { Dex } = require("pokemon-showdown");
 /**
  * Will be used to determine the moves belonging to each pokemon
  */
-const DexSearch = require("../pokemon-showdown-client/play.pokemonshowdown.com/js/battle-dex-search.js");
+const DexSearch = require("../node_modules/pokemon-showdown-client/play.pokemonshowdown.com/js/battle-dex-search.js");
 const pokemons = loadResource(PROVIDER, "pokemon");
 const searchEngine = new DexSearch();
 
