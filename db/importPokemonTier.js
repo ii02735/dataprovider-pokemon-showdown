@@ -14,11 +14,7 @@ Promise.all(
     ({ pokemon: name, tier: short_name, gen, technically }, i) => {
       return new Promise((resolve, reject) => {
         knex("pokemon")
-          .where(function () {
-            // lambda function to use "this" in knex
-            this.where({ name }).orWhere({ usage_name: name });
-          })
-          .andWhere({ gen })
+          .where({ name, gen })
           .first(["id", "usage_name"])
           .then((rowPokemon) => {
             if (!rowPokemon) {

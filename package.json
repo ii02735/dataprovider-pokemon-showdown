@@ -8,7 +8,8 @@
     "build": "./build",
     "postbuild": "node dataToJson.js",
     "prepare": "husky install",
-    "generate-stats": "node usage-stats.js update && node usage-stats.js --clear upgrade 2 && node usage-stats.js check && rm -rf pokemon-showdown-client && git clone https://github.com/smogon/pokemon-showdown-client && npm run build"
+    "install": "./post-install",
+    "generate-stats": "node usage-stats.js update && node usage-stats.js --clear upgrade 2 && node usage-stats.js check"
   },
   "repository": {
     "type": "git",
