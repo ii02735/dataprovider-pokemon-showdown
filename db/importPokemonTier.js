@@ -40,7 +40,7 @@ Promise.all(
               .then((rowTier) => {
                 if (!rowTier) {
                   catchError(
-                    Error(
+                    new Error(
                       `Pokemon "${name}" in gen ${gen} : Tier ${short_name} cannot be found`
                     ),
                     resolve
@@ -56,7 +56,12 @@ Promise.all(
                   })
                   .catch((e) => catchError(e, resolve));
               })
-              .catch((e) => catchError(e, resolve));
+              .catch((e) =>
+                catchError(
+                  new Error(`Tier update has failed for ${name}, ${e.message}`),
+                  resolve
+                )
+              );
           })
           .catch((e) => catchError(e, resolve));
       });
