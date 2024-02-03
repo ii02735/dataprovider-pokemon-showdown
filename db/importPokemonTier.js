@@ -18,10 +18,11 @@ Promise.all(
           .first(["id", "usage_name"])
           .then((rowPokemon) => {
             if (!rowPokemon) {
-              catchError(
-                new Error(`Pokemon "${name}" in gen ${gen} cannot be found`),
-                resolve
+              console.warn(
+                `Pokemon "${name}" in gen ${gen} cannot be found : skipping...`
               );
+              resolve();
+              return;
             }
 
             short_name = removeParenthesis(short_name);
