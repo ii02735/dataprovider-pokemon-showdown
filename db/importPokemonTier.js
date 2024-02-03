@@ -4,7 +4,7 @@ const pokemonTiers = loadResource(JSON, "pokemonTier.json");
 const { removeParenthesis } = loadResource(LIBS, "util");
 const results = { table: "pokemon", UPDATED: 0 };
 
-const cathError = (err, resolve) => {
+const catchError = (err, resolve) => {
   console.error(err);
   resolve();
 };
@@ -22,7 +22,7 @@ Promise.all(
           .first(["id", "usage_name"])
           .then((rowPokemon) => {
             if (!rowPokemon) {
-              cathError(
+              catchError(
                 new Error(`Pokemon "${name}" in gen ${gen} cannot be found`),
                 resolve
               );
@@ -39,7 +39,7 @@ Promise.all(
               .first(["id", "name"])
               .then((rowTier) => {
                 if (!rowTier) {
-                  cathError(
+                  catchError(
                     Error(
                       `Pokemon "${name}" in gen ${gen} : Tier ${short_name} cannot be found`
                     ),
@@ -54,11 +54,11 @@ Promise.all(
                     results.UPDATED++;
                     resolve();
                   })
-                  .catch((e) => cathError(e, resolve));
+                  .catch((e) => catchError(e, resolve));
               })
-              .catch((e) => cathError(e, resolve));
+              .catch((e) => catchError(e, resolve));
           })
-          .catch((e) => cathError(e, resolve));
+          .catch((e) => catchError(e, resolve));
       });
     }
   )
