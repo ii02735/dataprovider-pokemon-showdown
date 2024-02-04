@@ -2,12 +2,13 @@ const { loadResource, JSON, LIBS } = require("../libs/fileLoader");
 const { knex } = require("./db");
 const csv = require("fast-csv");
 const fs = require("fs");
+const importResult = require("../importResult")("import_pokemon_tier");
 const pokemonTiers = loadResource(JSON, "pokemonTier.json");
 const { removeParenthesis } = loadResource(LIBS, "util");
-const results = { table: "pokemon", UPDATED: 0 };
+const importResultFile = "./logs/pokemon_tier_import_result.csv";
 
 const catchError = (err, resolve) => {
-  console.error(err);
+  importResult.addError(err);
   resolve();
 };
 
@@ -18,6 +19,8 @@ const catchError = (err, resolve) => {
 const tiers = {};
 
 const pokemonsStore = [];
+
+importResult.addInfo("Import pokemon tiers has started...");
 
 knex("pokemon")
   .join("tier", "tier.id", "=", "pokemon.tier_id")
@@ -46,7 +49,7 @@ knex("pokemon")
                   .first(["id", "usage_name"])
                   .then((rowPokemon) => {
                     if (!rowPokemon) {
-                      console.warn(
+                      importResult.addWarn(
                         `For Pokemon "${name}" in gen ${gen} cannot be found : skipping...`
                       );
                       resolve();
@@ -60,7 +63,7 @@ knex("pokemon")
                     ) {
                       tierId = tiers[`Untiered-${gen}`];
                     } else if (!tiers[`${short_name}-${gen}`]) {
-                      console.warn(
+                      importResult.addWarn(
                         `For Pokemon ${name} : Tier ${short_name} cannot be found in ${gen}, setting to Untiered`
                       );
                       tierId = tiers[`Untiered-${gen}`];
@@ -72,7 +75,6 @@ knex("pokemon")
                       .update({ tierId, technically })
                       .where({ id: rowPokemon.id, gen })
                       .then(() => {
-                        results.UPDATED++;
                         resolve();
                       })
                       .catch((e) =>
@@ -94,7 +96,7 @@ knex("pokemon")
               headers: ["pokemon", "tier", "newTier", "gen"],
               delimiter: ";",
             });
-            stream.pipe(fs.createWriteStream("pokemon_tier_result.csv"));
+            stream.pipe(fs.createWriteStream(importResultFile));
             knex("pokemon")
               .join("tier", "tier.id", "=", "pokemon.tier_id")
               .select([
@@ -110,14 +112,19 @@ knex("pokemon")
                       : pokemons[i]["newTier"];
                   if (pokemonsStore[i]["newTier"]) {
                     stream.write(pokemonsStore[i]);
+                    importResult.addUpdated();
                   }
                 }
                 stream.end();
+
                 knex.destroy();
+                importResult.setResultImportFile(importResultFile);
+                importResult.addInfo("Import pokemon tiers has finished.");
+                importResult.sendToDiscord();
               });
           })
           .catch((err) => {
-            console.error(err);
+            importResult.addError(err);
           })
           .finally(() => {
             knex.destroy();
