@@ -27,11 +27,8 @@ jobs: #this section contains the tasks / jobs that must be executed
         with:
           node-version: "16"
 
-      - name: Update pokemon-showdown data
-        run: npm ci && npm run clone-showdown
-
       - name: Update pokemons' usages
-        run: USAGE_PATH='usages' npm run generate-stats
+        run: npm run generate-stats
 
       - name: Store last hash commit
         run: echo "old_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
