@@ -27,14 +27,17 @@ jobs: #this section contains the tasks / jobs that must be executed
         with:
           node-version: "16"
 
+      - name: Install NPM dependencies
+        run: npm i # using npm i instead of npm ci, in order to update the made NPM dependency, pokemon-showdown
+
       - name: Update pokemons' usages
         run: npm run generate-stats
 
+      - name: Update JSON files
+        run: node dataToJson.js
+
       - name: Store last hash commit
         run: echo "old_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
-
-      - name: Commit differences # commit if differences are tracked after updates (previous step)
-        run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add json usages
