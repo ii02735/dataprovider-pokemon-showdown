@@ -29,11 +29,8 @@ jobs: #this section contains the tasks / jobs that must be executed
         with:
           node-version: "16"
 
-      - name: Update pokemon-showdown NPM made dependency
-        run: npm update pokemon-showdown
-
-      - name: Update pokemon-showdown data
-        run: npm ci
+      - name: Install NPM dependencies
+        run: npm i # using npm i instead of npm ci, in order to update the made NPM dependency, pokemon-showdown
 
       - name: Update pokemons' usages
         run: npm run generate-stats
