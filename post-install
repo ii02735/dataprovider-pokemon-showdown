@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # This repository cannot be written as an NPM dependency like pokemon-showdown, because it has directories not tracked by git (hence, as a NPM dependency, it won't have it)
-
+ROOT_DIRECTORY=$PWD
 git clone https://github.com/smogon/pokemon-showdown-client node_modules/pokemon-showdown-client
 cd node_modules/pokemon-showdown-client && npm i
 
 # for pokemon-showdown-client (used for learns provider)
-echo "creating symlink..." && ln -s "$PWD/node_modules/pokemon-showdown" "$PWD/node_modules/pokemon-showdown-client/caches/pokemon-showdown"
-cd $PWD/node_modules/pokemon-showdown-client
+echo "creating symlink..." && ln -s "$ROOT_DIRECTORY/node_modules/pokemon-showdown" "$ROOT_DIRECTORY/node_modules/pokemon-showdown-client/caches/pokemon-showdown"
+cd $ROOT_DIRECTORY/node_modules/pokemon-showdown-client
 
 node build
 
