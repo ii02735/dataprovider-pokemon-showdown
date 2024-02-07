@@ -5,8 +5,6 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "build": "./build",
-    "postbuild": "node dataToJson.js",
     "prepare": "husky install",
     "install": "./post-install",
     "generate-stats": "node usage-stats.js update && node usage-stats.js --clear upgrade 2 && node usage-stats.js check"
