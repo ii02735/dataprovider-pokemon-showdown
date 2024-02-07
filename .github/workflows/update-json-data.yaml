@@ -35,6 +35,9 @@ jobs: #this section contains the tasks / jobs that must be executed
       - name: Update pokemons' usages
         run: npm run generate-stats
 
+      - name: Update JSON files
+        run: node dataToJson.js
+
       - name: Store last hash commit
         run: echo "old_hash=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
 
