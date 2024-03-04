@@ -25,6 +25,14 @@ jobs: #this section contains the tasks / jobs that must be executed
           use_github_release_notes: true
           tag_prefix: v
 
+      - name: "NodeJS setup"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Make sure that pokemon-showdown dependency is up-to-date
+        run: npm update pokemon-showdown
+
       - name: Change version into package.json
         run: >
           sed -i 's/"version": ".*"/"version": "${{ steps.release.outputs.version }}"/g' package.json
