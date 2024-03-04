@@ -182,11 +182,11 @@
 	},
 	{
 		"name": "VGC 2023 RE",
-		"shortName": "VGC",
+		"shortName": "VGCre",
 		"usageName": "vgc2023regulatione",
 		"playable": false,
 		"official": true,
-		"main": true,
+		"main": false,
 		"isDouble": true,
 		"sortOrder": 3,
 		"gen": [9]
@@ -246,7 +246,7 @@
 		"shortName": "BSSre",
 		"usageName": "battlestadiumsinglesregulatione",
 		"official": true,
-		"main": true,
+		"main": false,
 		"playable": false,
 		"sortOrder": 4,
 		"gen": [9]
