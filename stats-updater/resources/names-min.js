@@ -66,6 +66,7 @@
   gen9camomons: "[Gen 9] Camomons",
   gen9convergence: "[Gen 9] Convergence",
   gen9crossevolution: "[Gen 9] Cross Evolution",
+  gen9ferventimpersonation: "[Gen 9] Fervent Impersonation",
   gen9foresighters: "[Gen 9] Foresighters",
   gen9fortemons: "[Gen 9] Fortemons",
   gen9franticfusions: "[Gen 9] Frantic Fusions",
