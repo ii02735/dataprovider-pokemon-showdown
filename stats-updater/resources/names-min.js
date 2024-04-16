@@ -37,7 +37,6 @@
   gen9nfe: "[Gen 9] NFE",
   gen9donotuse: "[Gen 9] Do Not Use",
   gen2moderngen2: "[Gen 2] Modern Gen 2",
-  gen9vaporemons: "[Gen 9] VaporeMons",
   gen6nextou: "[Gen 6] NEXT OU",
   gen9draft: "[Gen 9] Draft",
   gen9terapreviewdraft: "[Gen 9] Tera Preview Draft",
