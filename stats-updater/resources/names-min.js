@@ -13,7 +13,6 @@
   gen9lc: "[Gen 9] LC",
   gen9monotype: "[Gen 9] Monotype",
   gen9cap: "[Gen 9] CAP",
-  gen9bssregf: "[Gen 9] BSS Reg F",
   gen9bssregg: "[Gen 9] BSS Reg G",
   gen9customgame: "[Gen 9] Custom Game",
   gen9randomdoublesbattle: "[Gen 9] Random Doubles Battle",
