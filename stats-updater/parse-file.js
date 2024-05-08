@@ -160,7 +160,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
   for (let pokeStr of pokes) {
     let pokemon = {
       id: "",
-      usage: pokemonRank[index].usage,
+      usage: pokemonRank[index]?.usage,
       raw: 0,
       avg: 0,
       vc: 0,
