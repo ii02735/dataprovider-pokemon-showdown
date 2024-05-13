@@ -236,6 +236,7 @@
   gen4doublescustomgame: "[Gen 4] Doubles Custom Game",
   gen3ubers: "[Gen 3] Ubers",
   gen3uu: "[Gen 3] UU",
+  gen3ru: "[Gen 3] RU",
   gen3nu: "[Gen 3] NU",
   gen3pu: "[Gen 3] PU",
   gen3zu: "[Gen 3] ZU",
