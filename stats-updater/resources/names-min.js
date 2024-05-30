@@ -154,6 +154,7 @@
   gen8cap: "[Gen 8] CAP",
   gen8battlestadiumsingles: "[Gen 8] Battle Stadium Singles",
   gen8bdspou: "[Gen 8 BDSP] OU",
+  gen8bdspubers: "[Gen 8 BDSP] Ubers",
   gen8customgame: "[Gen 8] Custom Game",
   gen8doublesubers: "[Gen 8] Doubles Ubers",
   gen8doublesuu: "[Gen 8] Doubles UU",
