@@ -92,7 +92,7 @@
 	{
 		"name": "ZeroUsed",
 		"shortName": "ZU",
-		"playable": true,
+		"playable": false,
 		"usageName": "zu",
 		"rank": 8,
 		"sortOrder": 9,
@@ -110,7 +110,7 @@
 		"name": "ZeroUsed BorderLine",
 		"shortName": "ZUBL",
 		"usageName": "zubl",
-		"playable": true,
+		"playable": false,
 		"rank": 7,
 		"sortOrder": 8,
 		"parent": "PU"
@@ -121,7 +121,7 @@
 		"usageName": "nfe",
 		"rank": 99,
 		"sortOrder": 99,
-		"playable": true
+		"playable": false
 	},
 	{
 		"name": "Little Cup",
@@ -221,7 +221,7 @@
 	{
 		"name": "1v1",
 		"shortName": "1v1",
-		"playable": true,
+		"playable": false,
 		"maxPokemon": 3,
 		"usageName": "1v1",
 		"gen": [
