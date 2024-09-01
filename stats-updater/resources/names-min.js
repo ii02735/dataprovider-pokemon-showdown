@@ -23,7 +23,6 @@
   gen9doubleslc: "[Gen 9] Doubles LC",
   gen9vgc2023regd: "[Gen 9] VGC 2023 Reg D",
   gen9vgc2024regg: "[Gen 9] VGC 2024 Reg G",
-  gen9vgc2024reggbo3: "[Gen 9] VGC 2024 Reg G (Bo3)",
   gen9vgc2024regh: "[Gen 9] VGC 2024 Reg H",
   gen9vgc2024reghbo3: "[Gen 9] VGC 2024 Reg H (Bo3)",
   gen9doublescustomgame: "[Gen 9] Doubles Custom Game",
