@@ -93,8 +93,8 @@
   gen9nationaldexbh: "[Gen 9] National Dex BH",
   gen8nationaldexuu: "[Gen 8] National Dex UU",
   gen8nationaldexmonotype: "[Gen 8] National Dex Monotype",
-  gen9sharedpowerrandbatsbring12pick6:
-    "[Gen 9] Shared Power RandBats (Bring 12 Pick 6)",
+  gen9randombattlesharedpowerb12p6:
+    "[Gen 9] Random Battle (Shared Power, B12P6)",
   gen9randomroulette: "[Gen 9] Random Roulette",
   gen9superstaffbrosultimate: "[Gen 9] Super Staff Bros Ultimate",
   gen9monotyperandombattle: "[Gen 9] Monotype Random Battle",
