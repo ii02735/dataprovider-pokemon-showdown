@@ -160,9 +160,9 @@
 		"teraBan": true
 	},
 	{
-		"name": "VGC 2023 RH",
+		"name": "VGC 2024 RH",
 		"shortName": "VGC",
-		"usageName": "vgc2023regh",
+		"usageName": "vgc2024regh",
 		"playable": true,
 		"official": true,
 		"main": true,
@@ -173,7 +173,7 @@
 		]
 	},
 	{
-		"name": "BSS 2023 RH",
+		"name": "BSS 2024 RH",
 		"shortName": "BSS",
 		"usageName": "bssregh",
 		"official": true,
