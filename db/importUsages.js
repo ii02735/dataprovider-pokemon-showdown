@@ -188,7 +188,7 @@ const fs = require("fs");
                 .first();
 
               if (!entityRow) continue;
-              let dataToInsert = {
+              const dataToInsert = {
                 tierUsageId,
                 pokemonId: entityRow.id,
                 percent: entityData[percentProperty[property]],
@@ -199,11 +199,7 @@ const fs = require("fs");
                 delete dataToInsert.tierUsageId;
               }
               
-              await knex(tableName).insert({
-                tierUsageId,
-                pokemonId: entityRow.id,
-                percent: entityData[percentProperty[property]],
-              });
+              await knex(tableName).insert(dataToInsert);
             }
           }
         }
