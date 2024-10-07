@@ -36,7 +36,6 @@
   gen9nfe: "[Gen 9] NFE",
   gen6megasrevisited: "[Gen 6] Megas Revisited",
   gen1rbycap: "[Gen 1] RBY CAP",
-  gen6nextou: "[Gen 6] NEXT OU",
   gen9draft: "[Gen 9] Draft",
   gen96v6doublesdraft: "[Gen 9] 6v6 Doubles Draft",
   gen94v4doublesdraft: "[Gen 9] 4v4 Doubles Draft",
