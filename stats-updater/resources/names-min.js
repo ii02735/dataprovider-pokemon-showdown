@@ -47,6 +47,7 @@
   gen8natdex4v4doublesdraft: "[Gen 8] NatDex 4v4 Doubles Draft",
   gen7draft: "[Gen 7] Draft",
   gen6draft: "[Gen 6] Draft",
+  gen3draft: "[Gen 3] Draft",
   gen9convergence: "[Gen 9] Convergence",
   gen9inverse: "[Gen 9] Inverse",
   gen9inheritance: "[Gen 9] Inheritance",
