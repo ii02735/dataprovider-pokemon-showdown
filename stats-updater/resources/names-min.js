@@ -68,6 +68,7 @@
   gen9fortemons: "[Gen 9] Fortemons",
   gen9franticfusions: "[Gen 9] Frantic Fusions",
   gen9fullpotential: "[Gen 9] Full Potential",
+  gen9passiveaggressive: "[Gen 9] Passive Aggressive",
   gen9pokebilities: "[Gen 9] Pokebilities",
   gen9pokemoves: "[Gen 9] Pokemoves",
   gen9purehackmons: "[Gen 9] Pure Hackmons",
