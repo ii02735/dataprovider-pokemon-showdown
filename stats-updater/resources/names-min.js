@@ -15,6 +15,7 @@
   gen9cap: "[Gen 9] CAP",
   gen9bssregg: "[Gen 9] BSS Reg G",
   gen9bssregh: "[Gen 9] BSS Reg H",
+  gen9teamstarchallenge: "[Gen 9] Team Star Challenge",
   gen9customgame: "[Gen 9] Custom Game",
   gen9randomdoublesbattle: "[Gen 9] Random Doubles Battle",
   gen9doublesou: "[Gen 9] Doubles OU",
