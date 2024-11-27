@@ -103,6 +103,7 @@
   gen9superstaffbrosultimate: "[Gen 9] Super Staff Bros Ultimate",
   gen9monotyperandombattle: "[Gen 9] Monotype Random Battle",
   gen9randombattlemayhem: "[Gen 9] Random Battle Mayhem",
+  gen9battlefactory: "[Gen 9] Battle Factory",
   gen9bssfactory: "[Gen 9] BSS Factory",
   gen9babyrandombattle: "[Gen 9] Baby Random Battle",
   gen9computergeneratedteams: "[Gen 9] Computer-Generated Teams",
