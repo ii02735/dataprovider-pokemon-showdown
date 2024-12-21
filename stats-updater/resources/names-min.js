@@ -47,6 +47,7 @@
   gen8natdex4v4doublesdraft: "[Gen 8] NatDex 4v4 Doubles Draft",
   gen7draft: "[Gen 7] Draft",
   gen6draft: "[Gen 6] Draft",
+  gen4draft: "[Gen 4] Draft",
   gen3draft: "[Gen 3] Draft",
   gen9twisteddimension: "[Gen 9] Twisted Dimension",
   gen9mixandmegadoubles: "[Gen 9] Mix and Mega Doubles",
