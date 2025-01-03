@@ -99,7 +99,7 @@
   gen9nationaldexstabmons: "[Gen 9] National Dex STABmons",
   gen8nationaldexuu: "[Gen 8] National Dex UU",
   gen8nationaldexmonotype: "[Gen 8] National Dex Monotype",
-  gen6tripleschallengecup: "[Gen 6] Triples Challenge Cup",
+  gen7randombattleapexabilities: "[Gen 7] Random Battle (Apex Abilities)",
   gen9randomroulette: "[Gen 9] Random Roulette",
   gen9superstaffbrosultimate: "[Gen 9] Super Staff Bros Ultimate",
   gen9monotyperandombattle: "[Gen 9] Monotype Random Battle",
