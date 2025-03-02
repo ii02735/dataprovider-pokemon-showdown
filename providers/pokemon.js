@@ -59,6 +59,7 @@ const makePokemonObject = (
     ability_1: abilities["0"],
     ability_2: abilities["1"] || abilities["S"],
     ability_hidden: abilities["H"],
+    deleted: /.*-Totem|-Antique|-Artisan|-Masterpiece|Rockruff-Dusk|Greninja-Bond/.test(name))
   };
 };
 
