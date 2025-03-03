@@ -20,7 +20,7 @@
   "Genesect-Shock", // => pas sûr
   "Genesect-Burn", // => pas sûr
   "Genesect-Chill", // => pas sûr
-  "Rockruff-Dusk",
+  // 'Rockruff-Dusk', => diff ability
   "Greninja-Bond",
   "Mimikyu-Busted",
   "Cramorant-Gulping",
@@ -35,6 +35,11 @@
   "Sinistcha-Masterpiece",
   "Eevee-Partner",
   "Pikachu-Cosplay",
+  "Pikachu-Rock-Star",
+  "Pikachu-Belle",
+  "Pikachu-Pop-Star",
+  "Pikachu-PhD",
+  "Pikachu-Libre",
   "Pikachu-World",
   "Pikachu-Original",
   "Pikachu-Hoenn",
