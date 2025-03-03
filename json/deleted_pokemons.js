@@ -22,13 +22,14 @@
   "Genesect-Chill", // => pas sûr
   // 'Rockruff-Dusk', => diff ability
   "Greninja-Bond",
+  "Magearna-Original",
+  "Zarude-Dada",
   "Mimikyu-Busted",
   "Cramorant-Gulping",
   "Cramorant-Gorging",
   "Dudunsparce-Three-Segment",
   "Maushold-Four",
   "Pichu-Spiky-eared",
-  "Magearna-Original",
   "Polteageist-Antique",
   "Sinistea-Antique",
   "Poltchageist-Artisan",
