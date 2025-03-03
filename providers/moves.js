@@ -12,6 +12,8 @@ const makeMoveObject = (rawObject, gen) => ({
   pp: rawObject.pp,
   accuracy: rawObject.accuracy,
   type: rawObject.type,
+  priority: rawObject.priority,
+  flags: rawObject.flags,
   gen,
 });
 
