@@ -1,4 +1,4 @@
-[
+const deletedPokemons = [
   // "Keldeo-Resolute", => à voir
   // "Basculin-Blue-Striped", => à voir
   // "Basculin-Red-Striped", => à voir

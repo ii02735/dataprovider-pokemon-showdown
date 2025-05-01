@@ -1,11 +1,11 @@
 const { loadResource, LIBS } = require("../libs/fileLoader");
 const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
 const { Dex } = require("pokemon-showdown");
-const deleted_pokemons = require("../json/deleted_pokemons");
+const { deletedPokemons } = require("../json/deleted_pokemons");
 let pokemonsCollection = [];
 
 const isDeleted = (name) =>
-  /.*-Totem./.test(name) || deleted_pokemons.includes(name);
+  /.*-Totem./.test(name) || deletedPokemons.includes(name);
 
 const getBaseForm = ({ name, changesFrom, baseSpecies }) => {
   // Take in priority changesFrom (for not basic form)
@@ -63,7 +63,7 @@ const makePokemonObject = (
 ) => {
   const { hp, atk, def, spa, spd, spe } = baseStats;
   const [type_1, type_2] = types;
-  const abilities = getAbilities(abilities, gen);
+  abilities = getAbilities(abilities, gen);
 
   const pokemon = {
     pokedex,
