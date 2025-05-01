@@ -1,13 +1,10 @@
 /* Export usage data */
-
-"use strict";
-
-const Path = require("path");
-const FileSystem = require("fs");
+import Path from "path";
+import FileSystem from "fs";
+import { check } from "./update-months.js";
 
 exports.start = function (month, formats_file, export_file) {
-  let monthsList = require(Path.resolve(__dirname, "update-months.js")).check()
-    .list;
+  let monthsList = check().list;
   if (monthsList.indexOf(month) >= 0) {
     let formats;
     try {

@@ -1,4 +1,4 @@
-const { Dex } = require("pokemon-showdown");
+import { Dex } from "pokemon-showdown";
 
 const natures = Dex.natures.all().map(({ id: key, name, plus, minus }) => {
   const nature = { name, usageName: key };
@@ -7,4 +7,4 @@ const natures = Dex.natures.all().map(({ id: key, name, plus, minus }) => {
   return nature;
 });
 
-module.exports = natures;
+export default natures;

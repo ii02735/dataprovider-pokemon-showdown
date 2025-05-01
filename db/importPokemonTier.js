@@ -1,9 +1,9 @@
-const { loadResource, JSON, LIBS } = require("../libs/fileLoader");
-const { knex } = require("./db");
-const csv = require("fast-csv");
-const fs = require("fs");
-const importResult = require("../importResult")("import_pokemon_tier");
-const pokemonTiers = loadResource(JSON, "pokemonTier.json");
+import { loadResource, JSON as CONST_JSON, LIBS } from "../libs/fileLoader";
+import { knex } from "./db";
+import csv from "fast-csv";
+import fs from "fs";
+import importResult from "../importResult";
+const pokemonTiers = loadResource(CONST_JSON, "pokemonTier.json");
 const { removeParenthesis } = loadResource(LIBS, "util");
 const importResultFile = "./logs/pokemon_tier_import_result.csv";
 

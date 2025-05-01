@@ -1,10 +1,10 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
+import fs from "fs";
+import { knex } from "./db";
+import { loadResource, LIBS } from "../libs/fileLoader";
 const { LAST_GEN, folderUsage, withoutSpaces } = loadResource(LIBS, "util");
-const { knex } = require("./db");
 
 const gen = LAST_GEN;
 // Choose latest data folder
-const fs = require("fs");
 
 (async () => {
   try {

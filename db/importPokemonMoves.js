@@ -1,9 +1,9 @@
-const { loadResource, LIBS, JSON } = require("../libs/fileLoader");
-const { knex } = require("./db");
-const { withoutSpaces } = loadResource(LIBS, "util");
-const bluebird = require("bluebird");
-const learns = loadResource(JSON, "learns.json");
-const cliProgress = require("cli-progress");
+import { knex } from "./db";
+import { withoutSpaces } from "../libs/util";
+import bluebird from "bluebird";
+import learns from "../json/learns.json";
+import cliProgress from "cli-progress";
+
 const progressBar = new cliProgress.SingleBar(
   {
     clearOnComplete: true,

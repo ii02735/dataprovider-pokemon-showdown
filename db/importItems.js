@@ -1,5 +1,5 @@
-const { loadResource, JSON } = require("../libs/fileLoader");
-const { insertOrUpdate, knex, resultRecords } = require("./db");
+import { loadResource, JSON } from "../libs/fileLoader";
+import { insertOrUpdate, knex, resultRecords } from "./db";
 const items = loadResource(JSON, "items.json");
 
 Promise.all(

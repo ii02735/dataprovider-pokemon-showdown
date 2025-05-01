@@ -1,6 +1,7 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
+import { Dex } from "pokemon-showdown";
+import { loadResource, LIBS } from "../libs/fileLoader";
 const { removeParenthesis, LAST_GEN, isStandard } = loadResource(LIBS, "util");
-const { Dex } = require("pokemon-showdown");
+
 let pokemonTier = [];
 
 const makePokemonTierObject = ({ name, tier, doubleTiers }, gen) => ({
@@ -29,4 +30,4 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
   }
 }
 
-module.exports = pokemonTier;
+export default pokemonTier;

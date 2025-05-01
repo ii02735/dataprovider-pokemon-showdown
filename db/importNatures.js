@@ -1,6 +1,6 @@
-const { loadResource, JSON } = require("../libs/fileLoader");
-const { insertOrUpdate, knex, resultRecords } = require("./db");
-const natures = loadResource(JSON, "natures.json");
+import { loadResource, JSON as CONST_JSON } from "../libs/fileLoader";
+import { insertOrUpdate, knex, resultRecords } from "./db";
+const natures = loadResource(CONST_JSON, "natures.json");
 
 Promise.all(
   insertOrUpdate(knex, "nature", natures, { ignoreColumns: ["usageName"] })

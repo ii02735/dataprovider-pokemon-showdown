@@ -1,12 +1,10 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
+import { loadResource, LIBS } from "../libs/fileLoader";
+import { knex } from "./db";
+import fs from "fs";
 const { LAST_GEN, folderUsage, range, withoutSpaces } = loadResource(
   LIBS,
   "util"
 );
-const { knex } = require("./db");
-
-// Choose latest data folder
-const fs = require("fs");
 
 (async () => {
   try {
@@ -198,7 +196,7 @@ const fs = require("fs");
                 dataToInsert.tierUsage = dataToInsert.tierUsageId;
                 delete dataToInsert.tierUsageId;
               }
-              
+
               await knex(tableName).insert(dataToInsert);
             }
           }

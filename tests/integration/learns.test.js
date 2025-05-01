@@ -1,64 +1,57 @@
-const path = require("path");
-const { loadResource, PROVIDER } = require(path.join(
-  __dirname,
-  "..",
-  "..",
-  "libs",
-  "fileLoader"
-));
-const { isRegional } = loadResource(PROVIDER, "learns");
+import { loadResource, PROVIDER } from '../../libs/fileLoader';
+const { isRegional } = loadResource(PROVIDER, 'learns');
 
-test("Should return true when regional form encountered", () => {
-  // Regional form case
+test('Should return true when regional form encountered', () => {
+	// Regional form case
 
-  let species = {
-    name: "Ninetales-Alola",
-    forme: "Alola",
-    baseSpecies: "Ninetales",
-  };
+	let species = {
+		name: 'Ninetales-Alola',
+		forme: 'Alola',
+		baseSpecies: 'Ninetales',
+	};
 
-  expect(isRegional(species)).toBe(true);
+	expect(isRegional(species)).toBe(true);
 
-  // Regular form case
+	// Regular form case
 
-  species = {
-    name: "Venusaur",
-    forme: "",
-  };
+	species = {
+		name: 'Venusaur',
+		forme: '',
+	};
 
-  expect(isRegional(species)).toBe(false);
+	expect(isRegional(species)).toBe(false);
 
-  // Non-regional case
+	// Non-regional case
 
-  species = {
-    name: "Vensuaur-Mega",
-    forme: "Mega",
-  };
+	species = {
+		name: 'Vensuaur-Mega',
+		forme: 'Mega',
+	};
 
-  expect(isRegional(species)).toBe(false);
+	expect(isRegional(species)).toBe(false);
 
-  species = {
-    name: "Venusaur-Gmax",
-    forme: "Gmax",
-  };
+	species = {
+		name: 'Venusaur-Gmax',
+		forme: 'Gmax',
+	};
 
-  expect(isRegional(species)).toBe(false);
+	expect(isRegional(species)).toBe(false);
 
-  species = {
-    name: "",
-  };
+	species = {
+		name: '',
+	};
 
-  species = {
-    name: "Growlithe-Hisui",
-    forme: "Hisui",
-  };
+	species = {
+		name: 'Growlithe-Hisui',
+		forme: 'Hisui',
+	};
 
-  expect(isRegional(species)).toBe(true);
+	expect(isRegional(species)).toBe(true);
 
-  species = {
-    name: "Weezing-Galar",
-    forme: "Galar",
-  };
+	species = {
+		name: 'Weezing-Galar',
+		forme: 'Galar',
+	};
 
-  expect(isRegional(species)).toBe(true);
+	expect(isRegional(species)).toBe(true);
 });

@@ -1,8 +1,7 @@
 /* Check stats files */
-
 "use strict";
-
-const Path = require("path");
+import { check, checkAndUpdate } from "./update-months.js";
+import { loadMonth } from "./load-month.js";
 
 let currMonth = -1;
 let monthsList = [];
@@ -11,29 +10,25 @@ function checkNext() {
   currMonth++;
   if (currMonth >= monthsList.length) {
     console.log("DONE: Check completed.");
-    require(Path.resolve(__dirname, "update-months.js")).checkAndUpdate();
+    checkAndUpdate();
     return;
   }
-  require(Path.resolve(__dirname, "load-month.js")).loadMonth(
-    monthsList[currMonth],
-    (err) => {
-      if (err) {
-        console.log("Error parsing month: " + monthsList[currMonth]);
-      } else {
-        console.log("DONE: Parsed month data for " + monthsList[currMonth]);
-      }
-      checkNext();
+  loadMonth(monthsList[currMonth], (err) => {
+    if (err) {
+      console.log("Error parsing month: " + monthsList[currMonth]);
+    } else {
+      console.log("DONE: Parsed month data for " + monthsList[currMonth]);
     }
-  );
+    checkNext();
+  });
 }
 
-exports.start = function () {
+export const start = () => {
   console.log("Checking usage stats files...");
-  monthsList = require(Path.resolve(__dirname, "update-months.js")).check()
-    .list;
+  monthsList = check().list;
   if (monthsList.length === 0) {
     console.log("DONE: Nothing to check.");
-    require(Path.resolve(__dirname, "update-months.js")).checkAndUpdate();
+    checkAndUpdate();
   } else {
     checkNext();
   }

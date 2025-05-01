@@ -1,5 +1,5 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
-const { Dex } = require("pokemon-showdown");
+import { Dex } from "pokemon-showdown";
+import { loadResource, LIBS } from "../libs/fileLoader";
 const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
 /**
  * Smogon's damageTaken property with its different values
@@ -49,4 +49,4 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
 
 [1, 2, 3, 4].forEach((gen) => types.push({ name: "???", weaknesses: [], gen }));
 
-module.exports = types;
+export default types;

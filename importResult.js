@@ -1,5 +1,5 @@
-const pino = require("pino");
-const Discord = require("discord.js");
+import pino from "pino";
+import Discord from "discord.js";
 let discordClient = null;
 
 const sendToDiscord = (
@@ -10,14 +10,14 @@ const sendToDiscord = (
 ) => {
   const formatMessage = () => {
     return `
-Résultats d'exécution de \`${importName}\` :
-- Lignes mises à jour : **${results.UPDATED}**
-- Avertissements : **${results.WARNING}**
-- Erreurs : **${results.ERROR}**
-Ci-joint ${
+    Résultats d'exécution de \`${importName}\` :
+    - Lignes mises à jour : **${results.UPDATED}**
+    - Avertissements : **${results.WARNING}**
+    - Erreurs : **${results.ERROR}**
+    Ci-joint ${
       resultImportFile ? "les lignes modifiées et " : ""
     }les logs d'exécution.  
-`;
+    `;
   };
 
   const filesToSend = [];
@@ -55,7 +55,7 @@ Ci-joint ${
   });
 };
 
-module.exports = (importName) => {
+export const importResult = (importName) => {
   const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

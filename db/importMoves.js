@@ -1,6 +1,7 @@
-const { loadResource, JSON } = require("../libs/fileLoader");
-const { knex, insertOrUpdate, resultRecords } = require("./db");
-const moves = loadResource(JSON, "moves.json").map((move) => {
+import { loadResource, JSON as CONST_JSON } from "../libs/fileLoader";
+import { knex, insertOrUpdate, resultRecords } from "./db";
+
+const moves = loadResource(CONST_JSON, "moves.json").map((move) => {
   if (move.type === "???") {
     move.type = "Unknown";
   }

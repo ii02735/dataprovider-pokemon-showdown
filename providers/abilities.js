@@ -1,6 +1,6 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
+import { Dex } from "pokemon-showdown";
+import { loadResource, LIBS } from "../libs/fileLoader";
 const { LAST_GEN, isStandard, range } = loadResource(LIBS, "util");
-const { Dex } = require("pokemon-showdown");
 
 const makeAbilityObject = ({ id: usageName, name, flags }, gen) => ({
   usageName,
@@ -27,4 +27,4 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
     abilities.push(makeAbilityObject(abilityFromShowdown, gen));
 }
 
-module.exports = abilities;
+export default abilities;

@@ -1,8 +1,7 @@
 // TODO retirer la fin des pokemons missingno + CAP + pokemon studio
 "use strict";
+import { loadResource, LIBS, PROVIDER } from "./libs/fileLoader";
 
-const path = require("path");
-const { loadResource, LIBS, PROVIDER } = require("./libs/fileLoader");
 const { writeFile } = loadResource(LIBS, "util");
 const abilities = loadResource(PROVIDER, "abilities");
 const items = loadResource(PROVIDER, "items");

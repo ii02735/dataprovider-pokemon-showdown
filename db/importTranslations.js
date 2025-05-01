@@ -6,8 +6,8 @@ const fileTableMapping = {
   pokemons: "pokemon",
   types: "type",
 };
-const { knex } = require("./db");
-const fs = require("fs");
+import { knex } from "./db";
+import fs from "fs";
 //console.log(JSON.parse(fs.readFileSync(`./json/translations/items_translations.json`)))
 
 Promise.all(

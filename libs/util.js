@@ -1,6 +1,8 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
 
-const fileSystem = require("fs");
+dotenv.config();
 
 const LAST_GEN = process.env.LAST_GEN;
 
@@ -16,7 +18,7 @@ const removeParenthesis = (string) =>
   string.replace(/\(+/g, "").replace(/\)+/g, "");
 
 // prettier-ignore
-const writeFile = (fileName, values) => fileSystem.writeFile(
+const writeFile = (fileName, values) => fs.writeFile(
     `json/${fileName}.json`,
     JSON.stringify(values),
     e => log(fileName, e)
@@ -42,8 +44,8 @@ const range = (start, end) =>
     .fill()
     .map((_, idx) => start + idx);
 
-const folderUsage = `usages/months/${fileSystem
-  .readdirSync(require("path").resolve("usages/months"))
+const folderUsage = `usages/months/${fs
+  .readdirSync(path.resolve("usages/months"))
   .pop()}`;
 
 const withoutSpaces = (s) =>
@@ -53,7 +55,7 @@ const withoutSpaces = (s) =>
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
 
-module.exports = {
+export default {
   writeFile,
   isStandard,
   removeParenthesis,

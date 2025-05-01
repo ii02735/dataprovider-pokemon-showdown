@@ -1,6 +1,8 @@
-const { loadResource, JSON } = require("../libs/fileLoader");
-const { knex } = require("./db");
+import { loadResource, JSON } from "../libs/fileLoader";
+import { knex } from "./db";
+
 let typesWeaknesses = {};
+
 let records = { table: "type", CREATED: 0, UPDATED: 0 };
 const objects = loadResource(JSON, "types.json").map((type) => {
   if (type.name === "???") {

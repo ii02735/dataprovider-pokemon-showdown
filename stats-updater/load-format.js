@@ -1,11 +1,9 @@
 /* Formats loader */
-
 "use strict";
-
-const Path = require("path");
-const FileSystem = require("fs");
-const Http = require("https");
-const Parser = require(Path.resolve(__dirname, "parse-file.js"));
+import Path from "path";
+import FileSystem from "fs";
+import Http from "https";
+import Parser from "./parse-file.js";
 
 const Smogon_Stats_URL = "https://www.smogon.com/stats/";
 
@@ -240,4 +238,4 @@ class FormatsLoader {
   }
 }
 
-module.exports = FormatsLoader;
+export default FormatsLoader;

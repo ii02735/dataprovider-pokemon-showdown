@@ -1,5 +1,8 @@
-const { knexSnakeCaseMappers } = require("objection");
-require("dotenv").config();
+import { knexSnakeCaseMappers } from "objection";
+import dotenv from "dotenv";
+import { knex as knexInstance } from "knex";
+dotenv.config();
+
 /**
  *
  * @param {string} knex Knex instance
@@ -17,7 +20,7 @@ require("dotenv").config();
  * - noOverideColumns : columns that mustn't be updated
  * @returns
  */
-module.exports.insertOrUpdate = (
+export const insertOrUpdate = (
   knex,
   tableName,
   objectArray,
@@ -88,7 +91,7 @@ module.exports.insertOrUpdate = (
   });
 };
 
-module.exports.resultRecords = (table, results) =>
+export const resultRecords = (table, results) =>
   results.reduce(
     (acc, { INSERTED = 0, UPDATED = 0 }) => {
       acc["INSERTED"] += INSERTED;
@@ -98,7 +101,7 @@ module.exports.resultRecords = (table, results) =>
     { table, INSERTED: 0, UPDATED: 0 }
   );
 
-module.exports.knex = require("knex")({
+export const knex = knexInstance({
   client: "mysql",
   connection: process.env.CONNECTION_STRING,
   log: {

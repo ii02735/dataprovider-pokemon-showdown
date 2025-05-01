@@ -1,6 +1,7 @@
-const { loadResource, JSON: _JSON } = require("../libs/fileLoader");
-const { knex, insertOrUpdate, resultRecords } = require("./db");
-const pokemons = loadResource(_JSON, "pokemons.json").map((pokemon) => {
+import { loadResource, JSON as CONST_JSON } from "../libs/fileLoader";
+import { knex, insertOrUpdate, resultRecords } from "./db";
+
+const pokemons = loadResource(CONST_JSON, "pokemons.json").map((pokemon) => {
   if (pokemon.type === "???") {
     pokemon.type = "Unknown";
   }

@@ -1,7 +1,7 @@
-const { loadResource, LIBS } = require("../libs/fileLoader");
-const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
-const { Dex } = require("pokemon-showdown");
-const deleted_pokemons = require("../json/deleted_pokemons");
+import { loadResource, LIBS } from "../libs/fileLoader";
+import { LAST_GEN, isStandard } from "../libs/util";
+import { Dex } from "pokemon-showdown";
+import deleted_pokemons from "../json/deleted_pokemons";
 let pokemonsCollection = [];
 
 const isDeleted = (name) =>
@@ -117,4 +117,4 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
   }
 }
 
-module.exports = pokemonsCollection;
+export default pokemonsCollection;

@@ -1,42 +1,40 @@
 /* Update names */
+'use strict';
+import Path from 'path';
+import FileSystem from 'fs';
+import { Dex } from 'pokemon-showdown';
 
-"use strict";
+const Names_File = Path.resolve(__dirname, 'resources/names.json');
+const Names_File_Min = Path.resolve(__dirname, 'resources/names-min.js');
 
-const Path = require("path");
-const FileSystem = require("fs");
+async function updateNames(formatsData) {
+	let names = {};
+	let n = 0;
 
-const Names_File = Path.resolve(__dirname, "resources/names.json");
-const Names_File_Min = Path.resolve(__dirname, "resources/names-min.js");
+	try {
+		names = await import(Names_File);
+	} catch (err) {
+		console.log('Creating new names file...');
+	}
 
-function updateNames(formatsData) {
-  let names = {};
-  let n = 0;
+	for (let format of formatsData) {
+		if (!format.name) continue;
+		let id = toId(format.name);
+		if (!id) continue;
+		names[id] = format.name;
+		n++;
+	}
 
-  try {
-    names = require(Names_File);
-  } catch (err) {
-    console.log("Creating new names file...");
-  }
+	FileSystem.writeFileSync(
+		Names_File_Min,
+		'/*Formats*/ window.FormatNames = ' + JSON.stringify(names) + ';'
+	);
+	FileSystem.writeFileSync(Names_File, JSON.stringify(names, null, 4));
 
-  for (let format of formatsData) {
-    if (!format.name) continue;
-    let id = toId(format.name);
-    if (!id) continue;
-    names[id] = format.name;
-    n++;
-  }
-
-  FileSystem.writeFileSync(
-    Names_File_Min,
-    "/*Formats*/ window.FormatNames = " + JSON.stringify(names) + ";"
-  );
-  FileSystem.writeFileSync(Names_File, JSON.stringify(names, null, 4));
-
-  console.log("DONE: Loaded " + n + " format names.");
+	console.log('DONE: Loaded ' + n + ' format names.');
 }
 
-exports.start = function () {
-  console.log("Getting formats data 2...");
-  const { Dex } = require("pokemon-showdown");
-  updateNames(Dex.formats.all());
+export const start = async function () {
+	console.log('Getting formats data 2...');
+	await updateNames(Dex.formats.all());
 };

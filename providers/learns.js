@@ -1,10 +1,11 @@
-const { loadResource, PROVIDER } = require("../libs/fileLoader");
-const { LAST_GEN } = require("../libs/util");
-const { Dex } = require("pokemon-showdown");
+import { loadResource, PROVIDER } from "../libs/fileLoader";
+import { LAST_GEN } from "../libs/util";
+import { Dex } from "pokemon-showdown";
 /**
  * Will be used to determine the moves belonging to each pokemon
  */
-const DexSearch = require("../pokemon-showdown-client/play.pokemonshowdown.com/js/battle-dex-search.js");
+import DexSearch from "../pokemon-showdown-client/play.pokemonshowdown.com/src/battle-dex-search.ts";
+
 const pokemons = loadResource(PROVIDER, "pokemon");
 const searchEngine = new DexSearch();
 
@@ -42,4 +43,4 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
   }
 }
 
-module.exports = learns;
+export default learns;

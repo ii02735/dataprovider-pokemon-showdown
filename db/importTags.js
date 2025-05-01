@@ -1,10 +1,10 @@
-const { insertOrUpdate, knex, resultRecords } = require("./db");
-const { loadResource, JSON } = require("../libs/fileLoader");
-const tags = loadResource(JSON, "tags.json");
-const guideTags = loadResource(JSON, "guide_tags.json");
-const actualityTags = loadResource(JSON, "actuality_tags.json");
-const videoTags = loadResource(JSON, "video_tags.json");
-const tournamentTags = loadResource(JSON, "tournament_tags.json");
+import { insertOrUpdate, knex, resultRecords } from "./db";
+import { loadResource, JSON as CONST_JSON } from "../libs/fileLoader";
+const tags = loadResource(CONST_JSON, "tags.json");
+const guideTags = loadResource(CONST_JSON, "guide_tags.json");
+const actualityTags = loadResource(CONST_JSON, "actuality_tags.json");
+const videoTags = loadResource(CONST_JSON, "video_tags.json");
+const tournamentTags = loadResource(CONST_JSON, "tournament_tags.json");
 
 // Team
 Promise.all(insertOrUpdate(knex, "tag", tags))

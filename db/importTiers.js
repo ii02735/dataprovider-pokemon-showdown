@@ -1,14 +1,7 @@
-const { insertOrUpdate, knex, resultRecords } = require("./db");
-const fs = require("fs");
-const path = require("path");
-const { loadResource, JSON, LIBS } = require("../libs/fileLoader");
-const { folderUsage, LAST_GEN, range } = loadResource(LIBS, "util");
-const formats = require(path.join(
-  __dirname,
-  "..",
-  folderUsage,
-  "formats.json"
-));
+import { insertOrUpdate, knex, resultRecords } from "./db";
+import { loadResource, JSON, LIBS, USAGE } from "../libs/fileLoader";
+const { LAST_GEN, range } = loadResource(LIBS, "util");
+const formats = loadResource(USAGE, "formats.json");
 const rawTiers = loadResource(JSON, "tiers.json");
 
 // Add tiers for specific gens
@@ -37,6 +30,7 @@ tiers = tiers.concat(
       return tier;
     })
 );
+
 Promise.all(
   insertOrUpdate(knex, "tier", tiers, {
     hasGen: true,

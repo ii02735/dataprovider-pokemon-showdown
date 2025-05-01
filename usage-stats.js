@@ -3,13 +3,14 @@
 
 "use strict";
 
-require("dotenv").config();
+import dotenv from "dotenv";
+import Path from "path";
+import FileSystem from "fs";
+import Program from "commander";
 
-const Path = require("path");
-const FileSystem = require("fs");
-const Program = require("commander");
+dotenv.config();
 
-const Package = require(Path.resolve(__dirname, "package.json"));
+import Package from Path.resolve(__dirname, "package.json");
 
 /* Globals */
 
@@ -68,13 +69,13 @@ Program.option("--clear", "Remove old usage stats files");
 
 Program.command("update")
   .description("update months list and format names")
-  .action(() => {
-    require(Path.resolve(
+  .action(async () => {
+    await import(Path.resolve(
       __dirname,
       "stats-updater",
       "update-names.js"
     )).start();
-    require(Path.resolve(
+    await import(Path.resolve(
       __dirname,
       "stats-updater",
       "update-months.js"
@@ -83,8 +84,8 @@ Program.command("update")
 
 Program.command("update-names")
   .description("update format names")
-  .action(() => {
-    require(Path.resolve(
+  .action(async () => {
+    await import(Path.resolve(
       __dirname,
       "stats-updater",
       "update-names.js"
@@ -93,8 +94,8 @@ Program.command("update-names")
 
 Program.command("update-months")
   .description("update months list")
-  .action(() => {
-    require(Path.resolve(
+  .action(async () => {
+    await import(Path.resolve(
       __dirname,
       "stats-updater",
       "update-months.js"
@@ -103,8 +104,8 @@ Program.command("update-months")
 
 Program.command("upgrade <number|all>")
   .description("loads usage stats for last months")
-  .action((param) => {
-    require(Path.resolve(__dirname, "stats-updater", "upgrade.js")).start(
+  .action(async (param) => {
+    await import(Path.resolve(__dirname, "stats-updater", "upgrade.js")).start(
       param,
       Program.clear
     );
@@ -112,28 +113,28 @@ Program.command("upgrade <number|all>")
 
 Program.command("get <month>")
   .description("loads usage stats of a month")
-  .action((month) => {
-    require(Path.resolve(__dirname, "stats-updater", "load-month.js")).start(
+  .action(async (month) => {
+    await import(Path.resolve(__dirname, "stats-updater", "load-month.js")).start(
       month
     );
   });
 
 Program.command("check")
   .description("checks downloaded stats")
-  .action(() => {
-    require(Path.resolve(__dirname, "stats-updater", "check.js")).start();
+  .action(async () => {
+    await import(Path.resolve(__dirname, "stats-updater", "check.js")).start();
   });
 
 Program.command("test <port>")
   .description("creates a http server to test the project")
-  .action((port) => {
-    require(Path.resolve(__dirname, "server.js")).start(parseInt(port));
+  .action(async (port) => {
+    await import(Path.resolve(__dirname, "server.js")).start(parseInt(port));
   });
 
 Program.command("simple-export <month> <json-formats-file> <output-file>")
   .description("exports a simplified version of usage stats")
-  .action((month, ff, outFile) => {
-    require(Path.resolve(__dirname, "stats-updater", "export.js")).start(
+  .action(async (month, ff, outFile) => {
+    await import(Path.resolve(__dirname, "stats-updater", "export.js")).start(
       month,
       Path.resolve(__dirname, ff),
       Path.resolve(__dirname, outFile)

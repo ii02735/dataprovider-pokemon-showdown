@@ -1,5 +1,6 @@
-const { LAST_GEN, isStandard } = require("../libs/util");
-const { Dex } = require("pokemon-showdown");
+import { Dex } from "pokemon-showdown";
+import { LAST_GEN, isStandard } from "../libs/util";
+
 let movesCollection = [];
 
 const makeMoveObject = (rawObject, gen) => ({
@@ -32,4 +33,4 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
   }
 }
 
-module.exports = movesCollection;
+export default movesCollection;

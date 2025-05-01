@@ -1,6 +1,7 @@
-const { loadResource, LIBS, DEX } = require("../libs/fileLoader");
+import { Dex } from "pokemon-showdown";
+import { loadResource, LIBS } from "../libs/fileLoader";
 const { LAST_GEN, range, isStandard } = loadResource(LIBS, "util");
-const { Dex } = require("pokemon-showdown");
+
 let itemsCollection = range(1, LAST_GEN).map((gen) => ({
   usageName: "noitem",
   name: "No Item",
@@ -30,4 +31,4 @@ for (let gen = 1; gen <= LAST_GEN; gen++) {
 
 // const items = Object.values(itemsCollection);
 
-module.exports = itemsCollection;
+export default itemsCollection;
