@@ -25,7 +25,7 @@ function upgradeNext() {
       } else {
         console.log("DONE: Parsed month data for " + monthsList[currMonth]);
       }
-      upgradeNext();
+      // upgradeNext(); // don't need to update previous months
     }
   );
 }

@@ -39,6 +39,7 @@ exports.check = function () {
       months.list.push(file);
     }
   }
+  months.list = months.list.slice(-2);
   return months;
 };
 

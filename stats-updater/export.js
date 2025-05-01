@@ -68,6 +68,11 @@ exports.start = function (month, formats_file, export_file) {
           }
         }
 
+        pokeData.teratypes = [];
+        for (let teratype of data[pokeId].teratypes) {
+          pokeData.teratypes.push(toId(teratype.name));
+        }
+
         pokeData.spreads = [];
         for (let spread of data[pokeId].spreads) {
           if (spread.nature === "Other") continue;

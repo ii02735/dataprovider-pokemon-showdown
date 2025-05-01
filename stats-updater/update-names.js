@@ -7,6 +7,10 @@ const FileSystem = require("fs");
 
 const Names_File = Path.resolve(__dirname, "resources/names.json");
 const Names_File_Min = Path.resolve(__dirname, "resources/names-min.js");
+const rejectedNames = require(Path.resolve(
+  __dirname,
+  "resources/rejected-names.js"
+));
 
 function updateNames(formatsData) {
   let names = {};
@@ -22,6 +26,7 @@ function updateNames(formatsData) {
     if (!format.name) continue;
     let id = toId(format.name);
     if (!id) continue;
+    if (rejectedNames[id]) continue;
     names[id] = format.name;
     n++;
   }

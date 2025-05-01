@@ -1,6 +1,11 @@
 /* File Parsing */
 
 "use strict";
+const Path = require("path");
+const rejectedNames = require(Path.resolve(
+  __dirname,
+  "resources/rejected-names.js"
+));
 
 function parsePercent(str) {
   return parseFloat((str || "").replace("%", "").trim());
@@ -46,7 +51,7 @@ exports.parseMonthsList = function (str) {
       months.push(data);
     }
   }
-  return { months };
+  return { months: months.slice(-2) };
 };
 
 exports.parseFormatsList = function (str) {
@@ -56,7 +61,11 @@ exports.parseFormatsList = function (str) {
     if (/.*\.txt$/i.test(file)) {
       let spl = file.split(".")[0].split("-");
       let format = toId(spl[0]);
+      if (rejectedNames[format]) continue;
+
       let cutline = parseInt(spl[1]);
+      if (!cutline) continue;
+
       if (format && !isNaN(cutline)) {
         if (!formats[format]) {
           formats[format] = {
@@ -167,6 +176,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
       abilities: [],
       moves: [],
       items: [],
+      teratypes: [],
       spreads: [],
       teammates: [],
       counters: [],
@@ -236,6 +246,18 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
             let name = spl.join(" ").trim();
             if (toId(name)) {
               pokemon.items.push({ name: name, usage: percent });
+            }
+          }
+        }
+      } else if (subject === "teratypes") {
+        for (let j = 2; j < lines.length; j++) {
+          let spl = lines[j].split("|");
+          if (spl[1]) {
+            spl = spl[1].trim().split(" ");
+            let percent = parsePercent(spl.pop());
+            let name = spl.join(" ").trim();
+            if (name) {
+              pokemon.teratypes.push({ name: name, usage: percent });
             }
           }
         }
