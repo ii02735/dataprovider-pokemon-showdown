@@ -28,7 +28,7 @@ jobs: #this section contains the tasks / jobs that must be executed
       - name: "NodeJS setup"
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "20"
 
       - name: Make sure that pokemon-showdown dependency is up-to-date
         run: npm update pokemon-showdown

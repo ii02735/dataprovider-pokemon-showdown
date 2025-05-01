@@ -9,7 +9,7 @@ jobs:
     env:
       LAST_GEN: 9
     runs-on: ubuntu-latest
-    container: node:16
+    container: node:20
 
     steps:
       - name: Check out repository
