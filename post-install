@@ -19,8 +19,10 @@ echo "\n" >> play.pokemonshowdown.com/js/battle-dex.js
 echo "module.exports.toID = toID;" >> play.pokemonshowdown.com/js/battle-dex.js
 
 # Injecting assets in order for play.pokemonshowdown.com/js/battle-dex-search.js to work as a regular node.js module (and not like JS code from a web client)
-sed -i "1s/^/const { Ability, Item, Move, Species, PureEffect, ID, Type } = require('.\/battle-dex-data');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
-sed -i "1s/^/const { toID } = require('.\/battle-dex');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
+# battle dex imports
+sed -i "1s/^/const { Ability, Item, Move, Species, PureEffect, ID, Type } = require('.\/battle-dex-data');\n/" play.pokemonshowdown.com/js/battle-dex.js
+# battle dex search imports
+sed -i "1s/^/const { toID, Dex } = require('.\/battle-dex');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
 sed -i "2s/^/const { BattleTeambuilderTable } = require('..\/data\/teambuilder-tables');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
 sed -i "3s/^/const { BattleMovedex } = require('..\/data\/moves');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
 sed -i "4s/^/const { Dex } = require('pokemon-showdown');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
