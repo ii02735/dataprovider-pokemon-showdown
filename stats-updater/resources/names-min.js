@@ -96,7 +96,6 @@
   gen4pu: "[Gen 4] PU",
   gen4lc: "[Gen 4] LC",
   gen41v1: "[Gen 4] 1v1",
-  gen4cap: "[Gen 4] CAP",
   gen4zu: "[Gen 4] ZU",
   gen3ubers: "[Gen 3] Ubers",
   gen3uu: "[Gen 3] UU",
