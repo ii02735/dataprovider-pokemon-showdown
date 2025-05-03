@@ -182,6 +182,8 @@ const fs = require("fs");
           counters: "eff",
         };
         for (const [pokemonUsageName, usageData] of Object.entries(pokedata)) {
+          const keyTierUsage = pokemonUsageName + tierId;
+
           const pokemonRow = await knex("pokemon")
             .where({
               usageName: pokemonUsageName,
