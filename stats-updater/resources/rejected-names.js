@@ -1,4 +1,5 @@
 const rejectedNames = {
+  gen9vgc2025reggbo3: "[Gen 9] VGC 2025 Reg G (Bo3)",
   gen9randombattle: "[Gen 9] Random Battle",
   gen9unratedrandombattle: "[Gen 9] Unrated Random Battle",
   gen9freeforallrandombattle: "[Gen 9] Free-For-All Random Battle",
@@ -18,6 +19,7 @@ const rejectedNames = {
   gen9natdexdraft: "[Gen 9] NatDex Draft",
   gen9natdex6v6doublesdraft: "[Gen 9] NatDex 6v6 Doubles Draft",
   gen9natdexlcdraft: "[Gen 9] NatDex LC Draft",
+  gen9littlecolosseumlc: "[Gen 9] Little Colosseum LC",
   gen8galardexdraft: "[Gen 8] Galar Dex Draft",
   gen8natdexdraft: "[Gen 8] NatDex Draft",
   gen8natdex4v4doublesdraft: "[Gen 8] NatDex 4v4 Doubles Draft",
@@ -163,6 +165,7 @@ const rejectedNames = {
   gen4vgc2010: "[Gen 4] VGC 2010",
   gen4vgc2009: "[Gen 4] VGC 2009",
   gen4doublescustomgame: "[Gen 4] Doubles Custom Game",
+  gen4cap: "[Gen 4] CAP",
   gen3customgame: "[Gen 3] Custom Game",
   gen3doublescustomgame: "[Gen 3] Doubles Custom Game",
   gen2nc2000: "[Gen 2] NC 2000",
@@ -173,6 +176,9 @@ const rejectedNames = {
   gen1tradebacksou: "[Gen 1] Tradebacks OU",
   gen1nc1997: "[Gen 1] NC 1997",
   gen1customgame: "[Gen 1] Custom Game",
+  gen2gscdoubles: "[Gen 2] GSC Doubles",
+  gen7randombattleapexabilities: "[Gen 7] Random Battle (Apex Abilities)",
+  gen9pickyourteamrandombattle: "[Gen 9] Pick-Your-Team Random Battle",
 };
 
 module.exports = rejectedNames;

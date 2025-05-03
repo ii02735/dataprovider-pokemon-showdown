@@ -110,7 +110,7 @@ exports.parsePokemonRanking = function (str) {
         let real = parseInt((spl[6] || "").trim());
         let real_p = parsePercent(spl[7]);
         ranking.pokemon.push({
-          name: name,
+          name,
           usage: usage,
           raw: raw,
           rawp: raw_p,
@@ -221,7 +221,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
             let percent = parsePercent(spl.pop());
             let name = spl.join(" ").trim();
             if (toId(name)) {
-              pokemon.abilities.push({ name: name, usage: percent });
+              pokemon.abilities.push({ name, usage: percent });
             }
           }
         }
@@ -233,7 +233,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
             let percent = parsePercent(spl.pop());
             let name = spl.join(" ").trim();
             if (toId(name)) {
-              pokemon.moves.push({ name: name, usage: percent });
+              pokemon.moves.push({ name, usage: percent });
             }
           }
         }
@@ -245,7 +245,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
             let percent = parsePercent(spl.pop());
             let name = spl.join(" ").trim();
             if (toId(name)) {
-              pokemon.items.push({ name: name, usage: percent });
+              pokemon.items.push({ name, usage: percent });
             }
           }
         }
@@ -257,7 +257,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
             let percent = parsePercent(spl.pop());
             let name = spl.join(" ").trim();
             if (name) {
-              pokemon.teratypes.push({ name: name, usage: percent });
+              pokemon.teratypes.push({ name, usage: percent });
             }
           }
         }
@@ -280,7 +280,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
               spe: parseInt(spl[5] || ""),
             };
             pokemon.spreads.push({
-              nature: nature,
+              nature,
               evs: stats,
               usage: percent,
             });
@@ -294,7 +294,7 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
             let percent = parsePercent(spl.pop());
             let name = spl.join(" ").trim();
             if (toId(name)) {
-              pokemon.teammates.push({ name: name, usage: percent });
+              pokemon.teammates.push({ name, usage: percent });
             }
           }
         }
@@ -315,10 +315,10 @@ exports.parsePokemonUsageData = function (str, ranking, leadsInfo, done) {
               let ko = parsePercent(spl2[0].trim().split(" ")[0]);
               let sw = parsePercent((spl2[1] || "").trim().split(" ")[0]);
               pokemon.counters.push({
-                name: name,
+                name,
                 eff: percent,
-                ko: ko,
-                sw: sw,
+                ko,
+                sw,
               });
             }
           }

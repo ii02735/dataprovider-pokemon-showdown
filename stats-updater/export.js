@@ -70,6 +70,8 @@ exports.start = function (month, formats_file, export_file) {
 
         pokeData.teratypes = [];
         for (let teratype of data[pokeId].teratypes) {
+          if (teratype.name === "Other" || teratype.name === "Nothing")
+            continue;
           pokeData.teratypes.push(toId(teratype.name));
         }
 
