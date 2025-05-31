@@ -109,6 +109,7 @@
   gen31v1: "[Gen 3] 1v1",
   gen3uubl: "[Gen 3] UUBL",
   gen3zu: "[Gen 3] ZU",
+  gen3orrecolosseum: "[Gen 3] Orre Colosseum",
   gen2ubers: "[Gen 2] Ubers",
   gen2nu: "[Gen 2] NU",
   gen2pu: "[Gen 2] PU",
