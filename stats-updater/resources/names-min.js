@@ -23,6 +23,7 @@
   gen9zu: "[Gen 9] ZU",
   gen9lcuu: "[Gen 9] LC UU",
   gen9nfe: "[Gen 9] NFE",
+  gen9fusionevolutionrandombattle: "[Gen 9] Fusion Evolution Random Battle",
   gen9tiershift: "[Gen 9] Tier Shift",
   gen9nationaldex1v1: "[Gen 9] National Dex 1v1",
   gen8nationaldexru: "[Gen 8] National Dex RU",
