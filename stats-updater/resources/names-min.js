@@ -30,6 +30,8 @@
   gen8nationaldexru: "[Gen 8] National Dex RU",
   gen8nationaldexdoubles: "[Gen 8] National Dex Doubles",
   gen8dlc1nationaldexag: "[Gen 8 DLC 1] National Dex AG",
+  gen9randombattlehyperblitzautochoose:
+    "[Gen 9] Random Battle (Hyperblitz, Auto Choose)",
   gen4uu: "[Gen 4] UU",
   gen7vgc2018: "[Gen 7] VGC 2018",
   gen5zu: "[Gen 5] ZU",
