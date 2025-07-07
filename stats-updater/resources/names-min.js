@@ -24,6 +24,7 @@
   gen9lcuu: "[Gen 9] LC UU",
   gen9nfe: "[Gen 9] NFE",
   gen9vaporemonsrandombattle: "[Gen 9] VaporeMons Random Battle",
+  gen8draft: "[Gen 8] Draft",
   gen9battlefields: "[Gen 9] Battlefields",
   gen9tiershift: "[Gen 9] Tier Shift",
   gen9nationaldex1v1: "[Gen 9] National Dex 1v1",
