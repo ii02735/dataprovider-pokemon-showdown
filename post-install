@@ -1,7 +1,12 @@
 #!/bin/sh
 
-# This repository cannot be written as an NPM dependency like pokemon-showdown, because it has directories not tracked by git (hence, as a NPM dependency, it won't have it)
 ROOT_DIRECTORY=$PWD
+
+cd node_modules/pokemon-showdown
+npm run build postinstall
+cd ../..
+
+# This repository cannot be written as an NPM dependency like pokemon-showdown, because it has directories not tracked by git (hence, as a NPM dependency, it won't have it)
 test -d pokemon-showdown-client && (cd pokemon-showdown-client && git pull origin master) || git clone https://github.com/smogon/pokemon-showdown-client
 cd pokemon-showdown-client && npm i && rm -rf play.pokemonshowdown.com/js/battle-dex-search.js
 
