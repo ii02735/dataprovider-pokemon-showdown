@@ -1,6 +1,6 @@
 const { loadResource, PROVIDER } = require("../libs/fileLoader");
 const { LAST_GEN } = require("../libs/util");
-const { Dex } = require("pokemon-showdown");
+const { Dex } = require("../pokemon-showdown/dist/sim/index.js");
 /**
  * Will be used to determine the moves belonging to each pokemon
  */

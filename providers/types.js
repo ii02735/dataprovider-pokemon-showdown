@@ -1,5 +1,5 @@
 const { loadResource, LIBS } = require("../libs/fileLoader");
-const { Dex } = require("pokemon-showdown");
+const { Dex } = require("../pokemon-showdown/dist/sim/index.js");
 const { LAST_GEN, isStandard } = loadResource(LIBS, "util");
 /**
  * Smogon's damageTaken property with its different values

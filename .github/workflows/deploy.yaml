@@ -30,9 +30,6 @@ jobs: #this section contains the tasks / jobs that must be executed
         with:
           node-version: "20"
 
-      - name: Make sure that pokemon-showdown dependency is up-to-date
-        run: npm update pokemon-showdown
-
       - name: Change version into package.json
         run: >
           sed -i 's/"version": ".*"/"version": "${{ steps.release.outputs.version }}"/g' package.json

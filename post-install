@@ -2,18 +2,21 @@
 
 ROOT_DIRECTORY=$PWD
 
-cd node_modules/pokemon-showdown
-npm run build postinstall
-cd ../..
+# These repositories cannot be written as an NPM dependency like pokemon-showdown, because it has directories not tracked by git (hence, as a NPM dependency, it won't have it)
 
-# This repository cannot be written as an NPM dependency like pokemon-showdown, because it has directories not tracked by git (hence, as a NPM dependency, it won't have it)
-test -d pokemon-showdown-client && (cd pokemon-showdown-client && git pull origin master) || git clone https://github.com/smogon/pokemon-showdown-client
-cd pokemon-showdown-client && npm i && rm -rf play.pokemonshowdown.com/js/battle-dex-search.js
-
+test -d pokemon-showdown && (cd pokemon-showdown && git pull origin master) || git clone https://github.com/smogon/pokemon-showdown
+cd pokemon-showdown 
+npm i 
 node build
+npm run postinstall
+cd ..
 
+test -d pokemon-showdown-client && (cd pokemon-showdown-client && git pull origin master) || git clone https://github.com/smogon/pokemon-showdown-client
+cd pokemon-showdown-client 
+npm i 
+rm -rf play.pokemonshowdown.com/js/battle-dex-search.js
+node build
 # Executing additionnal build to create assets for DexSearch
-
 node build-tools/build-indexes
 
 # additionnal steps :
@@ -30,7 +33,7 @@ sed -i "1s/^/const { Ability, Item, Move, Species, PureEffect, ID, Type } = requ
 sed -i "1s/^/const { toID } = require('.\/battle-dex');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
 sed -i "2s/^/const { BattleTeambuilderTable } = require('..\/data\/teambuilder-tables');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
 sed -i "3s/^/const { BattleMovedex } = require('..\/data\/moves');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
-sed -i "4s/^/const { Dex } = require('pokemon-showdown');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
+sed -i "4s/^/const { Dex } = require('../../../pokemon-showdown/dist/sim/index.js');\n/" play.pokemonshowdown.com/js/battle-dex-search.js
 
 echo "\n" >> play.pokemonshowdown.com/js/battle-dex-search.js
 echo "module.exports = DexSearch;" >> play.pokemonshowdown.com/js/battle-dex-search.js

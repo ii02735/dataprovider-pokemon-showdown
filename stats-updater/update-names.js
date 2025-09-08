@@ -42,6 +42,6 @@ function updateNames(formatsData) {
 
 exports.start = function () {
   console.log("Getting formats data 2...");
-  const { Dex } = require("pokemon-showdown");
+  const { Dex } = require("../pokemon-showdown/dist/sim/index.js");
   updateNames(Dex.formats.all());
 };

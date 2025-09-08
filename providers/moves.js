@@ -1,5 +1,5 @@
 const { LAST_GEN, isStandard } = require("../libs/util");
-const { Dex } = require("pokemon-showdown");
+const { Dex } = require("../pokemon-showdown/dist/sim/index.js");
 let movesCollection = [];
 
 const makeMoveObject = (rawObject, gen) => ({

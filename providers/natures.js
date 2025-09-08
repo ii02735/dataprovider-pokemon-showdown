@@ -1,4 +1,4 @@
-const { Dex } = require("pokemon-showdown");
+const { Dex } = require("../pokemon-showdown/dist/sim/index.js");
 
 const natures = Dex.natures.all().map(({ id: key, name, plus, minus }) => {
   const nature = { name, usageName: key };
