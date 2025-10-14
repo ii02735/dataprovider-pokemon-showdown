@@ -161,7 +161,7 @@
 	},
 	{
 		"name": "VGC 2025 RJ",
-		"shortName": "VGC",
+		"shortName": "VGC RJ",
 		"usageName": "vgc2025regj",
 		"playable": true,
 		"official": true,
@@ -173,9 +173,22 @@
 		]
 	},
 	{
+		"name": "VGC 2025 RH",
+		"shortName": "VGC RH",
+		"usageName": "vgc2025regh",
+		"playable": true,
+		"official": true,
+		"main": false,
+		"isDouble": true,
+		"sortOrder": 3,
+		"gen": [
+			9
+		]
+	},
+	{
 		"name": "BSS 2025 RI",
-		"shortName": "BSS",
-		"usageName": "bssregi",
+		"shortName": "BSS RJ",
+		"usageName": "bssregj",
 		"official": true,
 		"main": true,
 		"playable": true,
